@@ -3,7 +3,7 @@ import StarBorder from "./StarBorder";
 
 const Navbar = () => {
   return (
-    <div className="fixed top-0 left-0 w-full z-20 flex justify-between items-center px-10 py-6 bg-transparent">
+    <div className="fixed top-0 left-0 w-full z-20 flex justify-between items-center px-8 py-6 bg-transparent">
       {/* Logo */}
       <div className="flex gap-2 items-center">
         <img src="/jpcslogo.png" alt="jpcs" className="w-10" />

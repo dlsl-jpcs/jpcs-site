@@ -16,9 +16,10 @@ interface Event {
 
 interface EventsProps {
   events: Event[];
+  isMobile: boolean;
 }
 
-export default function Events({ events }: EventsProps) {
+export default function Events({ events, isMobile }: EventsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextCard = () => {
@@ -33,61 +34,85 @@ export default function Events({ events }: EventsProps) {
     );
   };
 
-  const visibleIndices = [
-    currentIndex,
-    (currentIndex + 1) % events.length,
-    (currentIndex + 2) % events.length,
-  ].filter((index) => index < events.length);
+  // For mobile, show only one card at a time
+  const visibleIndices = isMobile
+    ? [currentIndex]
+    : [
+        currentIndex,
+        (currentIndex + 1) % events.length,
+        (currentIndex + 2) % events.length,
+      ].filter((index) => index < events.length);
 
   return (
-    <div className="flex flex-col justify-center mt-20">
-      <h2 className="text-xl font-bold text-foreground px-3 text-left mb-4">
+    <div className="flex flex-col justify-center mt-10 md:mt-20 w-full max-w-md md:max-w-4xl px-4 md:px-0">
+      <h2 className="text-xl font-bold text-foreground px-3 text-left mb-2">
         Events
       </h2>
 
-      <div className="relative w-full max-w-4xl flex gap-2 overflow-hidden">
+      <div className="relative w-full flex gap-1 md:gap-2 pr-2 md:pr-3">
         <AnimatePresence initial={false}>
           {visibleIndices.map((index, position) => (
             <motion.div
               key={`${index}-${currentIndex}`}
-              className="bg-white/5 backdrop-blur-md rounded-lg p-6 border border-white/10 flex flex-col"
+              className="bg-white/5 backdrop-blur-md rounded-lg p-4 md:p-6 border border-white/10 flex flex-col mx-auto"
               style={{
-                flex: position === 0 ? "0 0 40%" : "0 0 30%",
-                height: "380px",
+                flex: isMobile
+                  ? "0 0 calc(100% - 0.5rem)"
+                  : position === 0
+                  ? "0 0 calc(50% - 0.25rem)"
+                  : "0 0 calc(40% - 0.25rem)",
+                height: isMobile ? "340px" : "380px",
                 minWidth: "0",
+                zIndex: 10 - position, // Ensure proper stacking
               }}
               initial={{
                 opacity: 0,
-                x: position === 0 ? 20 : 40,
-                scale: position === 0 ? 1 : 0.9,
+                x: isMobile
+                  ? position === 0
+                    ? 300
+                    : -300
+                  : position === 0
+                  ? 20
+                  : 40,
+                scale: isMobile ? 1 : position === 0 ? 1 : 0.9,
               }}
               animate={{
                 opacity: 1,
                 x: 0,
-                scale: position === 0 ? 1 : 0.9,
+                scale: isMobile ? 1 : position === 0 ? 1 : 0.9,
               }}
               exit={{
                 opacity: 0,
-                x: position === 0 ? -20 : -40,
-                scale: position === 0 ? 1 : 0.9,
+                x: isMobile
+                  ? position === 0
+                    ? -300
+                    : 300
+                  : position === 0
+                  ? -20
+                  : -40,
+                scale: isMobile ? 1 : position === 0 ? 1 : 0.9,
               }}
               transition={{ duration: 0.4 }}
-              whileHover={{
-                scale: position === 0 ? 1.0 : 0.92,
-                borderColor: "rgba(72, 187, 120, 0.8)",
-                transition: {
-                  duration: 0.3,
-                  ease: "easeOut",
-                },
-              }}
+              whileHover={
+                isMobile
+                  ? {}
+                  : {
+                      scale: position === 0 ? 1.02 : 0.92,
+                      borderColor: "rgba(72, 187, 120, 0.8)",
+                      transition: {
+                        duration: 0.3,
+                        ease: "easeOut",
+                      },
+                    }
+              }
             >
               <div className="flex flex-col flex-1 min-h-0">
                 {/* Organization and Title */}
-                <div className="h-20 mb-4">
-                  <p className="text-sm text-foreground/70 mb-1 uppercase tracking-wide line-clamp-1">
+                <div className="h-16 md:h-20 mb-3 md:mb-4">
+                  <p className="text-xs md:text-sm text-foreground/70 mb-1 uppercase tracking-wide line-clamp-1">
                     {events[index].org}
                   </p>
-                  <h3 className="text-2xl font-bold text-foreground uppercase tracking-wide line-clamp-2">
+                  <h3 className="text-lg md:text-2xl font-bold text-foreground uppercase tracking-wide line-clamp-2">
                     {events[index].title}
                   </h3>
                 </div>
@@ -104,7 +129,7 @@ export default function Events({ events }: EventsProps) {
 
                 {/* Description */}
                 <div className="flex-1 mb-4 min-h-0">
-                  <p className="text-foreground/80 text-sm leading-relaxed font-light line-clamp-4 overflow-hidden">
+                  <p className="text-foreground/80 text-xs md:text-sm leading-relaxed font-light line-clamp-4 overflow-hidden">
                     {events[index].description}
                   </p>
                 </div>
@@ -115,7 +140,7 @@ export default function Events({ events }: EventsProps) {
                     href={events[index].link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block bg-dark-green hover:bg-light-green/60 text-white text-sm font-medium py-1 px-4 rounded-xl transition-colors duration-300"
+                    className="inline-block bg-dark-green hover:bg-light-green/60 text-white text-xs md:text-sm font-medium py-1 px-3 md:px-4 rounded-xl transition-colors duration-300"
                   >
                     Register
                   </a>
@@ -127,7 +152,7 @@ export default function Events({ events }: EventsProps) {
                     aria-label="Facebook post"
                   >
                     <svg
-                      className="w-5 h-5"
+                      className="w-4 h-4 md:w-5 md:h-5"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -142,7 +167,7 @@ export default function Events({ events }: EventsProps) {
                     aria-label="Instagram post"
                   >
                     <svg
-                      className="w-5 h-5"
+                      className="w-4 h-4 md:w-5 md:h-5"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >

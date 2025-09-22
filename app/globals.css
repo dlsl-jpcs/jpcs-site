@@ -83,9 +83,20 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-body {
+html, body {
   font-family: var(--font-figtree), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  overflow-y: scroll; /* keep scroll functional */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
+
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -155,4 +166,17 @@ body {
 
   --animate-star-movement-bottom: star-movement-bottom linear infinite alternate;
   --animate-star-movement-top: star-movement-top linear infinite alternate;
+}
+
+@theme {
+  @keyframes shine {
+    0% {
+      background-position: 100%;
+    }
+    100% {
+      background-position: -100%;
+    }
+  }
+
+  --animate-shine: shine linear infinite;
 }
