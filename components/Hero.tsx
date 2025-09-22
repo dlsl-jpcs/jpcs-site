@@ -186,31 +186,39 @@ export default function Hero() {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-[35%_65%] md:grid-cols-[40%_60%] max-w-7xl mx-auto  sm:p-4 mt-30 md:mt-10 gap-0 md:gap-8 ">
-          {/* Left Text Section */}
-          <div className="flex flex-col justify-center items-center text-center sm:items-center sm:text-center md:items-start md:text-left mt-8 sm:mt-12 md:mt-20 px-2 sm:px-4 md:px-0">
-            <h1 className="text-5xl sm:text-4xl md:text-[55px] font-bold text-foreground mb-4 tracking-tight md:border-l-2 md:border-l-white/50 md:pl-3">
-              Junior Philippines{" "}
-              <span className="text-light-green">Computer Society</span>
-            </h1>
-            <p className="text-2xl sm:text-2xl md:text-3xl text-foreground mb-4">
-              De La Salle Lipa Chapter
-            </p>
-            <ShinyText
-              text="Exploring limitless opportunities through innovation"
-              disabled={false}
-              speed={3}
-              className="custom-class"
-            />
-            <p className="text-md sm:text-sm md:text-base text-foreground opacity-80"></p>
-            <p className="text-xs sm:text-sm md:text-sm bg-light-green text-background font-bold opacity-80 mt-3 border-2 border-light-green px-2 sm:px-3 md:px-2 py-1 md:py-2 rounded-full">
-              #TatakJPCS
-            </p>
-          </div>
+        {/* Main Content Container - Always Centered */}
+        <div className="relative z-10 flex items-center justify-center min-h-screen w-full px-4 sm:px-6 lg:px-8">
+          <div className="w-full max-w-[95%] sm:max-w-[90%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl 2xl:max-w-9xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-0 items-center">
+              {/* Left Text Section */}
+              <div className="flex flex-col items-center text-center lg:items-start lg:text-left order-1 lg:order-1">
+                <div className="w-full">
+                  <h1 className="text-4xl sm:text-4xl md:text-[55px] lg:border-l-2 lg:border-l-white/50 lg:pl-4 xl:pl-5 font-bold text-foreground mb-4 sm:mb-4 tracking-tight leading-[1] mt-20 md:mt-15">
+                    Junior Philippines{" "}
+                    <span className="text-light-green">Computer Society</span>
+                  </h1>
+                  <p className="text-xl sm:text-2xl md:text-3xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-foreground mb-4 sm:mb-6 md:ml-6">
+                    De La Salle Lipa Chapter
+                  </p>
+                  <div className="mb-4 sm:mb-6 md:ml-6">
+                    <ShinyText
+                      text="Exploring limitless opportunities through innovation"
+                      disabled={false}
+                      speed={3}
+                      className="text-base sm:text-lg md:text-xl lg:text-lg xl:text-xl 2xl:text-2xl"
+                    />
+                  </div>
+                  <div className="inline-block bg-light-green text-background font-bold border-2 border-light-green px-3 sm:px-4 md:px-3 md:ml-6 py-2 rounded-full text-sm sm:text-sm md:text-xs lg:text-sm xl:text-sm 2xl:text-xl">
+                    #TatakJPCS
+                  </div>
+                </div>
+              </div>
 
-          {/* Right Card Section */}
-          <div className="flex items-center justify-center sm:items-center sm:justify-center md:items-start md:justify-end pr-4 md:pr-8">
-            <Events events={events} isMobile={isMobile} />
+              {/* Right Events Section */}
+              <div className="flex items-center justify-center order-2 lg:order-2">
+                <Events events={events} isMobile={isMobile} />
+              </div>
+            </div>
           </div>
         </div>
 

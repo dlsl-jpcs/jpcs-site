@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { GlowCard } from "./spotlight-card";
 
 interface Event {
   org: string;
@@ -44,12 +45,12 @@ export default function Events({ events, isMobile }: EventsProps) {
       ].filter((index) => index < events.length);
 
   return (
-    <div className="flex flex-col justify-center mt-10 md:mt-20 w-full max-w-md md:max-w-4xl px-4 md:px-0">
+    <div className="flex flex-col justify-center mt-0 md:mt-20 w-full max-w-md md:max-w-4xl px-4 md:px-0">
       <h2 className="text-xl font-bold text-foreground px-3 text-left mb-2">
         Events
       </h2>
 
-      <div className="relative w-full flex gap-1 md:gap-2 pr-2 md:pr-3">
+      <div className="relative w-full flex gap-1 md:gap-3 pr-2 md:pr-3">
         <AnimatePresence initial={false}>
           {visibleIndices.map((index, position) => (
             <motion.div
@@ -59,11 +60,11 @@ export default function Events({ events, isMobile }: EventsProps) {
                 flex: isMobile
                   ? "0 0 calc(100% - 0.5rem)"
                   : position === 0
-                  ? "0 0 calc(50% - 0.25rem)"
-                  : "0 0 calc(40% - 0.25rem)",
-                height: isMobile ? "340px" : "380px",
+                  ? "0 0 calc(56% - 0.125rem)"
+                  : "0 0 calc(43% - 0.125rem)",
+                height: isMobile ? "340px" : "390px",
                 minWidth: "0",
-                zIndex: 10 - position, // Ensure proper stacking
+                zIndex: 10 - position,
               }}
               initial={{
                 opacity: 0,
@@ -74,12 +75,12 @@ export default function Events({ events, isMobile }: EventsProps) {
                   : position === 0
                   ? 20
                   : 40,
-                scale: isMobile ? 1 : position === 0 ? 1 : 0.9,
+                scale: isMobile ? 1 : position === 0 ? 1 : 0.93,
               }}
               animate={{
                 opacity: 1,
                 x: 0,
-                scale: isMobile ? 1 : position === 0 ? 1 : 0.9,
+                scale: isMobile ? 1 : position === 0 ? 1 : 0.93,
               }}
               exit={{
                 opacity: 0,

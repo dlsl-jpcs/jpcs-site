@@ -20,7 +20,7 @@ export default function ScrollProgressBar() {
 
   return (
     <div
-      className="fixed top-0 left-0 h-1 bg-dark-green z-50 transition-all duration-250"
+      className="fixed top-0 left-0 h-1 bg-light-green z-50 transition-all duration-250"
       style={{ width: `${scrollWidth}%` }}
     />
   );
