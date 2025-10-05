@@ -1,9 +1,35 @@
 import React from "react";
 import StarBorder from "./StarBorder";
+import { NavItems } from "./ui/resizable-navbar";
+
 
 const Navbar = () => {
+
+  const navItems = [
+    {
+      name: "Home",
+      link: "#home",
+    },
+    {
+      name: "Announcements",
+      link: "#announcements",
+    },
+    {
+      name: "Officers",
+      link: "#officers",
+    },
+    {
+      name: "Resources",
+      link: "#resources",
+    },
+    {
+      name: "Gallery",
+      link: "#gallery",
+    },
+  ];
+
   return (
-    <div className="fixed top-0 left-0 w-full z-20 flex justify-between items-center px-8 py-6 bg-transparent">
+    <div className="fixed top-0 left-0 w-full z-20 flex justify-between items-center px-12 py-8 bg-transparent">
       {/* Logo */}
       <div className="flex gap-2 items-center ">
         <div className="bg-white rounded-full">
@@ -16,23 +42,9 @@ const Navbar = () => {
         className="flex items-center justify-between px-10 py-3 
         rounded-full border border-white/10 
         bg-white/8 backdrop-blur-md shadow-lg 
-        max-w-3xl gap-9 text-white text-[14px]"
+        w-[40%] h-13 gap-9 text-white text-[14px]"
       >
-        <a href="" className="hover:text-gray-300 transition">
-          Home
-        </a>
-        <a href="" className="hover:text-gray-300 transition">
-          Announcements
-        </a>
-        <a href="" className="hover:text-gray-300 transition">
-          Officers
-        </a>
-        <a href="" className="hover:text-gray-300 transition">
-          Resources
-        </a>
-        <a href="" className="hover:text-gray-300 transition">
-          Gallery
-        </a>
+        <NavItems items={navItems}/>
       </div>
       {/* Menu and Contact Us */}
       <div>
