@@ -196,20 +196,20 @@ body::-webkit-scrollbar {
   padding: 6em 2em 2em 2em;
   overflow-y: auto;
   z-index: 10;
-  pointer-events: none; /* Add this */
+  pointer-events: none; 
 }
 .sm-scope .staggered-menu-wrapper[data-open] .staggered-menu-panel {
-  pointer-events: auto; /* Enable pointer events when menu is open */
+  pointer-events: auto; 
 }
 @media (max-width: 1024px) {
   .sm-scope .staggered-menu-panel {
     width: 100%;
     left: 0;
     right: 0;
-    pointer-events: none; /* Ensure no interference when closed */
+    pointer-events: none; 
   }
   .sm-scope .staggered-menu-wrapper[data-open] .staggered-menu-panel {
-    pointer-events: auto; /* Enable when open */
+    pointer-events: auto; 
   }
 }
 @media (max-width: 640px) {
@@ -217,9 +217,34 @@ body::-webkit-scrollbar {
     width: 100%;
     left: 0;
     right: 0;
-    pointer-events: none; /* Ensure no interference when closed */
+    pointer-events: none; 
   }
   .sm-scope .staggered-menu-wrapper[data-open] .staggered-menu-panel {
-    pointer-events: auto; /* Enable when open */
+    pointer-events: auto; 
   }
+}
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 15s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 15s linear infinite;
 }

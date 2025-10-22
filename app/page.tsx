@@ -1,5 +1,6 @@
 import Announcements from "@/components/Announcements";
 import Banner from "@/components/Banner";
+
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import ScrollProgressBar from "@/components/ScrollProgressBar"; 
