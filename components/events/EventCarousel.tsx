@@ -41,14 +41,14 @@ export default function EventCarousel({
     }
   };
 
-  const handleDotClick = (i: number) => {
+  /* const handleDotClick = (i: number) => {
     if (isMobile) {
       setPage([i, i > index ? 1 : -1]);
     } else {
       setCurrent(i);
     }
   };
-
+ */
   return (
     <>
       {/* Desktop*/}
