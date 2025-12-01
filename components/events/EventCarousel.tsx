@@ -129,7 +129,7 @@ export default function EventCarousel({
       )}
 
       {/* Navigation — same for both */}
-      <div className="flex items-center justify-center gap-4 mt-4">
+      <div className="flex items-center justify-center gap-4 mt-4 mb-5 md:mb-2">
         <button
           onClick={handlePrevious}
           className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all duration-300"
