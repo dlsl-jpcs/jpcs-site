@@ -15,13 +15,11 @@ export default function Hero() {
   const mouseRef = useRef<{ x: number; y: number } | null>(null);
   const animationFrameRef = useRef<number>(0);
 
-  const gridSize = 25;
   const dotRadius = 1.5;
   const hoverRadius = 200;
   const scaleRadius = 140;
   const glowRadius = 200;
 
-  // Check if mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -59,7 +57,6 @@ export default function Hero() {
     return () => window.removeEventListener("resize", generateDots);
   }, [isMobile]);
 
-  // Component entrance animation
   useEffect(() => {
     setIsVisible(true);
     return () => setIsVisible(false);
@@ -183,7 +180,6 @@ export default function Hero() {
     },
   ];
 
-  // Fixed animation variants with proper TypeScript types
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -218,18 +214,17 @@ export default function Hero() {
     },
   };
 
-  // Fixed dot variants - use a simpler approach without custom function
-  const dotVariants = {
+/*   const dotVariants = {
     hidden: { opacity: 0, scale: 0 },
     visible: {
-      opacity: 0.1, // Default opacity, will be overridden by custom prop
+      opacity: 0.1,
       scale: 1,
       transition: {
         duration: 0.6,
         ease: "easeOut" as const,
       },
     },
-  };
+  }; */
 
   const tagVariants = {
     hidden: {
