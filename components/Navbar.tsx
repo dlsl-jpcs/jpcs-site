@@ -1,79 +1,46 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
+import Image from "next/image"; 
 import StarBorder from "./StarBorder";
 import { NavItems } from "./ui/resizable-navbar";
 import { StaggeredMenu } from "./StaggeredMenu";
 
 const Navbar = () => {
-  const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
+    if (!menuOpen) return;
+
+    const handleLinkClick = (e: Event) => {
+      const target = (e.target as HTMLElement).closest("a");
+      if (target && target.getAttribute("href")?.startsWith("#")) {
+        setMenuOpen(false);
+      }
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+    document.addEventListener("click", handleLinkClick);
+    document.addEventListener("touchstart", handleLinkClick);
 
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  useEffect(() => {
-    if (menuOpen) {
-      const handleLinkClick = (e: Event) => {
-        const target = (e.target as HTMLElement).closest("a");
-        if (target && target.href.includes("#")) {
-          handleMenuClose();
-        }
-      };
-
-      document.addEventListener("click", handleLinkClick);
-      document.addEventListener("touchstart", handleLinkClick);
-      return () => {
-        document.removeEventListener("click", handleLinkClick);
-        document.removeEventListener("touchstart", handleLinkClick);
-      };
-    }
+    return () => {
+      document.removeEventListener("click", handleLinkClick);
+      document.removeEventListener("touchstart", handleLinkClick);
+    };
   }, [menuOpen]);
 
-  const handleMenuClose = () => {
-    setMenuOpen(false);
-  };
-
-  const handleMenuOpen = () => {
-    setMenuOpen(true);
-  };
+  const handleMenuOpen = () => setMenuOpen(true);
+  const handleMenuClose = () => setMenuOpen(false);
 
   const navItems = [
-    {
-      name: "Home",
-      link: "#home",
-    },
-    {
-      name: "Announcements",
-      link: "#announcements",
-    },
-    {
-      name: "Officers",
-      link: "#officers",
-    },
-    {
-      name: "Resources",
-      link: "#resources",
-    },
-    {
-      name: "Gallery",
-      link: "#gallery",
-    },
+    { name: "Home", link: "#home" },
+    { name: "Announcements", link: "#announcements" },
+    { name: "Officers", link: "#officers" },
+    { name: "Resources", link: "#resources" },
+    { name: "Gallery", link: "#gallery" },
   ];
 
   const menuItems = [
-    {
-      label: "Home",
-      ariaLabel: "Navigate to Home section",
-      link: "#home",
-    },
+    { label: "Home", ariaLabel: "Navigate to Home section", link: "#home" },
     {
       label: "Announcements",
       ariaLabel: "Navigate to Announcements section",
@@ -97,18 +64,9 @@ const Navbar = () => {
   ];
 
   const socialItems = [
-    {
-      label: "Facebook",
-      link: "https://facebook.com/jpcs",
-    },
-    {
-      label: "Instagram",
-      link: "https://instagram.com/jpcs",
-    },
-    {
-      label: "Twitter",
-      link: "https://twitter.com/jpcs",
-    },
+    { label: "Facebook", link: "https://facebook.com/jpcs" },
+    { label: "Instagram", link: "https://instagram.com/jpcs" },
+    { label: "Twitter", link: "https://twitter.com/jpcs" },
   ];
 
   return (
@@ -117,13 +75,20 @@ const Navbar = () => {
       <div className="fixed top-0 left-0 w-full z-50 hidden lg:flex justify-between items-center px-12 py-8 bg-transparent pointer-events-none">
         {/* Logo */}
         <div className="flex gap-2 items-center pointer-events-auto">
-          <div className="bg-white rounded-full">
-            <img src="/jpcslogo.png" alt="jpcs" className="w-10" />
+          <div className="relative bg-white rounded-full w-10 h-10">
+            <Image
+              src="/jpcslogo.png"
+              alt="JPCS Logo"
+              width={40}
+              height={40}
+              className="rounded-full object-cover"
+              priority // Above-the-fold image → loads immediately
+            />
           </div>
           <p className="font-bold text-light-green text-[20px]">JPCS</p>
         </div>
 
-        {/* Links */}
+        {/* Navigation Links */}
         <div
           className="flex items-center justify-between px-10 py-3 
           rounded-full border border-white/10 
@@ -133,7 +98,6 @@ const Navbar = () => {
           <NavItems items={navItems} />
         </div>
 
-        {/* Contact Button */}
         <div className="pointer-events-auto">
           <StarBorder
             as="button"
@@ -146,7 +110,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile/Tablet - Staggered Menu (Full Screen) */}
       <div className="lg:hidden">
         <StaggeredMenu
           position="right"
