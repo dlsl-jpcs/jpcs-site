@@ -128,7 +128,7 @@ const Navbar = () => {
           className="flex items-center justify-between px-10 py-3 
           rounded-full border border-white/10 
           bg-white/8 backdrop-blur-md shadow-lg 
-          w-[40%] h-13 gap-9 text-white text-[14px] pointer-events-auto"
+          min-w-[550px] h-13 gap-9 text-white text-[14px] pointer-events-auto"
         >
           <NavItems items={navItems} />
         </div>
