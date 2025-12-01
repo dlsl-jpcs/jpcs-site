@@ -137,7 +137,6 @@ const EventCard = ({
   current,
   isMobile,
   handleEventClick,
-  eventsCount,
 }: EventCardProps) => {
   const slideRef = useRef<HTMLDivElement>(null);
   const xRef = useRef<number>(0);
