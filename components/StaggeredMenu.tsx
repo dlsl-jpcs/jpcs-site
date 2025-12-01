@@ -147,7 +147,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     const panelStart = Number(gsap.getProperty(panel, "xPercent"));
 
     if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
-    if (numberEls.length) gsap.set(numberEls, { "--sm-num-opacity": 0 } as any);
+    if (numberEls.length) gsap.set(numberEls, { "--sm-num-opacity": 0 } as gsap.TweenVars);
     if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
     if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
 
@@ -195,7 +195,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             ease: "power2.out",
             "--sm-num-opacity": 1,
             stagger: { each: 0.08, from: "start" },
-          } as any,
+          } as gsap.TweenVars,
           itemsStart + 0.1
         );
       }
@@ -288,7 +288,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           )
         ) as HTMLElement[];
         if (numberEls.length)
-          gsap.set(numberEls, { "--sm-num-opacity": 0 } as any);
+          gsap.set(numberEls, { "--sm-num-opacity": 0 } as gsap.TweenVars);
 
         const socialTitle = panel.querySelector(
           ".sm-socials-title"
