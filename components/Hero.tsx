@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Events from "./Events";
+import Events from "./events/Events";
 import ShinyText from "./ShinyText";
 
 export default function Hero() {
