@@ -82,7 +82,7 @@ const Navbar = () => {
               width={40}
               height={40}
               className="rounded-full object-cover"
-              priority // Above-the-fold image → loads immediately
+              priority 
             />
           </div>
           <p className="font-bold text-light-green text-[20px]">JPCS</p>
