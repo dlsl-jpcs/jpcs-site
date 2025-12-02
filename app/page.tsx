@@ -1,3 +1,4 @@
+import About from "@/components/about/About";
 import Announcements from "@/components/Announcements";
 import Banner from "@/components/Banner";
 
@@ -13,6 +14,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Banner />
+      <About />
       <Announcements />
     </div>
   );
