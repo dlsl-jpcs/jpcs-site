@@ -33,18 +33,18 @@ const Navbar = () => {
 
   const navItems = [
     { name: "Home", link: "#home" },
-    { name: "Announcements", link: "#announcements" },
+    { name: "About", link: "#about" },
     { name: "Officers", link: "#officers" },
-    { name: "Resources", link: "#resources" },
+    { name: "Projects", link: "#projects" },
     { name: "Gallery", link: "#gallery" },
   ];
 
   const menuItems = [
     { label: "Home", ariaLabel: "Navigate to Home section", link: "#home" },
     {
-      label: "Announcements",
-      ariaLabel: "Navigate to Announcements section",
-      link: "#announcements",
+      label: "About",
+      ariaLabel: "Navigate to About section",
+      link: "#about",
     },
     {
       label: "Officers",
@@ -52,9 +52,9 @@ const Navbar = () => {
       link: "#officers",
     },
     {
-      label: "Resources",
-      ariaLabel: "Navigate to Resources section",
-      link: "#resources",
+      label: "Projects",
+      ariaLabel: "Navigate to Projects section",
+      link: "#projects",
     },
     {
       label: "Gallery",
@@ -64,8 +64,8 @@ const Navbar = () => {
   ];
 
   const socialItems = [
-    { label: "Facebook", link: "https://facebook.com/jpcs" },
-    { label: "Instagram", link: "https://instagram.com/jpcs" },
+    { label: "Facebook", link: "https://www.facebook.com/JPCS.DLSL" },
+    { label: "Instagram", link: "https://www.instagram.com/jpcsdlsl" },
     { label: "Twitter", link: "https://twitter.com/jpcs" },
   ];
 
@@ -93,7 +93,7 @@ const Navbar = () => {
           className="flex items-center justify-between px-10 py-3 
           rounded-full border border-white/10 
           bg-white/8 backdrop-blur-md shadow-lg 
-          min-w-[550px] h-13 gap-9 text-white text-[14px] pointer-events-auto"
+          min-w-[525px] h-13 gap-10 text-white text-[14px] pointer-events-auto"
         >
           <NavItems items={navItems} />
         </div>

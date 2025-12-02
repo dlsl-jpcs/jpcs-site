@@ -24,7 +24,7 @@ export default function EventCard({
 
   const isActive = current === index;
 
-  // 3D tilt effect (desktop only) – FIXED cleanup
+  // 3D tilt effect (desktop only) 
   useEffect(() => {
     if (isMobile) return;
 
@@ -39,14 +39,13 @@ export default function EventCard({
 
     frameRef.current = requestAnimationFrame(animate);
 
-    // Proper cleanup – returns void | undefined only
     return () => {
       if (frameRef.current !== null) {
         cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
       }
     };
-  }, [isMobile]); // ← dependency is correct
+  }, [isMobile]); 
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile || !slideRef.current) return;
@@ -66,7 +65,7 @@ export default function EventCard({
   return (
     <motion.div
       className="flex-shrink-0 [perspective:1200px] [transform-style:preserve-3d]"
-      style={{ width: isMobile ? "100%" : "calc(50% - 0.5rem)" }}
+      style={{ width: isMobile ? "100%" : "calc(50% - 0.3rem)" }}
       initial={false}
       animate={{
         x: isMobile ? 0 : `calc(-${current * 100}% - ${current * 1}rem)`,
@@ -99,22 +98,21 @@ export default function EventCard({
               }
         }
       >
-        {/* Your original content – 100% unchanged */}
         <motion.div className="flex flex-col flex-1 min-h-0">
           <div className="h-16 md:h-20 mb-3 md:mb-4">
             <p className="text-xs md:text-sm text-foreground/70 mb-1 uppercase tracking-wide line-clamp-1">
               {event.org}
             </p>
-            <h3 className="text-lg md:text-2xl font-bold text-foreground uppercase tracking-wide line-clamp-2">
+            <h3 className="text-2xl md:text-2xl font-bold text-foreground uppercase tracking-wide line-clamp-2">
               {event.title}
             </h3>
           </div>
 
           <div className="h-12 mb-3">
-            <p className="text-foreground/80 text-sm font-medium line-clamp-1">
+            <p className="text-foreground/80 text-lg md:text-md font-medium line-clamp-1">
               {event.date}
             </p>
-            <p className="text-foreground/70 text-xs line-clamp-1">
+            <p className="text-foreground/70 text-md md:text-sm line-clamp-1">
               {event.time}
             </p>
           </div>
@@ -130,7 +128,7 @@ export default function EventCard({
               href={event.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-dark-green hover:bg-light-green/60 text-white text-xs md:text-sm font-medium py-1 px-3 md:px-4 rounded-xl transition-colors duration-300"
+              className="inline-block bg-dark-green hover:bg-light-green/60 text-white text-sm md:text-sm font-medium py-1 px-3 md:px-4 rounded-xl transition-colors duration-300"
             >
               Register
             </a>

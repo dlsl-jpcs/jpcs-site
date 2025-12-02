@@ -7,7 +7,7 @@ const Banner: React.FC = () => {
   return (
     <div className="w-full overflow-hidden">
       {/* First banner - moves left */}
-      <div className="bg-green-600 text-white py-2 mb-3">
+      <div className="bg-white text-green-600 py-2 mb-3">
         <div className="flex animate-marquee-left">
           <div className="flex whitespace-nowrap">
             <span className="px-8 text-3xl font-bold">
@@ -41,9 +41,8 @@ const Banner: React.FC = () => {
       </div>
 
       {/* Second banner - moves right */}
-      <div className="bg-white text-green-600 py-2">
+      <div className="bg-green-600 text-white py-2">
         <div className="flex animate-marquee-right">
-         
           <div className="flex whitespace-nowrap">
             <span className="px-8 text-3xl font-bold">DE LA SALLE LIPA</span>
             <span className="px-8 text-3xl font-bold">DE LA SALLE LIPA</span>
