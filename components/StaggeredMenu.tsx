@@ -14,6 +14,7 @@ export interface StaggeredMenuItem {
   label: string;
   ariaLabel: string;
   link: string;
+  onClick?: () => void; 
 }
 
 export interface StaggeredMenuSocialItem {
@@ -147,7 +148,8 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     const panelStart = Number(gsap.getProperty(panel, "xPercent"));
 
     if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
-    if (numberEls.length) gsap.set(numberEls, { "--sm-num-opacity": 0 } as gsap.TweenVars);
+    if (numberEls.length)
+      gsap.set(numberEls, { "--sm-num-opacity": 0 } as gsap.TweenVars);
     if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
     if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
 
@@ -209,38 +211,28 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           { opacity: 1, duration: 0.5, ease: "power2.out" },
           socialsStart
         );
-     if (socialTitle || socialLinks.length) {
-       const socialsStart = panelInsertTime + panelDuration * 0.4;
 
-       if (socialTitle)
-         tl.to(
-           socialTitle,
-           { opacity: 1, duration: 0.5, ease: "power2.out" },
-           socialsStart
-         );
-
-       if (socialLinks.length) {
-         tl.to(
-           socialLinks,
-           {
-             y: 0,
-             opacity: 1,
-             duration: 0.55,
-             ease: "power3.out",
-             stagger: { each: 0.08, from: "start" },
-             onComplete: () => {
-               gsap.set(socialLinks, { clearProps: "opacity" });
-             },
-           },
-           socialsStart + 0.04
-         );
-       }
-     }
+      if (socialLinks.length) {
+        tl.to(
+          socialLinks,
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.55,
+            ease: "power3.out",
+            stagger: { each: 0.08, from: "start" },
+            onComplete: () => {
+              gsap.set(socialLinks, { clearProps: "opacity" });
+            },
+          },
+          socialsStart + 0.04
+        );
+      }
     }
 
     openTlRef.current = tl;
     return tl;
-  }, []); // Removed `position` — it's stable, no need to recreate timeline on position change
+  }, []);
 
   const playOpen = useCallback(() => {
     if (busyRef.current) return;
@@ -402,6 +394,38 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
     onMenuClose,
   ]);
 
+  // NEW: Function to handle item clicks
+  const handleItemClick = useCallback(
+    (item: StaggeredMenuItem, e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+
+      // Call the item's onClick handler if provided
+      if (item.onClick) {
+        item.onClick();
+      }
+
+      // Close the menu
+      if (openRef.current) {
+        toggleMenu();
+      }
+
+      // Handle navigation if it's a hash link
+      if (item.link.startsWith("#")) {
+        const element = document.querySelector(item.link);
+        if (element) {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      } else {
+        // For external links, navigate normally
+        window.open(item.link, "_blank");
+      }
+    },
+    [toggleMenu]
+  );
+
   const handleOutsideClick = useCallback(
     (e: MouseEvent) => {
       if (!openRef.current) return;
@@ -506,7 +530,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           <button
             ref={toggleBtnRef}
             className={`sm-toggle relative inline-flex items-center gap-[0.3rem] bg-transparent border-0 cursor-pointer font-medium leading-none overflow-visible pointer-events-auto ${
-              open ? "text-black" : "text-[#e9e9ef]"
+              open ? "text-black" : "text-green-400"
             }`}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
@@ -575,6 +599,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
+                      onClick={(e) => handleItemClick(it, e)}
                     >
                       <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
                         {it.label}

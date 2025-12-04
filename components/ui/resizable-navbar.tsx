@@ -27,7 +27,8 @@ interface NavItemsProps {
     link: string;
   }[];
   className?: string;
-  onItemClick?: () => void;
+  onItemClick?: (link: string) => void; 
+  
 }
 
 interface MobileNavProps {
@@ -107,6 +108,29 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
 export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    link: string
+  ) => {
+    e.preventDefault();
+
+    // Smooth scroll to section
+    if (link.startsWith("#")) {
+      const element = document.querySelector(link);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }
+
+    // Call the onItemClick callback if provided
+    if (onItemClick) {
+      onItemClick(link);
+    }
+  };
+
   return (
     <motion.div
       onMouseLeave={() => setHovered(null)}
@@ -118,8 +142,8 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
       {items.map((item, idx) => (
         <a
           onMouseEnter={() => setHovered(idx)}
-          onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-primary"
+          onClick={(e) => handleClick(e, item.link)}
+          className="relative px-4 py-2 text-neutral-600 dark:text-primary cursor-pointer"
           key={`link-${idx}`}
           href={item.link}
         >
@@ -182,12 +206,29 @@ export const MobileNavHeader = ({
   );
 };
 
-// Fixed: Removed unused `onClose` prop
+// Update MobileNavMenu to handle smooth scrolling
 export const MobileNavMenu = ({
   children,
   className,
   isOpen,
 }: MobileNavMenuProps) => {
+  // Add smooth scroll handler for mobile menu items
+  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const target = e.currentTarget as HTMLAnchorElement;
+    const href = target.getAttribute("href");
+
+    if (href && href.startsWith("#")) {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -199,6 +240,16 @@ export const MobileNavMenu = ({
             "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-neutral-950",
             className
           )}
+          onClick={(e) => {
+            // Handle mobile link clicks
+            const target = e.target as HTMLElement;
+            const link = target.closest('a[href^="#"]');
+            if (link) {
+              handleMobileLinkClick(
+                e as unknown as React.MouseEvent<HTMLAnchorElement>
+              );
+            }
+          }}
         >
           {children}
         </motion.div>
@@ -215,18 +266,32 @@ export const MobileNavToggle = ({
   onClick: () => void;
 }) => {
   return isOpen ? (
-    <IconX className="text-black dark:text-white" onClick={onClick} />
+    <IconX
+      className="text-black dark:text-white cursor-pointer"
+      onClick={onClick}
+    />
   ) : (
-    <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
+    <IconMenu2
+      className="text-black dark:text-white cursor-pointer"
+      onClick={onClick}
+    />
   );
 };
 
-// Fixed: Replaced <img> with <Image />
 export const NavbarLogo = () => {
+  const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <a
       href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+      onClick={scrollToTop}
+      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black cursor-pointer"
     >
       <Image
         src="https://assets.aceternity.com/logo-dark.png"
@@ -258,6 +323,19 @@ export const NavbarButton = ({
   | React.ComponentPropsWithoutRef<"a">
   | React.ComponentPropsWithoutRef<"button">
 )) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (href && href.startsWith("#")) {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }
+  };
+
   const baseStyles =
     "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
@@ -273,6 +351,7 @@ export const NavbarButton = ({
   return (
     <Tag
       href={href || undefined}
+      onClick={handleClick}
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
     >
