@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image"; 
+import React, { useState } from "react";
+import Image from "next/image";
 import StarBorder from "./StarBorder";
 import { NavItems } from "./ui/resizable-navbar";
 import { StaggeredMenu } from "./StaggeredMenu";
@@ -9,24 +9,18 @@ import { StaggeredMenu } from "./StaggeredMenu";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (!menuOpen) return;
-
-    const handleLinkClick = (e: Event) => {
-      const target = (e.target as HTMLElement).closest("a");
-      if (target && target.getAttribute("href")?.startsWith("#")) {
-        setMenuOpen(false);
+  // Smooth scroll function
+  const scrollToSection = (sectionId: string) => {
+    if (sectionId.startsWith("#")) {
+      const element = document.querySelector(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }
-    };
-
-    document.addEventListener("click", handleLinkClick);
-    document.addEventListener("touchstart", handleLinkClick);
-
-    return () => {
-      document.removeEventListener("click", handleLinkClick);
-      document.removeEventListener("touchstart", handleLinkClick);
-    };
-  }, [menuOpen]);
+    }
+  };
 
   const handleMenuOpen = () => setMenuOpen(true);
   const handleMenuClose = () => setMenuOpen(false);
@@ -82,7 +76,7 @@ const Navbar = () => {
               width={40}
               height={40}
               className="rounded-full object-cover"
-              priority 
+              priority
             />
           </div>
           <p className="font-bold text-light-green text-[20px]">JPCS</p>
@@ -92,10 +86,13 @@ const Navbar = () => {
         <div
           className="flex items-center justify-between px-10 py-3 
           rounded-full border border-white/10 
-          bg-white/8 backdrop-blur-md shadow-lg 
+          bg-[#1D1D1D]/80 backdrop-blur-md shadow-lg 
           min-w-[525px] h-13 gap-10 text-white text-[14px] pointer-events-auto"
         >
-          <NavItems items={navItems} />
+          <NavItems
+            items={navItems}
+            onItemClick={(link: string) => scrollToSection(link)} 
+          />
         </div>
 
         <div className="pointer-events-auto">
@@ -114,7 +111,12 @@ const Navbar = () => {
         <StaggeredMenu
           position="right"
           colors={["#1a1a1a", "#2d2d2d", "#1a1a1a"]}
-          items={menuItems}
+          items={menuItems.map((item) => ({
+            ...item,
+            onClick: () => {
+              scrollToSection(item.link);
+            },
+          }))}
           socialItems={socialItems}
           displaySocials={true}
           displayItemNumbering={true}
