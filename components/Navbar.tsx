@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
 import StarBorder from "./StarBorder";
 import { NavItems } from "./ui/resizable-navbar";
 import { StaggeredMenu } from "./StaggeredMenu";
+import Image from "next/image";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
