@@ -13,7 +13,7 @@ export default function Home() {
       <ScrollProgressBar /> 
       <Navbar />
       <Hero />
-      <Banner />
+      {/* <Banner /> */}
       <About />
       <Announcements />
     </div>

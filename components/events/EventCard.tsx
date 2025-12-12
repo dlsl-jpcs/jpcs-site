@@ -24,7 +24,6 @@ export default function EventCard({
 
   const isActive = current === index;
 
-  // 3D tilt effect (desktop only) 
   useEffect(() => {
     if (isMobile) return;
 

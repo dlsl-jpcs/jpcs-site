@@ -19,7 +19,7 @@ const ProgramsUnder = () => {
       title: "Bachelor of Science in Computer Science",
       short: "BSCS",
       desc: "Master algorithms, software engineering, AI, and advanced computing theories for research and tech leadership.",
-      bg: "bg-transparent border-green-500/30",
+      bg: "bg-white/5 border-green-500/30",
       gradient: "from-green-400 to-emerald-500",
       icon: (
         <svg
@@ -42,7 +42,7 @@ const ProgramsUnder = () => {
       title: "Bachelor of Science in Information Technology",
       short: "BSIT",
       desc: "Develop practical skills in web development, cybersecurity, cloud computing, and enterprise solutions.",
-      bg: "bg-transparent border-green-500/30",
+      bg: "bg-white/5 border-green-500/30",
       gradient: "from-green-400 to-emerald-500",
       icon: (
         <svg
@@ -65,7 +65,7 @@ const ProgramsUnder = () => {
       title: "Associate in Computer Technology",
       short: "ACT",
       desc: "Two-year intensive program with foundational skills in programming, networking, and hardware.",
-      bg: "bg-transparent border-green-500/30",
+      bg: "bg-white/5 border-green-500/30",
       gradient: "from-green-400 to-emerald-500",
       icon: (
         <svg
@@ -91,10 +91,11 @@ const ProgramsUnder = () => {
         ref={containerRef}
         className="relative py-6 sm:py-10 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden"
       >
+
         <div className="relative text-center mb-16 md:mb-20">
           <h1 className="text-3xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Programs under{" "}
-            <span className="gradient-text relative">
+            <span className="text-light-green relative">
               JPCS
               <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"></span>
             </span>
