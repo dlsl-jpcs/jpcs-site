@@ -278,14 +278,12 @@ export default function Hero() {
             onMouseLeave={handleMouseLeave}
             variants={containerVariants}
           >
-            {/* Main Content Container - Always Centered */}
             <motion.div
               className="relative z-10 flex items-center justify-center min-h-screen w-full px-4 sm:px-6 lg:px-2"
               variants={staggerVariants}
             >
               <div className="w-full max-w-[95%] sm:max-w-[95%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl 2xl:max-w-9xl">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-0 items-center">
-                  {/* Left Text Section */}
                   <motion.div
                     className="flex flex-col items-center text-center lg:items-start lg:text-left order-1 lg:order-1"
                     variants={staggerVariants}
@@ -337,7 +335,6 @@ export default function Hero() {
                     </div>
                   </motion.div>
 
-                  {/* Right Events Section */}
                   <motion.div
                     className="flex items-center justify-center order-2 lg:order-2"
                     variants={eventsVariants}
@@ -351,7 +348,6 @@ export default function Hero() {
               </div>
             </motion.div>
 
-            {/* Dot Grid */}
             <AnimatePresence>
               {dots.map((dot, index) => (
                 <motion.div
