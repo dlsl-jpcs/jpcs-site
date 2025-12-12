@@ -10,7 +10,6 @@ export default function Hero() {
   >([]);
   const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isContentLoaded, setIsContentLoaded] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseRef = useRef<{ x: number; y: number } | null>(null);
@@ -20,14 +19,6 @@ export default function Hero() {
   const hoverRadius = 200;
   const scaleRadius = 140;
   const glowRadius = 200;
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsContentLoaded(true);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -59,15 +50,15 @@ export default function Hero() {
 
           if (y > fadeStartY) {
             const progress =
-              (y - fadeStartY) / (window.innerHeight - fadeStartY);
-            const fadeFactor = 1 - progress * 0.5;
+              (y - fadeStartY) / (window.innerHeight - fadeStartY); 
+            const fadeFactor = 1 - progress * 0.5; 
             baseOpacity *= fadeFactor;
           }
 
           newDots.push({
             x,
             y,
-            baseOpacity: Math.max(0.06, baseOpacity),
+            baseOpacity: Math.max(0.06, baseOpacity), 
           });
         }
       }
@@ -89,7 +80,7 @@ export default function Hero() {
     const animate = () => {
       const container = containerRef.current;
       const mouse = mouseRef.current;
-      if (!container || !mouse || !isContentLoaded) {
+      if (!container || !mouse) {
         animationFrameRef.current = requestAnimationFrame(animate);
         return;
       }
@@ -141,10 +132,9 @@ export default function Hero() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [dots, isContentLoaded]);
+  }, [dots]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isContentLoaded) return;
     const pos = { x: e.clientX, y: e.clientY };
     mouseRef.current = pos;
   };
@@ -238,6 +228,18 @@ export default function Hero() {
     },
   };
 
+/*   const dotVariants = {
+    hidden: { opacity: 0, scale: 0 },
+    visible: {
+      opacity: 0.1,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut" as const,
+      },
+    },
+  }; */
+
   const tagVariants = {
     hidden: {
       opacity: 0,
@@ -278,25 +280,17 @@ export default function Hero() {
       {isVisible && (
         <motion.section
           id="home"
-          className="min-h-screen w-screen overflow-hidden flex items-center justify-center relative"
+          className="min-h-screen w-screen overflow-hidden flex items-center justify-center"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
-          {!isContentLoaded && (
-            <div className="absolute inset-0 bg-black z-50" />
-          )}
-
           <motion.div
             ref={containerRef}
             className="min-h-screen w-screen bg-background relative overflow-hidden"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             variants={containerVariants}
-            style={{
-              opacity: isContentLoaded ? 1 : 0,
-              transition: "opacity 0.5s ease-out",
-            }}
           >
             <motion.div
               className="relative z-10 flex items-center justify-center min-h-screen w-full px-4 sm:px-6 lg:px-2"
@@ -369,29 +363,28 @@ export default function Hero() {
             </motion.div>
 
             <AnimatePresence>
-              {isContentLoaded &&
-                dots.map((dot, index) => (
-                  <motion.div
-                    key={index}
-                    className="absolute dot rounded-full bg-dark-green pointer-events-none will-change-transform transition-opacity duration-150 ease-out z-0"
-                    style={{
-                      left: dot.x - dotRadius,
-                      top: dot.y - dotRadius,
-                      width: dotRadius * 2,
-                      height: dotRadius * 2,
-                    }}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{
-                      opacity: dot.baseOpacity,
-                      scale: 1,
-                    }}
-                    transition={{
-                      duration: 0.6,
-                      delay: index * 0.002,
-                      ease: "easeOut",
-                    }}
-                  />
-                ))}
+              {dots.map((dot, index) => (
+                <motion.div
+                  key={index}
+                  className="absolute dot rounded-full bg-dark-green pointer-events-none will-change-transform transition-opacity duration-150 ease-out z-0"
+                  style={{
+                    left: dot.x - dotRadius,
+                    top: dot.y - dotRadius,
+                    width: dotRadius * 2,
+                    height: dotRadius * 2,
+                  }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{
+                    opacity: dot.baseOpacity,
+                    scale: 1,
+                  }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.002,
+                    ease: "easeOut",
+                  }}
+                />
+              ))}
             </AnimatePresence>
           </motion.div>
         </motion.section>
