@@ -5,14 +5,13 @@ const About = () => {
   return (
     <div
       id="about"
-      className="relative w-screen min-h-screen bg-white overflow-hidden"
+      className="relative w-screen min-h-screen bg-background overflow-hidden"
     >
-      {/* Full-height background – works on mobile & desktop */}
       <div className="absolute inset-0 pointer-events-none">
         <svg
           viewBox="0 0 1400 900"
           className="absolute inset-0 w-full h-full"
-          preserveAspectRatio="xMidYMid slice" // ← This is the key for mobile!
+          preserveAspectRatio="xMidYMid slice"
         >
           <defs>
             <radialGradient id="centerFade">
@@ -31,7 +30,6 @@ const About = () => {
             <rect width="100%" height="100%" fill="url(#centerFade)" />
           </mask>
 
-          {/* Curved Grid */}
           <g
             mask="url(#fadeMask)"
             stroke="#10b981"
@@ -59,7 +57,6 @@ const About = () => {
             ))}
           </g>
 
-          {/* Animated Dots */}
           <g>
             <circle r="5" fill="url(#dotGlow)">
               <animateMotion
@@ -80,7 +77,6 @@ const About = () => {
         </svg>
       </div>
 
-      {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-8 pb-10">
         <ProgramsUnder />
       </div>

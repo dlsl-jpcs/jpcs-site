@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import StarBorder from "./StarBorder";
 import { NavItems } from "./ui/resizable-navbar";
 import { StaggeredMenu } from "./StaggeredMenu";
+import Image from "next/image";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showNavbar, setShowNavbar] = useState(true);
 
-  // Smooth scroll function
   const scrollToSection = (sectionId: string) => {
     if (sectionId.startsWith("#")) {
       const element = document.querySelector(sectionId);
@@ -24,6 +25,32 @@ const Navbar = () => {
 
   const handleMenuOpen = () => setMenuOpen(true);
   const handleMenuClose = () => setMenuOpen(false);
+
+  const handleScroll = useCallback(() => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY < 10) {
+      setShowNavbar(true);
+      setLastScrollY(currentScrollY);
+      return;
+    }
+
+    if (currentScrollY < lastScrollY) {
+      setShowNavbar(true);
+    } else if (currentScrollY > lastScrollY + 50) {
+      setShowNavbar(false);
+    }
+
+    setLastScrollY(currentScrollY);
+  }, [lastScrollY]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
 
   const navItems = [
     { name: "Home", link: "#home" },
@@ -65,9 +92,11 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Desktop Navbar */}
-      <div className="fixed top-0 left-0 w-full z-50 hidden lg:flex justify-between items-center px-12 py-8 bg-transparent pointer-events-none">
-        {/* Logo */}
+      <div
+        className={`fixed top-0 left-0 w-full z-50 hidden lg:flex justify-between items-center px-12 py-8 bg-transparent pointer-events-none transition-transform duration-300 ease-in-out ${
+          showNavbar ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
         <div className="flex gap-2 items-center pointer-events-auto">
           <div className="relative bg-white rounded-full w-10 h-10">
             <Image
@@ -81,8 +110,6 @@ const Navbar = () => {
           </div>
           <p className="font-bold text-light-green text-[20px]">JPCS</p>
         </div>
-
-        {/* Navigation Links */}
         <div
           className="flex items-center justify-between px-10 py-3 
           rounded-full border border-white/10 
@@ -91,7 +118,7 @@ const Navbar = () => {
         >
           <NavItems
             items={navItems}
-            onItemClick={(link: string) => scrollToSection(link)} 
+            onItemClick={(link: string) => scrollToSection(link)}
           />
         </div>
 
