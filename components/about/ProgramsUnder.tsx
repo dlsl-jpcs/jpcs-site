@@ -158,7 +158,7 @@ const ProgramsUnder = () => {
         </svg>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center py-20 max-w-6xl mx-auto px-6 md:px-0">
+      <div className="relative z-10 flex flex-col items-center justify-center py-3 md:py-5 max-w-6xl mx-auto px-6 md:px-0">
         <div className="text-center mb-16 md:mb-20">
           <h1 className="text-3xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Programs under{" "}
