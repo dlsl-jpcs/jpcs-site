@@ -21,7 +21,7 @@ const Main = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-12"
+          className="text-center mb-8"
         >
           <div className="inline-block mb-4">
             <h1 className="text-2xl md:text-4xl font-bold text-black">
@@ -35,9 +35,9 @@ const Main = () => {
             ></motion.div>
           </div>
 
-          <p className="text-black/80 text-lg md:text-xl font-medium max-w-2xl mx-auto">
+          {/* <p className="text-black/80 text-lg md:text-xl font-medium max-w-2xl mx-auto">
             Junior Philippine Computer Society
-          </p>
+          </p> */}
         </motion.div>
 
         <div className="space-y-6">
