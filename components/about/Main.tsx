@@ -10,31 +10,30 @@ const Main = () => {
       <div className="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-accent-green/5 rotate-45 transform blur-3xl"></div>
       <div className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-light-green/3 rotate-12 transform blur-3xl"></div>
 
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="relative z-10 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
-            className="relative flex justify-center lg:justify-end"
+            className="relative flex justify-center"
           >
-            <div className="relative group max-w-md">
-              <div className="absolute -inset-3  bg-gradient-to-r from-accent-green/15 to-light-green/15 rounded-full blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500"></div>
+            <div className="relative group">
+              <div className="absolute -inset-4"></div>
 
-              <div className="relative  backdrop-blur-sm rounded-full p-6 group-hover:border-accent-green/40 transition-all duration-500 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent-green/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+              <div className="relative backdrop-blur-sm rounded-full p-4 transition-all duration-500 overflow-hidden">
 
-                <div className="relative">
+                <div className="relative flex items-center justify-center">
                   <img
                     src="/jpcslogo.png"
                     alt="JPCS Logo"
-                    className="w-full h-auto transform group-hover:scale-105 transition-all duration-500 drop-shadow-2xl"
+                    className="w-[60%] md:w-[70%] h-auto transform group-hover:scale-105 transition-all duration-500 drop-shadow-2xl"
                   />
                 </div>
 
-                <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-accent-green/40 rounded-tr-lg"></div>
-                <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-light-green/40 rounded-bl-lg"></div>
+                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-accent-green/40 rounded-tr-lg"></div>
+                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-light-green/40 rounded-bl-lg"></div>
               </div>
             </div>
           </motion.div>
@@ -46,7 +45,6 @@ const Main = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-8"
           >
-            {/* Badge */}
             <div className="text-center md:text-left">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -61,7 +59,6 @@ const Main = () => {
               </motion.div>
             </div>
 
-            {/* Title */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -75,15 +72,13 @@ const Main = () => {
                 </span>
               </h2>
 
-              {/* Title Decorative Line */}
-              <div className="hidden md:flex items-center gap-3 mt-4">
+              {/* <div className="hidden md:flex items-center gap-3 mt-4">
                 <div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-accent-green/30"></div>
                 <div className="w-1.5 h-1.5 bg-accent-green rounded-full animate-pulse"></div>
                 <div className="h-0.5 flex-1 bg-gradient-to-r from-accent-green/30 to-transparent"></div>
-              </div>
+              </div> */}
             </motion.div>
 
-            {/* Content Card - Clean Version */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -91,7 +86,6 @@ const Main = () => {
               transition={{ delay: 0.5 }}
               className="relative group"
             >
-              {/* Card */}
               <div className="bg-white/5 backdrop-blur-md rounded-xl p-6 md:p-8 border border-white/10 group-hover:border-accent-green/40 transition-all duration-500">
                 <div className="space-y-6">
                   <p className="text-gray-200 text-lg leading-relaxed">
@@ -104,7 +98,6 @@ const Main = () => {
                   </p>
 
                   <div className="relative pl-5 border-l-2 border-accent-green/40">
-                    {/* Decorative Dot */}
                     <div className="absolute -left-1.5 top-0 w-3 h-3 bg-accent-green rounded-full"></div>
 
                     <p className="text-gray-300 leading-relaxed">
@@ -113,7 +106,6 @@ const Main = () => {
                       its members.
                     </p>
 
-                    {/* Bottom Indicator */}
                     <div className="flex items-center gap-2 mt-4">
                       <div className="w-6 h-0.5 bg-gradient-to-r from-accent-green to-light-green rounded-full"></div>
                       <div className="text-xs text-gray-400 font-medium">
@@ -123,25 +115,22 @@ const Main = () => {
                   </div>
                 </div>
 
-                {/* Corner Accents */}
                 <div className="absolute top-3 right-3 w-2 h-2 border-t border-r border-accent-green/30"></div>
                 <div className="absolute bottom-3 left-3 w-2 h-2 border-b border-l border-light-green/30"></div>
               </div>
 
-              {/* Subtle Hover Glow */}
               <div className="absolute -inset-0.5 bg-gradient-to-r from-accent-green/20 to-light-green/20 rounded-xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10"></div>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Bottom Separator */}
-        <motion.div
+        {/* <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: "100%" }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.8 }}
           className="h-px bg-gradient-to-r from-transparent via-accent-green/30 to-transparent mt-12 md:mt-16"
-        ></motion.div>
+        ></motion.div> */}
       </div>
     </section>
   );
