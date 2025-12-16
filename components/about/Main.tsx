@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 const Main = () => {
   return (
-    <section className="py-16 md:py-24 px-4 md:px-8 text-white relative overflow-hidden bg-accent-green">
-      <div className="absolute -top-1/4 -right-1/4 w-[800px] h-[800px] bg-black/5 rotate-45 transform"></div>
+    <section className="py-16 md:py-18   px-4 md:px-8 text-white relative overflow-hidden bg-accent-green">
+      <div className="absolute -top-1/4 -right-1/4  w-[500px] h-[500px] md:w-[800px] md:h-[800px] bg-black/5 rotate-45 transform"></div>
       <div
         className="absolute inset-0 opacity-5"
         style={{
@@ -16,7 +16,7 @@ const Main = () => {
         }}
       />
 
-      <div className="relative w-full max-w-4xl mx-auto">
+      <div className="relative w-full max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -24,14 +24,14 @@ const Main = () => {
           className="text-center mb-12 md:mb-16"
         >
           <div className="inline-block mb-4">
-            <h1 className="text-3xl md:text-5xl font-bold text-black">
+            <h1 className="text-2xl md:text-4xl font-bold text-black">
               About <span className="text-white">JPCS</span>
             </h1>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="h-1 bg-white/80 rounded-full mt-2"
+              className="h-1 bg-black rounded-full mt-2"
             ></motion.div>
           </div>
 
@@ -46,7 +46,7 @@ const Main = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <p className="text-center text-black font-semibold text-lg md:text-2xl leading-relaxed">
+            <p className="text-center text-black font-semibold text-md md:text-2xl leading-relaxed">
               JPCS is a professional organization of ICT students which aims to
               provide knowledge and skills significant to the students once they
               enter the academe and industry.
@@ -58,7 +58,7 @@ const Main = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <p className="text-center text-black font-semibold text-lg md:text-2xl leading-relaxed">
+            <p className="text-center text-black font-semibold text-md md:text-2xl leading-relaxed">
               JPCS provides wide opportunities and experiences which will
               encourage collaboration and healthy competition among its members.
             </p>
@@ -71,7 +71,7 @@ const Main = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-16 text-center"
         >
-          <p className="text-black/70 text-md font-medium italic">
+          <p className="text-black/70 text-sm font-medium italic">
             Shaping the future of technology, one student at a time
           </p>
         </motion.div>
