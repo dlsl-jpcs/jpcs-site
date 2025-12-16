@@ -167,7 +167,7 @@ const ProgramsUnder = () => {
           className="text-center mb-12 md:mb-16"
         >
           <div className="inline-block mb-4">
-            <h1 className="text-3xl md:text-5xl font-bold text-white">
+            <h1 className="text-2xl md:text-4xl font-bold text-white">
               Programs Under <span className="text-light-green">JPCS</span>
             </h1>
             <motion.div
@@ -184,7 +184,7 @@ const ProgramsUnder = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-white/80 text-lg md:text-xl font-medium max-w-2xl mx-auto"
+            className="text-white/80 text-sm md:text-xl font-medium max-w-2xl mx-auto"
           >
             Explore the cutting-edge degree programs under Junior Philippine
             Computer Society at De La Salle Lipa
@@ -211,8 +211,8 @@ const ProgramsUnder = () => {
                 <div
                   className={`relative w-15 h-15 rounded-full bg-gradient-to-br ${prog.gradient} p-0.5 shadow-lg shadow-green-500/20`}
                 >
-                  <div className="w-full h-full rounded-full flex items-center justify-center bg-black">
-                    <div className="text-green-400">{prog.icon}</div>
+                  <div className="w-full h-full rounded-full flex items-center justify-center bg-accent-green">
+                    <div className="text-black  ">{prog.icon}</div>
                   </div>
                   <div className="absolute inset-0 rounded-full border-2 border-white/30"></div>
                 </div>
@@ -229,7 +229,7 @@ const ProgramsUnder = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 + 0.3 }}
-                    className="text-xl sm:text-2xl font-bold text-white mb-4 leading-tight"
+                    className="text-lg sm:text-xl font-bold text-white mb-4 leading-tight"
                   >
                     {prog.title}
                   </motion.h2>
@@ -239,7 +239,7 @@ const ProgramsUnder = () => {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
-                    className="text-gray-300 leading-relaxed"
+                    className="text-gray-300 leading-relaxed text-sm md:text-[16px]"
                   >
                     {prog.desc}
                   </motion.p>

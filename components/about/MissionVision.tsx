@@ -9,7 +9,7 @@ const MissionVision = () => {
   };
 
   return (
-    <section className="py-10 md:py-16 px-8 md:px-8 text-black relative overflow-hidden">
+    <section className="py-15 md:py-20 px-8 md:px-8 text-black relative overflow-hidden">
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -19,7 +19,7 @@ const MissionVision = () => {
           className="text-center mb-12 md:mb-16"
         >
           <div className="inline-block mb-4">
-            <h1 className="text-3xl md:text-5xl font-bold text-white">
+            <h1 className="text-2xl md:text-4xl font-bold text-white">
               Mission & <span className="text-accent-green">Vision</span>
             </h1>
             <motion.div
