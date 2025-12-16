@@ -1,6 +1,7 @@
 import React from "react";
 import ProgramsUnder from "./ProgramsUnder";
 import Main from "./Main";
+import MissionVision from "./MissionVision";
 
 const About = () => {
   return (
@@ -10,6 +11,7 @@ const About = () => {
     >
       <Main />
 
+      <MissionVision />
       <ProgramsUnder />
     </div>
   );

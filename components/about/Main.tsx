@@ -5,7 +5,8 @@ import { motion } from "framer-motion";
 
 const Main = () => {
   return (
-    <section className="py-10 md:py-20 px-4 md:px-8 text-white relative overflow-hidden">
+    <section className="py-10 md:py-20 px-4 md:px-8 text-white relative overflow-hidden bg-[#0d0d0d]">
+      <div className="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] md:w-[800px] md:h-[800px] bg-accent-green/5 rotate-45 transform"></div>
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-5 items-center justify-center">
           <motion.div
@@ -18,7 +19,7 @@ const Main = () => {
               <img
                 src="/jpcslogo.png"
                 alt="JPCS Logo"
-                className="w-[40%] md:w-[70%] mx-auto h-auto transform hover:scale-[1.02] transition-transform duration-500 drop-shadow-2xl relative z-10"
+                className="w-[40%] lg:w-[70%] mx-auto h-auto transform hover:scale-[1.02] transition-transform duration-500 drop-shadow-2xl relative z-10"
               />
 
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent-green/10 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1000 opacity-0 hover:opacity-100 z-20" />
