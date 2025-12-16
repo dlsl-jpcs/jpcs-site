@@ -9,23 +9,31 @@ const MissionVision = () => {
   };
 
   return (
-    <section className="py-8 md:py-14 px-8 md:px-8 text-black relative overflow-hidden">
+    <section className="py-10 md:py-16 px-8 md:px-8 text-black relative overflow-hidden">
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
-          {...fadeInUp}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="text-center mb-12 md:mb-16"
         >
-          <h1 className="text-3xl md:text-5xl font-bold mb-3 text-white">
-            MISSION & VISION
-          </h1>
-          <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: "6rem" }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="w-24 h-0.5 bg-accent-green mx-auto"
-          ></motion.div>
+          <div className="inline-block mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-white">
+              Mission & <span className="text-accent-green">Vision</span>
+            </h1>
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "100%" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-1 bg-accent-green rounded-full mt-2"
+            ></motion.div>
+          </div>
+
+          <p className="text-white/80 text-lg md:text-xl font-medium max-w-2xl mx-auto">
+            Our guiding principles and aspirations
+          </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
