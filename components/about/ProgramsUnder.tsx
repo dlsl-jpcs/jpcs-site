@@ -160,36 +160,35 @@ const ProgramsUnder = () => {
 
       <div className="relative z-10 flex flex-col items-center justify-center py-3 md:py-5 max-w-6xl mx-auto px-6 md:px-0">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16 md:mb-20"
+          className="text-center mb-12 md:mb-16"
         >
-          <h1 className="text-3xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-            Programs under{" "}
-            <span className="text-light-green relative">
-              JPCS
-              <motion.span
-                initial={{ width: 0 }}
-                whileInView={{ width: "100%" }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-light-green to-emerald-500 rounded-full"
-              ></motion.span>
-            </span>
-          </h1>
+          <div className="inline-block mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-white">
+              Programs Under <span className="text-light-green">JPCS</span>
+            </h1>
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "100%" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-1 bg-light-green rounded-full mt-2"
+            ></motion.div>
+          </div>
 
-          <motion.h2
+          <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-white/80 text-lg md:text-xl font-medium max-w-2xl mx-auto"
           >
             Explore the cutting-edge degree programs under Junior Philippine
             Computer Society at De La Salle Lipa
-          </motion.h2>
+          </motion.p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 sm:gap-8">
