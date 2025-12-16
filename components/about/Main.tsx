@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 const Main = () => {
   return (
-    <section className="py-16 md:py-18   px-4 md:px-8 text-white relative overflow-hidden bg-accent-green">
-      <div className="absolute -top-1/4 -right-1/4  w-[500px] h-[500px] md:w-[800px] md:h-[800px] bg-black/5 rotate-45 transform"></div>
+    <section className="py-16 md:py-14  px-4 md:px-8 text-white relative overflow-hidden bg-accent-green">
+      <div className="absolute -top-1/4 -right-1/4  w-[550px] h-[550px] md:w-[800px] md:h-[800px] bg-black/5 rotate-45 transform"></div>
       <div
         className="absolute inset-0 opacity-5"
         style={{
@@ -21,7 +21,7 @@ const Main = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-10 md:mb-12"
         >
           <div className="inline-block mb-4">
             <h1 className="text-2xl md:text-4xl font-bold text-black">
@@ -69,9 +69,9 @@ const Main = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 text-center"
+          className="mt-10 text-center"
         >
-          <p className="text-black/70 text-sm font-medium italic">
+          <p className="text-black/70 text-xs md:text-sm font-medium italic">
             Shaping the future of technology, one student at a time
           </p>
         </motion.div>
