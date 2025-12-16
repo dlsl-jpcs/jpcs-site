@@ -45,7 +45,7 @@ const MissionVision = () => {
             <div className="absolute bottom-0 left-0 w-1/4 h-1/2 bg-black/5 skew-x-12 transform"></div>
 
             <div className="mb-6">
-              <div className="text-3xl md:text-4xl font-bold mb-4">
+              <div className="text-2xl md:text-4xl font-bold mb-4">
                 Mission
                 <span className="ml-1 text-black/30">.</span>
               </div>
@@ -54,7 +54,7 @@ const MissionVision = () => {
                 <div className="absolute -top-4 -left-3 text-6xl md:text-7xl font-bold text-black/5">
                   M
                 </div>
-                <p className="text-lg md:text-xl leading-relaxed font-medium relative z-10">
+                <p className="text-md md:text-xl leading-relaxed font-medium relative z-10">
                   To build a community that will help future IT professionals
                   develop their technical and non-technical skills in order to
                   help others in bringing equality, equity, and justice into all
@@ -90,7 +90,7 @@ const MissionVision = () => {
             <div className="absolute top-0 right-0 w-1/3 h-full bg-black/5 -skew-x-12 transform"></div>
 
             <div className="mb-6">
-              <div className="text-3xl md:text-4xl font-bold mb-4">
+              <div className="text-2xl md:text-4xl font-bold mb-4">
                 Vision
                 <span className="ml-1 text-black/30">.</span>
               </div>
@@ -128,9 +128,6 @@ const MissionVision = () => {
                     <p className="text-black/80 leading-relaxed text-sm md:text-base">
                       {item.description}
                     </p>
-                    {index < 2 && (
-                      <div className="w-16 h-0.5 bg-black/30 mt-4"></div>
-                    )}
                   </div>
                 </div>
               ))}
@@ -143,14 +140,13 @@ const MissionVision = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-12 md:mt-16"
         >
-          <div className="my-6 md:my-8 border-t border-gray-200 origin-left"></div>
-
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-xl md:text-2xl font-bold leading-tight text-gray-50">
               Building bridges between technical excellence and social impact
               <span className="text-gray-400">.</span>
             </p>
           </div>
+          <div className="my-6 md:my-8 border-b border-gray-200 origin-left"></div>
         </motion.div>
       </div>
     </section>

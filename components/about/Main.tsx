@@ -2,10 +2,15 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 const Main = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.3 });
+
   return (
-    <section className="py-16 md:py-14  px-4 md:px-8 text-white relative overflow-hidden bg-accent-green">
+    <section ref={ref} className="py-16 md:py-14  px-4 md:px-8 text-white relative overflow-hidden bg-accent-green">
       <div className="absolute -top-1/4 -right-1/4  w-[550px] h-[550px] md:w-[800px] md:h-[800px] bg-black/5 rotate-45 transform"></div>
       <div
         className="absolute inset-0 opacity-5"
@@ -18,8 +23,8 @@ const Main = () => {
 
       <div className="relative w-full max-w-5xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
@@ -29,21 +34,17 @@ const Main = () => {
             </h1>
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: "100%" }}
+              animate={isInView ? { width: "100%" } : { width: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="h-1 bg-black rounded-full mt-2"
             ></motion.div>
           </div>
-
-          {/* <p className="text-black/80 text-lg md:text-xl font-medium max-w-2xl mx-auto">
-            Junior Philippine Computer Society
-          </p> */}
         </motion.div>
 
         <div className="space-y-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <p className="text-center text-black font-semibold text-md md:text-2xl leading-relaxed">
@@ -54,8 +55,8 @@ const Main = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <p className="text-center text-black font-semibold text-md md:text-2xl leading-relaxed">
@@ -66,8 +67,8 @@ const Main = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-10 text-center"
         >
