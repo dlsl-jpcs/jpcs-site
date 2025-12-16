@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
 const ProgramsUnder = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,7 @@ const ProgramsUnder = () => {
       title: "Bachelor of Science in Computer Science",
       short: "BSCS",
       desc: "Master algorithms, software engineering, AI, and advanced computing theories for research and tech leadership.",
-      gradient: "from-green-400 to-emerald-500",
+      gradient: "from-accent-green to-accent-green",
       icon: (
         <svg
           className="w-6 h-6"
@@ -41,7 +42,7 @@ const ProgramsUnder = () => {
       title: "Bachelor of Science in Information Technology",
       short: "BSIT",
       desc: "Develop practical skills in web development, cybersecurity, cloud computing, and enterprise solutions.",
-      gradient: "from-green-400 to-emerald-500",
+      gradient: "from-accent-green to-accent-green",
       icon: (
         <svg
           className="w-6 h-6"
@@ -63,7 +64,7 @@ const ProgramsUnder = () => {
       title: "Associate in Computer Technology",
       short: "ACT",
       desc: "Two-year intensive program with foundational skills in programming, networking, and hardware.",
-      gradient: "from-green-400 to-emerald-500",
+      gradient: "from-accent-green to-accent-green",
       icon: (
         <svg
           className="w-6 h-6"
@@ -87,7 +88,6 @@ const ProgramsUnder = () => {
       ref={containerRef}
       className="relative py-6 sm:py-10 px-4 sm:px-6 w-full mx-auto overflow-hidden"
     >
-      {/* Background SVG Design */}
       <div className="absolute inset-0 pointer-events-none">
         <svg
           viewBox="0 0 1400 900"
@@ -159,26 +159,56 @@ const ProgramsUnder = () => {
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center py-3 md:py-5 max-w-6xl mx-auto px-6 md:px-0">
-        <div className="text-center mb-16 md:mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 md:mb-20"
+        >
           <h1 className="text-3xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Programs under{" "}
             <span className="text-light-green relative">
               JPCS
-              <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-light-green to-emerald-500 rounded-full"></span>
+              <motion.span
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-light-green to-emerald-500 rounded-full"
+              ></motion.span>
             </span>
           </h1>
 
-          <h2 className="text-gray-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-gray-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed"
+          >
             Explore the cutting-edge degree programs under Junior Philippine
             Computer Society at De La Salle Lipa
-          </h2>
-        </div>
+          </motion.h2>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 sm:gap-8">
-          {programs.map((prog) => (
-            <div key={prog.short} className="group relative">
-              {/* Icon Circle */}
-              <div className="absolute -top-8 md:-top-6 left-1/2 transform -translate-x-1/2 z-10">
+          {programs.map((prog, index) => (
+            <motion.div
+              key={prog.short}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="group relative"
+            >
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+                className="absolute -top-8 md:-top-6 left-1/2 transform -translate-x-1/2 z-10"
+              >
                 <div
                   className={`relative w-15 h-15 rounded-full bg-gradient-to-br ${prog.gradient} p-0.5 shadow-lg shadow-green-500/20`}
                 >
@@ -187,7 +217,7 @@ const ProgramsUnder = () => {
                   </div>
                   <div className="absolute inset-0 rounded-full border-2 border-white/30"></div>
                 </div>
-              </div>
+              </motion.div>
 
               <div
                 className={`absolute -top-3 -right-3 w-16 h-16 bg-gradient-to-br ${prog.gradient} rounded-xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500`}
@@ -195,16 +225,30 @@ const ProgramsUnder = () => {
 
               <div className="relative h-full bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 overflow-hidden pt-12 md:pt-16 hover:border-green-500/80 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 group-hover:shadow-green-500/20">
                 <div className="relative text-center">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 leading-tight0">
+                  <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 + 0.3 }}
+                    className="text-xl sm:text-2xl font-bold text-white mb-4 leading-tight"
+                  >
                     {prog.title}
-                  </h2>
+                  </motion.h2>
 
-                  <p className="text-gray-300 leading-relaxed">{prog.desc}</p>
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
+                    className="text-gray-300 leading-relaxed"
+                  >
+                    {prog.desc}
+                  </motion.p>
                 </div>
               </div>
 
               <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-light-green rounded-br-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
