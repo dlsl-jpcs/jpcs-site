@@ -20,7 +20,7 @@ const ProgramsUnder = () => {
       title: "Bachelor of Science in Computer Science",
       short: "BSCS",
       desc: "Master algorithms, software engineering, AI, and advanced computing theories for research and tech leadership.",
-      gradient: "from-green-400 to-emerald-500",
+      gradient: "from-accent-green to-accent-green",
       icon: (
         <svg
           className="w-6 h-6"
@@ -42,7 +42,7 @@ const ProgramsUnder = () => {
       title: "Bachelor of Science in Information Technology",
       short: "BSIT",
       desc: "Develop practical skills in web development, cybersecurity, cloud computing, and enterprise solutions.",
-      gradient: "from-green-400 to-emerald-500",
+      gradient: "from-accent-green to-accent-green",
       icon: (
         <svg
           className="w-6 h-6"
@@ -64,7 +64,7 @@ const ProgramsUnder = () => {
       title: "Associate in Computer Technology",
       short: "ACT",
       desc: "Two-year intensive program with foundational skills in programming, networking, and hardware.",
-      gradient: "from-green-400 to-emerald-500",
+      gradient: "from-accent-green to-accent-green",
       icon: (
         <svg
           className="w-6 h-6"
