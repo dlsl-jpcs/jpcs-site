@@ -3,8 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import About from "@/components/about/About";
+import Banner from "@/components/Banner";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
+import Officers from "@/components/officers/Officers";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 
 const Announcements = dynamic(() => import("@/components/Announcements"), {
@@ -47,7 +49,10 @@ export default function Home() {
         <Hero />
       </div>
 
+      <Banner />
+
       {isAboutVisible && <About />}
+      {isAboutVisible && <Officers />}
 
       <Announcements />
     </div>

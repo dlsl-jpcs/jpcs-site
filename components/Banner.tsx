@@ -3,59 +3,50 @@
 import React from "react";
 
 const Banner: React.FC = () => {
+  const text1 = "JUNIOR PHILIPPINE COMPUTER SOCIETY";
+  const text2 = "DE LA SALLE LIPA · JPCS ·";
+
   return (
     <div className="w-full overflow-hidden">
-      <div className="bg-white text-green-600 py-2 mb-3">
+      {/* Strip 1: white bg, dark green text, scrolls left */}
+      <div className="bg-white py-2.5">
         <div className="flex animate-marquee-left">
-          <div className="flex whitespace-nowrap">
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-          </div>
-          <div className="flex whitespace-nowrap">
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-            <span className="px-8 text-xl md:text-3xl font-bold">
-              JUNIOR PHILIPPINE COMPUTER SOCIETY
-            </span>
-          </div>
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="flex whitespace-nowrap items-center">
+              <span className="px-6 text-sm md:text-lg font-bold text-dark-green tracking-widest uppercase">
+                {text1}
+              </span>
+              <span className="text-dark-green/30 text-lg">✦</span>
+            </div>
+          ))}
+          {[...Array(4)].map((_, i) => (
+            <div key={`b${i}`} className="flex whitespace-nowrap items-center">
+              <span className="px-6 text-sm md:text-lg font-bold text-dark-green tracking-widest uppercase">
+                {text1}
+              </span>
+              <span className="text-dark-green/30 text-lg">✦</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="bg-green-600 text-white py-2">
+      {/* Strip 2: light green bg, dark bg text, scrolls right */}
+      <div className="bg-light-green py-2.5">
         <div className="flex animate-marquee-right">
-          <div className="flex whitespace-nowrap">
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-          </div>
-          <div className="flex whitespace-nowrap">
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-            <span className="px-8 text-xl md:text-3xl font-bold">DE LA SALLE LIPA</span>
-          </div>
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="flex whitespace-nowrap items-center">
+              <span className="px-6 text-sm md:text-lg font-bold text-background tracking-widest uppercase">
+                {text2}
+              </span>
+            </div>
+          ))}
+          {[...Array(6)].map((_, i) => (
+            <div key={`b${i}`} className="flex whitespace-nowrap items-center">
+              <span className="px-6 text-sm md:text-lg font-bold text-background tracking-widest uppercase">
+                {text2}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
