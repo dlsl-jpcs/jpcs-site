@@ -45,7 +45,17 @@ export default function Officers() {
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
 
-  const [open, setOpen] = useState<Category>("Executive");
+  const [open, setOpen] = useState<Category | null>("Executive");
+  const accordionRefs = useRef<Partial<Record<Category, HTMLDivElement>>>({});
+
+  const toggleAccordion = (key: Category) => {
+    const isCurrentlyOpen = open === key;
+    setOpen(isCurrentlyOpen ? null : key);
+    if (isCurrentlyOpen) {
+      const el = accordionRefs.current[key];
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   const officers = officersData.officers.filter(
     (o) => getCategory(o.Position) === active,
@@ -303,6 +313,7 @@ export default function Officers() {
             return (
               <motion.div
                 key={key}
+                ref={(el) => { if (el) accordionRefs.current[key] = el; }}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
@@ -314,7 +325,7 @@ export default function Officers() {
                 }`}
               >
                 <button
-                  onClick={() => setOpen(key)}
+                  onClick={() => toggleAccordion(key)}
                   className="w-full flex items-center gap-4 px-5 py-4 text-left group"
                 >
                   <span
