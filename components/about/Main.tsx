@@ -1,80 +1,79 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
 
 const Main = () => {
   return (
-    <section className="py-16 md:py-14  px-4 md:px-8 text-white relative overflow-hidden bg-accent-green">
-      <div className="absolute -top-1/4 -right-1/4  w-[550px] h-[550px] md:w-[800px] md:h-[800px] bg-black/5 rotate-45 transform"></div>
+    <section
+      id="about"
+      className="relative py-24 md:py-32 px-6 md:px-16 overflow-hidden bg-background"
+    >
+      {/* Subtle dot grid */}
       <div
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
-          backgroundImage: `linear-gradient(to right, #000000 1px, transparent 1px),
-                           linear-gradient(to bottom, #000000 1px, transparent 1px)`,
-          backgroundSize: "50px 50px",
+          backgroundImage:
+            "radial-gradient(circle, #0dcc58 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
         }}
       />
 
-      <div className="relative w-full max-w-5xl mx-auto">
+      <div className="relative max-w-6xl mx-auto">
+        {/* Section label */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-10"
         >
-          <div className="inline-block mb-4">
-            <h1 className="text-2xl md:text-4xl font-bold text-black">
-              About <span className="text-white">JPCS</span>
-            </h1>
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: "100%" }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="h-1 bg-black rounded-full mt-2"
-            ></motion.div>
-          </div>
-
-          {/* <p className="text-black/80 text-lg md:text-xl font-medium max-w-2xl mx-auto">
-            Junior Philippine Computer Society
-          </p> */}
+          <span className="inline-flex items-center gap-2 text-light-green text-xs font-semibold tracking-widest uppercase border border-light-green/30 rounded-full px-4 py-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-light-green" />
+            About Us
+          </span>
         </motion.div>
 
-        <div className="space-y-6">
+        {/* 2-column content */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          {/* Left: heading */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <p className="text-center text-black font-semibold text-md md:text-2xl leading-relaxed">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05]">
+              About <br />
+              <span className="text-light-green">JPCS</span>
+            </h2>
+            <p className="mt-5 text-white/40 text-sm md:text-base italic leading-relaxed">
+              Shaping the future of technology,
+              <br />
+              one student at a time
+            </p>
+          </motion.div>
+
+          {/* Right: description */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="border-l-2 border-light-green/30 pl-8 space-y-5 lg:pt-2"
+          >
+            <p className="text-white/70 text-base md:text-lg leading-relaxed">
               JPCS is a professional organization of ICT students which aims to
               provide knowledge and skills significant to the students once they
               enter the academe and industry.
             </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <p className="text-center text-black font-semibold text-md md:text-2xl leading-relaxed">
+            <p className="text-white/70 text-base md:text-lg leading-relaxed">
               JPCS provides wide opportunities and experiences which will
               encourage collaboration and healthy competition among its members.
             </p>
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-10 text-center"
-        >
-          <p className="text-black/70 text-xs md:text-sm font-medium italic">
-            Shaping the future of technology, one student at a time
-          </p>
-        </motion.div>
+
       </div>
     </section>
   );
