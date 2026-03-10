@@ -371,14 +371,17 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   const toggleMenu = useCallback(() => {
     const target = !openRef.current;
     openRef.current = target;
-    setOpen(target);
 
     if (target) {
+      setOpen(true);
       onMenuOpen?.();
       playOpen();
     } else {
       onMenuClose?.();
       playClose();
+      // Delay React state update until after the GSAP close animation (0.32s)
+      // so the full-screen wrapper stays in place and the header doesn't linger
+      setTimeout(() => setOpen(false), 350);
     }
 
     animateIcon(target);
