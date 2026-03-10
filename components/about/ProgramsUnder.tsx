@@ -83,7 +83,7 @@ const ProgramsUnder = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="flex flex-col items-center text-center mb-16"
         >
           <span className="inline-flex items-center gap-2 text-light-green text-xs font-semibold tracking-widest uppercase border border-light-green/30 rounded-full px-4 py-1.5 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-light-green" />
