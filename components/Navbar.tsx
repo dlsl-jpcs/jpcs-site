@@ -120,7 +120,7 @@ const Navbar = () => {
             onMouseLeave={() => setHoveredIndex(null)}
             className={`flex items-center justify-center p-2 rounded-full border backdrop-blur-2xl font-bold pointer-events-auto transition-all duration-500 ${
               navTheme === "light"
-                ? "bg-white/90 border-navy/10 shadow-[0_20px_40px_-15px_rgba(11,19,43,0.15)]"
+                ? "bg-white/40 border-navy/10 shadow-[0_20px_40px_-15px_rgba(11,19,43,0.15)]"
                 : "bg-charcoal-light/40 border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
             }`}
           >
@@ -157,9 +157,10 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* CTA Area */}
           <div className="pointer-events-auto">
             <button
+              type="button"
+              onClick={() => scrollToSection("#contact")}
               className={`px-9 py-3 rounded-full font-extrabold text-[15px] tracking-wide transition-all duration-500 hover:-translate-y-1 ${
                 navTheme === "light"
                   ? "bg-navy text-white hover:bg-navy-light shadow-[0_15px_30px_-10px_rgba(11,19,43,0.4)]"
