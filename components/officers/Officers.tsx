@@ -99,7 +99,7 @@ export default function Officers() {
   return (
     <section
       id="officers"
-      className="relative py-20 md:py-32 bg-background overflow-hidden"
+      className="relative py-16 md:py-25 bg-background overflow-hidden"
     >
       <div
         className="absolute inset-0 pointer-events-none"

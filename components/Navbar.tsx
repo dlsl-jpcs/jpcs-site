@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import StarBorder from "./StarBorder";
+import React, { useState, useEffect, useCallback } from "react";
 import { NavItems } from "./ui/resizable-navbar";
 import { StaggeredMenu } from "./StaggeredMenu";
 import Image from "next/image";
@@ -46,7 +45,6 @@ const Navbar = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -62,11 +60,7 @@ const Navbar = () => {
 
   const menuItems = [
     { label: "Home", ariaLabel: "Navigate to Home section", link: "#home" },
-    {
-      label: "About",
-      ariaLabel: "Navigate to About section",
-      link: "#about",
-    },
+    { label: "About", ariaLabel: "Navigate to About section", link: "#about" },
     {
       label: "Officers",
       ariaLabel: "Navigate to Officers section",
@@ -93,51 +87,55 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`fixed top-0 left-0 w-full z-50 hidden lg:flex justify-between items-center px-12 py-8 bg-transparent pointer-events-none transition-transform duration-300 ease-in-out ${
-          showNavbar ? "translate-y-0" : "-translate-y-full"
+        className={`fixed top-6 left-0 w-full z-50 hidden lg:flex justify-center items-center px-12 bg-transparent pointer-events-none transition-transform duration-500 ease-in-out ${
+          showNavbar ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0"
         }`}
       >
-        <div className="flex gap-2 items-center pointer-events-auto">
-          <div className="relative bg-white rounded-full w-10 h-10">
-            <Image
-              src="/jpcslogo.png"
-              alt="JPCS Logo"
-              width={40}
-              height={40}
-              className="rounded-full object-cover"
-              priority
+        <div className="flex items-center justify-between w-full max-w-7xl">
+          {/* Logo Area */}
+          <div className="flex gap-3 items-center pointer-events-auto">
+            <div className="relative bg-white rounded-full w-12 h-12 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              <Image
+                src="/jpcslogo.png"
+                alt="JPCS Logo"
+                width={48}
+                height={48}
+                className="rounded-full object-cover p-1"
+                priority
+              />
+            </div>
+            <p className="font-extrabold text-white text-[22px] tracking-tight">
+              JPCS<span className="text-neon">.</span>
+            </p>
+          </div>
+
+          {/* Center Nav Pill */}
+          <div
+            className="flex items-center justify-center px-8 py-3 
+            rounded-full border border-white/10 
+            bg-charcoal/60 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] 
+            min-w-[450px] gap-8 text-white font-medium pointer-events-auto"
+          >
+            <NavItems
+              items={navItems}
+              onItemClick={(link: string) => scrollToSection(link)}
             />
           </div>
-          <p className="font-bold text-light-green text-[20px]">JPCS</p>
-        </div>
-        <div
-          className="flex items-center justify-between px-10 py-3 
-          rounded-full border border-white/10 
-          bg-[#1D1D1D]/80 backdrop-blur-md shadow-lg 
-          min-w-[525px] h-13 gap-10 text-white text-[14px] pointer-events-auto"
-        >
-          <NavItems
-            items={navItems}
-            onItemClick={(link: string) => scrollToSection(link)}
-          />
-        </div>
 
-        <div className="pointer-events-auto">
-          <StarBorder
-            as="button"
-            className="custom-class"
-            color="white"
-            speed="5s"
-          >
-            Contact Us
-          </StarBorder>
+          {/* CTA Area */}
+          <div className="pointer-events-auto">
+            <button className="bg-neon text-navy px-8 py-3.5 rounded-full font-extrabold text-sm hover:bg-neon-hover hover:-translate-y-1 transition-all duration-300 shadow-[0_0_30px_rgba(196,255,71,0.25)]">
+              Contact Us
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* Mobile Menu */}
       <div className="lg:hidden">
         <StaggeredMenu
           position="right"
-          colors={["#1a1a1a", "#2d2d2d", "#1a1a1a"]}
+          colors={["#0B132B", "#111111", "#1A1A1A"]}
           items={menuItems.map((item) => ({
             ...item,
             onClick: () => {
@@ -148,9 +146,9 @@ const Navbar = () => {
           displaySocials={true}
           displayItemNumbering={true}
           logoUrl="/jpcslogo.png"
-          menuButtonColor="#ffffff"
-          openMenuButtonColor="#000000"
-          accentColor="#48bb78"
+          menuButtonColor="#C4FF47"
+          openMenuButtonColor="#FFFFFF"
+          accentColor="#C4FF47"
           isFixed={true}
           changeMenuColorOnOpen={true}
           onMenuOpen={handleMenuOpen}

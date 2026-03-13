@@ -30,7 +30,7 @@ export default function Home() {
       {
         threshold: 0.1,
         rootMargin: "-50px 0px 0px 0px",
-      }
+      },
     );
 
     if (heroSectionRef.current) {
@@ -41,7 +41,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="font-figtree items-center justify-items-center min-h-screen w-full">
+    <main className="w-full relative selection:bg-neon selection:text-navy">
       <ScrollProgressBar />
       <Navbar />
 
@@ -52,9 +52,10 @@ export default function Home() {
       <Banner />
 
       {isAboutVisible && <About />}
+
       {isAboutVisible && <Officers />}
 
       <Announcements />
-    </div>
+    </main>
   );
 }
