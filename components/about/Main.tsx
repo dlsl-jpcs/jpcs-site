@@ -1,22 +1,15 @@
+
 "use client";
 import { motion } from "framer-motion";
 
 const Main = () => {
   return (
     <section className="relative pt-32 pb-24 px-6 md:px-16 overflow-hidden bg-white z-10 rounded-t-[3rem] -mt-10">
-      <div className="relative max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-10"
-        >
-          <span className="inline-flex items-center gap-2 text-navy text-xs font-bold tracking-[0.15em] uppercase border border-navy/10 rounded-full px-4 py-2 bg-[#F4F4F5]">
-            <span className="w-2 h-2 rounded-full bg-neon" />
-            About Us
-          </span>
-        </motion.div>
+ 
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto z-10">
+       
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           <motion.div

@@ -21,7 +21,9 @@ const programs = [
 
 const ProgramsUnder = () => {
   return (
-    <section className="relative py-20 px-6 md:px-16 overflow-hidden bg-[#F4F4F5]">
+    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-[#F4F4F5]">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_100%,#000_70%,transparent_100%)] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -50,38 +52,45 @@ const ProgramsUnder = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="group relative bg-white rounded-[2.5rem] p-10 shadow-[0_10px_40px_-10px_rgba(11,19,43,0.05)] hover:shadow-[0_20px_50px_-10px_rgba(11,19,43,0.12)] transition-all duration-500 hover:-translate-y-2 border border-navy/5"
+              className="group relative bg-charcoal rounded-[2.5rem] p-10 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/5 hover:border-neon/40 hover:shadow-[0_20px_50px_-10px_rgba(196,255,71,0.15)] flex flex-col"
             >
-              <div className="absolute top-0 left-10 right-10 h-1.5 bg-neon rounded-b-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -bottom-4 -right-4 text-[8rem] font-black text-white/[0.02] select-none pointer-events-none tracking-tighter group-hover:text-white/[0.05] transition-colors duration-500">
+                {prog.short}
+              </div>
 
-              <div className="mb-10">
-                <span className="text-6xl font-black text-navy/5 group-hover:text-neon/30 transition-colors duration-500 tracking-tighter">
+              <div className="mb-10 relative z-10">
+                <span className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-neon/10 border border-neon/20 text-neon font-extrabold text-sm tracking-widest uppercase">
                   {prog.short}
                 </span>
               </div>
 
-              <h3 className="text-2xl font-extrabold text-navy mb-4 leading-tight">
+              <h3 className="text-2xl font-extrabold text-white mb-4 leading-tight relative z-10">
                 {prog.title}
               </h3>
-              <p className="text-charcoal/60 font-medium leading-relaxed">
+
+              <p className="text-white/60 font-medium leading-relaxed relative z-10 mb-10 flex-grow">
                 {prog.desc}
               </p>
 
-              <div className="mt-10 flex items-center gap-2 text-navy font-bold text-sm group-hover:text-[#9fe619] transition-colors duration-300 cursor-pointer">
-                Explore Track
-                <svg
-                  className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2.5"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
+              <div className="mt-auto flex items-center gap-4 text-white font-bold text-sm cursor-pointer relative z-10 group-hover:text-neon transition-colors duration-300">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-neon group-hover:border-neon group-hover:text-navy transition-all duration-300 shadow-inner">
+                  <svg
+                    className="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2.5"
+                      d="M5 12h14M12 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+                <span className="tracking-wide uppercase text-xs transform group-hover:translate-x-1 transition-transform duration-300">
+                  Explore Track
+                </span>
               </div>
             </motion.div>
           ))}

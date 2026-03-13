@@ -27,7 +27,7 @@ const Footer = () => {
       <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-neon/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="absolute bottom-[-5vw] left-0 w-full overflow-hidden flex justify-center pointer-events-none select-none z-0 opacity-[0.02]">
-        <h1 className="text-[18vw] font-black text-white whitespace-nowrap leading-none tracking-tighter">
+        <h1 className="text-[19vw] font-black text-white whitespace-nowrap leading-none tracking-tighter">
           JPCS DLSL
         </h1>
       </div>
@@ -85,7 +85,7 @@ const Footer = () => {
      
           <div className="md:col-span-12 lg:col-span-6">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center p-1.5 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center p-0.3 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 <Image
                   src="/jpcslogo.png"
                   width={56}

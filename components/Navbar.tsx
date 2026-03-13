@@ -91,7 +91,6 @@ const Navbar = () => {
         }`}
       >
         <div className="flex items-center justify-between w-full max-w-7xl">
-          {/* Logo Area */}
           <div
             className="flex gap-3 items-center pointer-events-auto cursor-pointer group"
             onClick={() => scrollToSection("#home")}
@@ -102,7 +101,7 @@ const Navbar = () => {
                 alt="JPCS Logo"
                 width={56}
                 height={56}
-                className="rounded-full object-cover p-1"
+                className="rounded-full object-cover p-0.3"
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
@@ -191,7 +190,7 @@ const Navbar = () => {
           displayItemNumbering={true}
           logoUrl="/jpcslogo.png"
           menuButtonColor={navTheme === "light" ? "#0B132B" : "#C4FF47"}
-          openMenuButtonColor="#FFFFFF"
+          openMenuButtonColor="#0B132B"
           accentColor="#C4FF47"
           isFixed={true}
           changeMenuColorOnOpen={true}

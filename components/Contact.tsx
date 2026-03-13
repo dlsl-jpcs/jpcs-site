@@ -72,6 +72,7 @@ const Contact = () => {
       id="contact"
       className="relative py-32 px-6 md:px-16 overflow-hidden bg-white z-30 rounded-t-[3rem] -mt-10 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
     >
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           <motion.div
@@ -174,7 +175,10 @@ const Contact = () => {
               </p>
             </div>
 
-            <form className="relative z-10 flex flex-col gap-5" onSubmit={handleSubmit}>
+            <form
+              className="relative z-10 flex flex-col gap-5"
+              onSubmit={handleSubmit}
+            >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <label className="text-[11px] font-extrabold text-white/50 uppercase tracking-widest ml-1">
