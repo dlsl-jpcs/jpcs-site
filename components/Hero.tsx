@@ -74,7 +74,7 @@ export default function Hero() {
       <div className="absolute top-1/4 -left-32 w-[30rem] h-[30rem] bg-neon/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[40rem] h-[40rem] bg-blue-500/10 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="max-w-[95%] sm:max-w-[95%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto px-4 sm:px-6 relative z-10 w-full pt-24 pb-16">
+      <div className="max-w-[95%] sm:max-w-[95%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto px-4 sm:px-6 relative z-10 w-full pt-24 lg:pt-14 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
         
           <motion.div

@@ -4,12 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import About from "@/components/about/About";
 import Banner from "@/components/Banner";
+import Contact from "@/components/Contact";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import Officers from "@/components/officers/Officers";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 
-const Announcements = dynamic(() => import("@/components/Announcements"), {
+const Footer = dynamic(() => import("@/components/Footer"), {
   ssr: false,
 });
 
@@ -55,7 +56,9 @@ export default function Home() {
 
       {isAboutVisible && <Officers />}
 
-      <Announcements />
+      <Contact />
+
+      <Footer />
     </main>
   );
 }

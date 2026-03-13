@@ -7,10 +7,9 @@ const About = () => {
   return (
     <div
       id="about"
-      className="relative w-screen min-h-screen bg-background overflow-hidden"
+      className="relative w-full bg-white text-charcoal overflow-hidden selection:bg-neon selection:text-navy"
     >
       <Main />
-
       <MissionVision />
       <ProgramsUnder />
     </div>

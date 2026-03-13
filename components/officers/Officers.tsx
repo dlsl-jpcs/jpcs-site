@@ -17,10 +17,30 @@ const SECTIONS: {
   short: string;
   description: string;
 }[] = [
-  { key: "Executive", label: "Executive Officers", short: "Executive", description: "Leading the organization" },
-  { key: "Project Heads", label: "Project Heads", short: "Proj. Heads", description: "Driving our initiatives" },
-  { key: "Officers", label: "Officers", short: "Officers", description: "Supporting our operations" },
-  { key: "Reps", label: "Representatives", short: "Reps", description: "Representing our members" },
+  {
+    key: "Executive",
+    label: "Executive Officers",
+    short: "Executive",
+    description: "Leading the organization",
+  },
+  {
+    key: "Project Heads",
+    label: "Project Heads",
+    short: "Proj. Heads",
+    description: "Driving our initiatives",
+  },
+  {
+    key: "Officers",
+    label: "Officers",
+    short: "Officers",
+    description: "Supporting our operations",
+  },
+  {
+    key: "Reps",
+    label: "Representatives",
+    short: "Reps",
+    description: "Representing our members",
+  },
 ];
 
 function getCategory(position: string): Category {
@@ -33,12 +53,11 @@ function getCategory(position: string): Category {
   return "Officers";
 }
 
-const CARD_W = 180;
-const CARD_GAP = 16;
+const CARD_W = 300;
+const CARD_GAP = 24; // Increased gap for breathability
 const STEP = CARD_W + CARD_GAP;
 
 export default function Officers() {
-  // Desktop carousel state
   const [active, setActive] = useState<Category>("Executive");
   const [canScroll, setCanScroll] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -82,7 +101,7 @@ export default function Officers() {
 
   const slide = useCallback(
     (dir: 1 | -1) => {
-      const next = x.get() - dir * STEP * 3;
+      const next = x.get() - dir * STEP * 2;
       const clamped = Math.max(-maxScroll(), Math.min(0, next));
       animate(x, clamped, { duration: 0.45, ease: [0.4, 0, 0.2, 1] });
     },
@@ -99,153 +118,95 @@ export default function Officers() {
   return (
     <section
       id="officers"
-      className="relative py-16 md:py-25 bg-background overflow-hidden"
+      className="relative py-24 md:py-32 bg-charcoal overflow-hidden rounded-t-[3rem] -mt-10 z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.15)]"
     >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(13,204,88,0.06) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, rgba(13,204,88,0.25), transparent)",
-        }}
-      />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.03]">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute top-0 bottom-0 w-px bg-white"
-            style={{ left: `${(i + 1) * (100 / 7)}%` }}
-          />
-        ))}
-      </div>
-
-      <div className="relative z-10 max-w-[1400px] mx-auto">
-        <div className="px-6 md:px-16 mb-14">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="px-6 md:px-16 mb-16 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-5"
+            transition={{ duration: 0.6 }}
           >
-            <span className="inline-flex items-center gap-2 text-light-green text-[11px] font-bold tracking-[0.18em] uppercase border border-light-green/25 rounded-full px-4 py-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-light-green animate-pulse" />
-              The Team
-            </span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+              The <span className="text-neon inline-block">Officers</span>
+            </h2>
+            <p className="mt-4 text-white/50 text-lg max-w-md font-medium">
+              The dedicated individuals driving JPCS DLSL forward through
+              innovation and service.
+            </p>
           </motion.div>
 
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, delay: 0.05 }}
-            >
-              <h2 className="text-4xl md:text-5xl lg:text-[3.75rem] font-bold text-white leading-[1.05] tracking-tight">
-                Meet our{" "}
-                <span
-                  className="text-light-green"
-                  style={{ textShadow: "0 0 40px rgba(13,204,88,0.35)" }}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="hidden md:flex items-center p-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+          >
+            {SECTIONS.map(({ key, short }) => {
+              const isActive = active === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActive(key)}
+                  className="relative px-6 py-3 rounded-full text-sm font-extrabold transition-colors duration-300"
                 >
-                  Officers
-                </span>
-              </h2>
-              <p className="mt-3 text-white/35 text-sm md:text-base max-w-md leading-relaxed">
-                The dedicated individuals who lead and drive JPCS DLSL forward.
-              </p>
-            </motion.div>
-
-            {/* Category tabs — desktop only */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.12 }}
-              className="hidden md:flex items-center gap-1.5 p-1 rounded-xl border border-white/[0.07] bg-white/[0.02] self-start md:self-auto flex-wrap"
-            >
-              {SECTIONS.map(({ key, short }) => {
-                const isActive = active === key;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => setActive(key)}
-                    className="relative px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors duration-200"
+                  {isActive && (
+                    <motion.span
+                      layoutId="officer-tab-pill"
+                      className="absolute inset-0 rounded-full bg-neon"
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                  <span
+                    className={`relative z-10 transition-colors duration-300 ${isActive ? "text-navy" : "text-white/50 hover:text-white"}`}
                   >
-                    {isActive && (
-                      <motion.span
-                        layoutId="tab-pill"
-                        className="absolute inset-0 rounded-lg bg-light-green/[0.12] border border-light-green/20"
-                        transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-                      />
-                    )}
-                    <span
-                      className={`relative flex items-center gap-1.5 transition-colors duration-200 ${
-                        isActive
-                          ? "text-light-green"
-                          : "text-white/35 hover:text-white/55"
-                      }`}
-                    >
-                      {short}
-                    </span>
-                  </button>
-                );
-              })}
-            </motion.div>
-          </div>
+                    {short}
+                  </span>
+                </button>
+              );
+            })}
+          </motion.div>
         </div>
 
         <div className="hidden md:block relative">
-          <div
-            className="absolute left-0 top-0 bottom-0 w-16 md:w-24 z-10 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to right, var(--background, #080808), transparent)",
-            }}
-          />
-          <div
-            className="absolute right-0 top-0 bottom-0 w-16 md:w-24 z-10 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to left, var(--background, #080808), transparent)",
-            }}
-          />
+          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none bg-gradient-to-r from-charcoal to-transparent" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none bg-gradient-to-l from-charcoal to-transparent" />
 
-          <div ref={containerRef} className={`overflow-hidden px-6 md:px-16${!canScroll ? " flex justify-center" : ""}`}>
+          <div
+            ref={containerRef}
+            className={`overflow-hidden px-6 md:px-16 ${!canScroll ? " flex justify-center" : ""}`}
+          >
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
               >
                 <motion.div
                   ref={trackRef}
                   drag="x"
                   dragConstraints={{ left: -maxScroll(), right: 0 }}
-                  dragElastic={0.08}
+                  dragElastic={0.1}
                   onDragEnd={handleDragEnd}
-                  className="flex cursor-grab active:cursor-grabbing"
+                  className="flex cursor-grab active:cursor-grabbing pb-8 pt-4"
                   style={{ x, gap: CARD_GAP, width: "max-content" }}
                 >
                   {officers.map((officer, idx) => (
                     <motion.div
                       key={officer.Name}
-                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{
-                        duration: 0.35,
-                        delay: idx * 0.04,
-                        ease: [0.4, 0, 0.2, 1],
-                      }}
-                      style={{ width: CARD_W }}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, delay: idx * 0.05 }}
                       className="flex-shrink-0"
                     >
                       <OfficerCard
@@ -263,47 +224,51 @@ export default function Officers() {
             </AnimatePresence>
           </div>
 
-          <div className="px-6 md:px-16 mt-8 flex items-center justify-end">
-
-            {canScroll && (
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => slide(-1)}
-                  className="w-9 h-9 rounded-lg border border-white/[0.08] bg-white/[0.03] flex items-center justify-center text-white/35 hover:text-white hover:border-white/20 hover:bg-white/[0.06] transition-all duration-200 active:scale-95"
+          {canScroll && (
+            <div className="px-6 md:px-16 mt-4 flex items-center justify-end gap-4">
+              <button
+                onClick={() => slide(-1)}
+                className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-neon hover:border-neon hover:text-navy transition-all duration-300"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path
-                      d="M8.5 3L5 7l3.5 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-
-                <button
-                  onClick={() => slide(1)}
-                  className="w-9 h-9 rounded-lg border border-white/[0.08] bg-white/[0.03] flex items-center justify-center text-white/35 hover:text-white hover:border-white/20 hover:bg-white/[0.06] transition-all duration-200 active:scale-95"
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.5"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => slide(1)}
+                className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-neon hover:border-neon hover:text-navy transition-all duration-300"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path
-                      d="M5.5 3L9 7l-3.5 4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-            )}
-          </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.5"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* ── Mobile: Accordion ── */}
-        <div className="md:hidden px-6 space-y-2">
-          {SECTIONS.map(({ key, label, description }, i) => {
+        {/* Mobile Accordion */}
+        <div className="md:hidden px-6 space-y-4">
+          {SECTIONS.map(({ key, label }, i) => {
             const sectionOfficers = officersData.officers.filter(
               (o) => getCategory(o.Position) === key,
             );
@@ -313,77 +278,41 @@ export default function Officers() {
             return (
               <motion.div
                 key={key}
-                ref={(el) => { if (el) accordionRefs.current[key] = el; }}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.4, delay: i * 0.06 }}
-                className={`rounded-2xl border transition-colors duration-300 ${
-                  isOpen
-                    ? "border-light-green/20 bg-white/[0.02]"
-                    : "border-white/[0.06]"
-                }`}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className={`rounded-3xl border transition-all duration-300 overflow-hidden ${isOpen ? "border-neon/30 bg-white/5" : "border-white/10 bg-transparent"}`}
               >
                 <button
                   onClick={() => toggleAccordion(key)}
-                  className="w-full flex items-center gap-4 px-5 py-4 text-left group"
+                  className="w-full flex items-center justify-between p-6 text-left"
                 >
                   <span
-                    className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold tabular-nums transition-all duration-200 ${
-                      isOpen
-                        ? "bg-light-green text-background"
-                        : "bg-white/[0.05] text-white/25"
-                    }`}
+                    className={`text-lg font-extrabold ${isOpen ? "text-neon" : "text-white"}`}
                   >
-                    {String(i + 1).padStart(2, "0")}
+                    {label}
                   </span>
-
-                  <div className="flex-1 min-w-0">
-                    <p
-                      className={`text-sm font-semibold leading-none transition-colors duration-200 ${
-                        isOpen ? "text-white" : "text-white/50"
-                      }`}
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen ? "bg-neon text-navy" : "bg-white/10 text-white"}`}
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
                     >
-                      {label}
-                    </p>
-                    <p
-                      className={`mt-1.5 text-xs transition-colors duration-200 ${
-                        isOpen ? "text-white/35" : "text-white/20"
-                      }`}
-                    >
-                      {description}
-                    </p>
+                      <path
+                        d="M4 6l4 4 4-4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </div>
-
-                  <span
-                    className={`shrink-0 text-[11px] font-semibold tabular-nums px-2.5 py-1 rounded-full border transition-all duration-200 ${
-                      isOpen
-                        ? "text-light-green border-light-green/30 bg-light-green/[0.08]"
-                        : "text-white/25 border-white/[0.08]"
-                    }`}
-                  >
-                    {sectionOfficers.length}
-                  </span>
-
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className={`shrink-0 transition-transform duration-300 ${
-                      isOpen ? "rotate-180 text-light-green" : "text-white/20"
-                    }`}
-                  >
-                    <path
-                      d="M4 6l4 4 4-4"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
                 </button>
-
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
@@ -391,30 +320,25 @@ export default function Officers() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                      transition={{ duration: 0.3 }}
                       style={{ overflow: "hidden" }}
                     >
-                      <div className="mx-5 h-px bg-white/[0.06]" />
-                      <div className="p-4">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                          {sectionOfficers.map((officer, idx) => (
-                            <motion.div
-                              key={officer.Name}
-                              initial={{ opacity: 0, y: 8 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.25, delay: idx * 0.025 }}
-                            >
-                              <OfficerCard
-                                name={officer.Name}
-                                nickname={officer.Nickname}
-                                image={officer.Image}
-                                position={officer.Position}
-                                year={officer.Year}
-                                course={officer.Course}
-                              />
-                            </motion.div>
-                          ))}
-                        </div>
+                      <div className="p-6 pt-0 flex overflow-x-auto gap-4 snap-x pb-4">
+                        {sectionOfficers.map((officer) => (
+                          <div
+                            key={officer.Name}
+                            className="snap-center shrink-0"
+                          >
+                            <OfficerCard
+                              name={officer.Name}
+                              nickname={officer.Nickname}
+                              image={officer.Image}
+                              position={officer.Position}
+                              year={officer.Year}
+                              course={officer.Course}
+                            />
+                          </div>
+                        ))}
                       </div>
                     </motion.div>
                   )}

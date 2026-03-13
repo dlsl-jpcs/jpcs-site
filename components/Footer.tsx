@@ -15,18 +15,17 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const Announcements = () => {
+const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer className="relative bg-navy pt-32 pb-12 px-6 overflow-hidden rounded-t-[3rem] -mt-10 z-30 shadow-[0_-30px_60px_rgba(0,0,0,0.3)]">
-      {/* Subtle Background Glows & Grids */}
+    <footer className="relative bg-navy pt-32 pb-12 px-6 overflow-hidden rounded-t-[3rem] -mt-10 z-40 shadow-[0_-30px_60px_rgba(0,0,0,0.3)]">
+   
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
       <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-neon/5 rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Massive Background Watermark */}
       <div className="absolute bottom-[-5vw] left-0 w-full overflow-hidden flex justify-center pointer-events-none select-none z-0 opacity-[0.02]">
         <h1 className="text-[18vw] font-black text-white whitespace-nowrap leading-none tracking-tighter">
           JPCS DLSL
@@ -34,7 +33,6 @@ const Announcements = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Top Section: Giant CTA */}
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between border-b border-white/10 pb-20 mb-16 gap-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -83,9 +81,8 @@ const Announcements = () => {
           </motion.div>
         </div>
 
-        {/* Middle Section: Grid Links & Info */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-24">
-          {/* Brand Column */}
+     
           <div className="md:col-span-12 lg:col-span-6">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center p-1.5 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
@@ -102,7 +99,6 @@ const Announcements = () => {
               </span>
             </div>
 
-            {/* Ultra-Minimalist Status Indicator */}
             <div className="flex items-center gap-3 mt-4 ml-1">
               <div className="relative w-2 h-2">
                 <span className="absolute inset-0 rounded-full bg-neon animate-ping opacity-75"></span>
@@ -114,7 +110,6 @@ const Announcements = () => {
             </div>
           </div>
 
-          {/* Quick Links Column */}
           <div className="md:col-span-6 lg:col-span-2 lg:col-start-8">
             <h4 className="text-white font-extrabold mb-6 text-lg tracking-wide">
               Explore
@@ -134,7 +129,6 @@ const Announcements = () => {
             </ul>
           </div>
 
-          {/* Socials Column */}
           <div className="md:col-span-6 lg:col-span-3">
             <h4 className="text-white font-extrabold mb-6 text-lg tracking-wide">
               Connect
@@ -170,7 +164,6 @@ const Announcements = () => {
           </div>
         </div>
 
-        {/* Bottom Strip: Copyright & Back to Top */}
         <div className="relative pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-white/40 font-bold text-sm tracking-wide">
             © {new Date().getFullYear()} Junior Philippine Computer Society. De
@@ -204,4 +197,4 @@ const Announcements = () => {
   );
 };
 
-export default Announcements;
+export default Footer;
