@@ -7,7 +7,6 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import Image from "next/image";
 import { gsap } from "gsap";
 
 export interface StaggeredMenuItem {
@@ -518,13 +517,15 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             aria-label="Logo"
           >
             <div className="relative h-8 w-8 rounded-full overflow-hidden bg-white">
-              <Image
+              <img
                 src={logoUrl}
                 alt="JPCS Logo"
                 width={32}
                 height={32}
                 className="object-cover"
-                priority
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
             <p className="ml-2 font-bold text-light-green text-lg">JPCS</p>
