@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Main = () => {
   return (
-    <section className="relative pt-32 pb-24 px-6 md:px-16 overflow-hidden bg-white z-10 rounded-t-[3rem] -mt-10">
+    <section className="relative pt-32 pb-0 lg:pb-24 px-6 md:px-16 overflow-hidden bg-white z-10 rounded-t-[3rem] -mt-10">
  
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 

@@ -64,7 +64,7 @@ const Announcements = () => {
               className="group relative inline-flex items-center justify-center px-10 py-6 bg-neon text-navy font-extrabold text-xl rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(196,255,71,0.3)]"
             >
               <span className="relative z-10 flex items-center gap-3">
-                Let's Talk
+                Let&apos;s Talk
                 <svg
                   className="w-6 h-6 group-hover:rotate-45 transition-transform duration-300"
                   fill="none"
@@ -116,9 +116,9 @@ const Announcements = () => {
 
           {/* Quick Links Column */}
           <div className="md:col-span-6 lg:col-span-2 lg:col-start-8">
-            <h4 className="text-white font-extrabold mb-6 text-lg tracking-wide">
+            <h3 className="text-white font-extrabold mb-6 text-lg tracking-wide">
               Explore
-            </h4>
+            </h3>
             <ul className="space-y-4">
               {["Home", "About", "Officers", "Projects"].map((link) => (
                 <li key={link}>
@@ -136,9 +136,9 @@ const Announcements = () => {
 
           {/* Socials Column */}
           <div className="md:col-span-6 lg:col-span-3">
-            <h4 className="text-white font-extrabold mb-6 text-lg tracking-wide">
+            <h3 className="text-white font-extrabold mb-6 text-lg tracking-wide">
               Connect
-            </h4>
+            </h3>
             <div className="flex flex-col gap-4">
               <a
                 href="https://www.facebook.com/JPCS.DLSL"

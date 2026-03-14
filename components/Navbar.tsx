@@ -1,15 +1,22 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { StaggeredMenu } from "./StaggeredMenu";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const StaggeredMenu = dynamic(
+  () => import("./StaggeredMenu").then((mod) => mod.StaggeredMenu),
+  { ssr: false },
+);
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [showNavbar, setShowNavbar] = useState(true);
   const [navTheme, setNavTheme] = useState<"dark" | "light">("dark");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const lastScrollYRef = useRef(0);
+  const tickingRef = useRef(false);
+  const showNavbarRef = useRef(true);
 
   const navItems = [
     { name: "Home", link: "#home" },
@@ -37,58 +44,107 @@ const Navbar = () => {
     }
   };
 
-  const handleMenuOpen = () => setMenuOpen(true);
-  const handleMenuClose = () => setMenuOpen(false);
+  useEffect(() => {
+    const updateNavbarVisibility = () => {
+      const currentScrollY = window.scrollY;
+      const lastScrollY = lastScrollYRef.current;
+      const delta = currentScrollY - lastScrollY;
 
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
+      let nextShowNavbar = showNavbarRef.current;
 
-    if (currentScrollY < 10) {
-      setShowNavbar(true);
-      setLastScrollY(currentScrollY);
-    } else {
-      if (currentScrollY < lastScrollY) {
-        setShowNavbar(true);
-      } else if (currentScrollY > lastScrollY + 50) {
-        setShowNavbar(false);
+      // Keep navbar visible near the top for predictable navigation.
+      if (currentScrollY <= 24) {
+        nextShowNavbar = true;
+      } else if (delta > 6 && currentScrollY > 120) {
+        // Hide while scrolling down.
+        nextShowNavbar = false;
+      } else if (delta < -6) {
+        // Reveal quickly while scrolling up.
+        nextShowNavbar = true;
       }
-      setLastScrollY(currentScrollY);
-    }
 
-    const sections = document.querySelectorAll("section");
-    let currentTheme: "dark" | "light" = "dark";
+      setShowNavbar((prev) => {
+        if (prev === nextShowNavbar) return prev;
+        showNavbarRef.current = nextShowNavbar;
+        return nextShowNavbar;
+      });
+      lastScrollYRef.current = currentScrollY;
+      tickingRef.current = false;
+    };
 
-    sections.forEach((sec) => {
-      const rect = sec.getBoundingClientRect();
-      if (rect.top <= 80 && rect.bottom >= 80) {
-        if (
-          sec.className.includes("bg-white") ||
-          sec.className.includes("bg-[#F4F4F5]")
-        ) {
-          currentTheme = "light";
-        } else {
-          currentTheme = "dark";
-        }
-      }
-    });
+    const onScroll = () => {
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+      window.requestAnimationFrame(updateNavbarVisibility);
+    };
 
-    setNavTheme(currentTheme);
-  }, [lastScrollY]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
+    const sections = Array.from(document.querySelectorAll("section"));
+    if (!sections.length) return;
+
+    const visibleSections = new Map<Element, IntersectionObserverEntry>();
+
+    const getThemeFromSection = (sec: Element) => {
+      const className = sec.className;
+      if (typeof className === "string") {
+        if (className.includes("bg-white") || className.includes("bg-[#F4F4F5]")) {
+          return "light" as const;
+        }
+      }
+      return "dark" as const;
     };
-  }, [handleScroll]);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            visibleSections.set(entry.target, entry);
+          } else {
+            visibleSections.delete(entry.target);
+          }
+        }
+
+        let activeEntry: IntersectionObserverEntry | null = null;
+        for (const entry of visibleSections.values()) {
+          if (!activeEntry || entry.intersectionRatio > activeEntry.intersectionRatio) {
+            activeEntry = entry;
+          }
+        }
+
+        const nextTheme = activeEntry
+          ? getThemeFromSection(activeEntry.target)
+          : "dark";
+
+        setNavTheme((prev) => (prev === nextTheme ? prev : nextTheme));
+      },
+      {
+        root: null,
+        threshold: [0.15, 0.3, 0.6],
+        rootMargin: "-80px 0px -60% 0px",
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
       <div
         className={`fixed top-8 left-0 w-full z-50 hidden lg:flex justify-center items-center px-12 bg-transparent pointer-events-none transition-transform duration-500 ease-in-out ${
-          showNavbar ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0"
+          showNavbar
+            ? "translate-y-0 opacity-100"
+            : "-translate-y-12 opacity-0"
         }`}
+        style={{ transitionDuration: "650ms", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
       >
         <div className="flex items-center justify-between w-full max-w-7xl">
           <div
@@ -96,15 +152,14 @@ const Navbar = () => {
             onClick={() => scrollToSection("#home")}
           >
             <div className="relative bg-white rounded-full w-14 h-14 shadow-[0_0_20px_rgba(255,255,255,0.1)] flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
-              <img
+              <Image
                 src="/jpcslogo.png"
                 alt="JPCS Logo"
                 width={56}
                 height={56}
                 className="rounded-full object-cover p-0.3"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
+                sizes="56px"
+                quality={70}
               />
             </div>
             <p
@@ -174,7 +229,12 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className="lg:hidden">
+      <div
+        className={`fixed top-0 left-0 w-full z-50 lg:hidden transition-transform duration-500 ease-in-out ${
+          showNavbar ? "translate-y-0" : "-translate-y-16"
+        }`}
+        style={{ transitionDuration: "500ms", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+      >
         <StaggeredMenu
           position="right"
           colors={["#0B132B", "#111111", "#1A1A1A"]}
@@ -195,8 +255,6 @@ const Navbar = () => {
           accentColor="#C4FF47"
           isFixed={true}
           changeMenuColorOnOpen={true}
-          onMenuOpen={handleMenuOpen}
-          onMenuClose={handleMenuClose}
         />
       </div>
     </>

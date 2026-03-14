@@ -46,9 +46,9 @@ export default function OfficerCard({
        
         <div className="w-8 h-1.5 bg-neon rounded-full mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100" />
 
-        <h4 className="text-white font-extrabold text-2xl leading-tight mb-1">
+        <h3 className="text-white font-extrabold text-2xl leading-tight mb-1">
           {name}
-        </h4>
+        </h3>
         <p className="text-white/60 font-medium text-sm leading-snug line-clamp-2 group-hover:text-white/90 transition-colors duration-300">
           {position}
         </p>
