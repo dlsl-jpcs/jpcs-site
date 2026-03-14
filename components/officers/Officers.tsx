@@ -286,7 +286,7 @@ export default function Officers() {
               >
                 <button
                   onClick={() => toggleAccordion(key)}
-                  className="w-full flex items-center justify-between p-5 min-[401px]:p-6 text-left"
+                  className="w-full flex items-center justify-between p-5 min-[401px]:p-6 pb-2 text-left"
                 >
                   <span
                     className={`text-base min-[401px]:text-lg font-extrabold ${isOpen ? "text-neon" : "text-white"}`}
@@ -323,7 +323,7 @@ export default function Officers() {
                       transition={{ duration: 0.3 }}
                       style={{ overflow: "hidden" }}
                     >
-                      <div className="p-5 min-[401px]:p-6 pt-0 flex overflow-x-auto gap-3 min-[401px]:gap-4 snap-x pb-4">
+                      <div className="p-5 min-[401px]:p-6 min-[401px]:pt-0 flex overflow-x-auto gap-3 min-[401px]:gap-4 pt-0 snap-x pb-4">
                         {sectionOfficers.map((officer) => (
                           <div
                             key={officer.Name}
