@@ -94,7 +94,7 @@ const Footer = () => {
                   className="rounded-full object-cover"
                 />
               </div>
-              <span className="text-2xl min-[401px]:text-3xl font-extrabold text-white tracking-tight">
+              <span className="text-7xl min-[401px]:text-7xl font-extrabold text-white tracking-tight">
                 JPCS<span className="text-neon">.</span>
               </span>
             </div>

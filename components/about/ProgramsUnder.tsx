@@ -30,7 +30,7 @@ const ProgramsUnder = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col items-center text-center mb-20"
+          className="flex flex-col items-center text-center mb-10 lg:mb-15"
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight mb-6">
             Degree{" "}
