@@ -8,12 +8,13 @@ import React, {
   useEffect,
 } from "react";
 import { gsap } from "gsap";
+import Image from "next/image";
 
 export interface StaggeredMenuItem {
   label: string;
   ariaLabel: string;
   link: string;
-  onClick?: () => void; 
+  onClick?: () => void;
 }
 
 export interface StaggeredMenuSocialItem {
@@ -107,14 +108,21 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
       gsap.set(plusV, { transformOrigin: "50% 50%", rotate: 90 });
       gsap.set(icon, { rotate: 0, transformOrigin: "50% 50%" });
       gsap.set(textInner, { yPercent: 0 });
-
-      if (toggleBtnRef.current) {
-        gsap.set(toggleBtnRef.current, { color: menuButtonColor });
-      }
     });
 
     return () => ctx.revert();
-  }, [menuButtonColor, position]);
+  }, [position]);
+
+  useEffect(() => {
+    if (!toggleBtnRef.current) return;
+
+    const targetColor =
+      openRef.current && changeMenuColorOnOpen
+        ? openMenuButtonColor
+        : menuButtonColor;
+
+    gsap.set(toggleBtnRef.current, { color: targetColor });
+  }, [menuButtonColor, openMenuButtonColor, changeMenuColorOnOpen]);
 
   // Build open animation timeline
   const buildOpenTimeline = useCallback(() => {
@@ -517,15 +525,14 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
             aria-label="Logo"
           >
             <div className="relative h-8 w-8 rounded-full overflow-hidden bg-white">
-              <img
+              <Image
                 src={logoUrl}
                 alt="JPCS Logo"
                 width={32}
                 height={32}
                 className="object-cover"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
+                sizes="32px"
+                quality={70}
               />
             </div>
             <p className="ml-2 font-bold text-light-green text-lg">JPCS</p>
@@ -585,6 +592,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           className="staggered-menu-panel absolute top-0 right-0 h-full bg-white flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-10 backdrop-blur-[12px]"
           style={{ WebkitBackdropFilter: "blur(12px)" }}
           aria-hidden={!open}
+          tabIndex={open ? 0 : -1}
         >
           <div className="sm-panel-inner flex-1 flex flex-col gap-5">
             <ul
@@ -603,6 +611,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
+                      tabIndex={open ? 0 : -1}
                       onClick={(e) => handleItemClick(it, e)}
                     >
                       <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
@@ -640,7 +649,9 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                         href={s.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="sm-socials-link text-[1.2rem] font-medium text-[#111] no-underline relative inline-block py-[2px] transition-[color,opacity] duration-300 ease-linear"
+                        aria-label={`${s.label} (opens in new window)`}
+                        tabIndex={open ? 0 : -1}
+                        className="sm-socials-link text-[1.2rem] font-medium text-[#1f2937] no-underline relative inline-block py-[2px] transition-[color,opacity] duration-300 ease-linear"
                       >
                         {s.label}
                       </a>
@@ -691,7 +702,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 .sm-scope .sm-socials-list .sm-socials-link:hover,
 .sm-scope .sm-socials-list .sm-socials-link:focus-visible { opacity: 1; }
 .sm-scope .sm-socials-link:focus-visible { outline: 2px solid var(--sm-accent, #ff0000); outline-offset: 3px; }
-.sm-scope .sm-socials-link { font-size: 1.2rem; font-weight: 500; color: #111; text-decoration: none; position: relative; padding: 2px 0; display: inline-block; transition: color 0.3s ease, opacity 0.3s ease; }
+.sm-scope .sm-socials-link { font-size: 1.2rem; font-weight: 500; color: #1f2937; text-decoration: none; position: relative; padding: 2px 0; display: inline-block; transition: color 0.3s ease, opacity 0.3s ease; }
 .sm-scope .sm-socials-link:hover { color: var(--sm-accent, #ff0000); }
 .sm-scope .sm-panel-title { margin: 0; font-size: 1rem; font-weight: 600; color: #fff; text-transform: uppercase; }
 .sm-scope .sm-panel-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }

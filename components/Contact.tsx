@@ -82,7 +82,7 @@ const Contact = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold text-navy tracking-tight leading-[1.05] mb-6">
-              Let's build <br />
+              Let&apos;s build <br />
               something <br />
               <span className="inline-block bg-charcoal text-neon px-6 py-2 mt-3 rounded-full transform -rotate-2 shadow-2xl">
                 extraordinary.
@@ -171,7 +171,7 @@ const Contact = () => {
                 Send a Message
               </h3>
               <p className="text-white/50 text-sm md:text-base mt-2 font-medium">
-                Fill out the form below and we'll get back to you shortly.
+                Fill out the form below and we&apos;ll get back to you shortly.
               </p>
             </div>
 
