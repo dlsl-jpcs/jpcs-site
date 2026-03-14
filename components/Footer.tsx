@@ -99,15 +99,7 @@ const Footer = () => {
               </span>
             </div>
 
-            <div className="flex items-center gap-3 mt-4 ml-1">
-              <div className="relative w-2 h-2">
-                <span className="absolute inset-0 rounded-full bg-neon animate-ping opacity-75"></span>
-                <span className="relative block w-2 h-2 rounded-full bg-neon shadow-[0_0_8px_#C4FF47]"></span>
-              </div>
-              <span className="text-[11px] font-bold text-white/50 tracking-[0.25em] uppercase">
-                Innovating 24/7
-              </span>
-            </div>
+          
           </div>
 
           <div className="md:col-span-6 lg:col-span-2 lg:col-start-8">
