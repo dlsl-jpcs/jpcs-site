@@ -21,7 +21,7 @@ const programs = [
 
 const ProgramsUnder = () => {
   return (
-    <section className="relative py-32 px-6 md:px-16 overflow-hidden bg-[#F4F4F5]">
+    <section className="relative py-20 pb-32 px-6 md:px-16 overflow-hidden bg-[#F4F4F5]">
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_100%,#000_70%,transparent_100%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">

@@ -21,19 +21,19 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative bg-navy pt-32 pb-12 px-6 overflow-hidden rounded-t-[3rem] -mt-10 z-40 shadow-[0_-30px_60px_rgba(0,0,0,0.3)]">
+    <footer className="relative bg-navy pt-20 min-[401px]:pt-28 pb-10 min-[401px]:pb-12 px-4 min-[401px]:px-6 overflow-hidden rounded-t-[3rem] -mt-10 z-40 shadow-[0_-30px_60px_rgba(0,0,0,0.3)]">
    
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
       <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-neon/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="absolute bottom-[-5vw] left-0 w-full overflow-hidden flex justify-center pointer-events-none select-none z-0 opacity-[0.02]">
-        <h1 className="text-[19vw] font-black text-white whitespace-nowrap leading-none tracking-tighter">
+        <h1 className="text-[24vw] min-[401px]:text-[19vw] font-black text-white whitespace-nowrap leading-none tracking-tighter">
           JPCS DLSL
         </h1>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between border-b border-white/10 pb-20 mb-16 gap-10">
+        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between border-b border-white/10 pb-14 min-[401px]:pb-20 mb-12 min-[401px]:mb-16 gap-8 min-[401px]:gap-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -41,11 +41,11 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             className="max-w-2xl"
           >
-            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold text-white tracking-tight leading-[1.05] mb-6">
+            <h2 className="text-4xl min-[401px]:text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold text-white tracking-tight leading-[1.05] mb-4 min-[401px]:mb-6">
               Ready to <br />
               <span className="text-neon">innovate?</span>
             </h2>
-            <p className="text-white/50 text-xl font-medium leading-relaxed">
+            <p className="text-white/50 text-base min-[401px]:text-lg md:text-xl font-medium leading-relaxed">
               Join the network of future IT professionals. Connect with us to
               stay updated on hackathons, seminars, and exclusive opportunities.
             </p>
@@ -59,7 +59,7 @@ const Footer = () => {
           >
             <a
               href="mailto:jpcs@dlsl.edu.ph"
-              className="group relative inline-flex items-center justify-center px-10 py-6 bg-neon text-navy font-extrabold text-xl rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(196,255,71,0.3)]"
+              className="group relative inline-flex items-center justify-center px-7 min-[401px]:px-10 py-4 min-[401px]:py-6 bg-neon text-navy font-extrabold text-base min-[401px]:text-xl rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(196,255,71,0.3)]"
             >
               <span className="relative z-10 flex items-center gap-3">
                 Let&apos;s Talk
@@ -81,11 +81,11 @@ const Footer = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 min-[401px]:gap-12 lg:gap-8 mb-16 min-[401px]:mb-24">
      
           <div className="md:col-span-12 lg:col-span-6">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center p-0.3 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+            <div className="flex items-center gap-3 min-[401px]:gap-4 mb-4">
+              <div className="w-12 h-12 min-[401px]:w-14 min-[401px]:h-14 rounded-full bg-white flex items-center justify-center p-0.3 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 <Image
                   src="/jpcslogo.png"
                   width={56}
@@ -94,7 +94,7 @@ const Footer = () => {
                   className="rounded-full object-cover"
                 />
               </div>
-              <span className="text-3xl font-extrabold text-white tracking-tight">
+              <span className="text-2xl min-[401px]:text-3xl font-extrabold text-white tracking-tight">
                 JPCS<span className="text-neon">.</span>
               </span>
             </div>
@@ -111,15 +111,15 @@ const Footer = () => {
           </div>
 
           <div className="md:col-span-6 lg:col-span-2 lg:col-start-8">
-            <h3 className="text-white font-extrabold mb-6 text-lg tracking-wide">
+            <h3 className="text-white font-extrabold mb-5 min-[401px]:mb-6 text-base min-[401px]:text-lg tracking-wide">
               Explore
             </h3>
-            <ul className="space-y-4">
+            <ul className="space-y-3 min-[401px]:space-y-4">
               {["Home", "About", "Officers", "Projects"].map((link) => (
                 <li key={link}>
                   <a
                     href={`#${link.toLowerCase()}`}
-                    className="group flex items-center gap-2 text-white/50 hover:text-neon font-bold transition-colors text-lg"
+                    className="group flex items-center gap-2 text-white/50 hover:text-neon font-bold transition-colors text-base min-[401px]:text-lg"
                   >
                     <span className="w-0 h-0.5 bg-neon transition-all duration-300 group-hover:w-3" />
                     {link}
@@ -130,7 +130,7 @@ const Footer = () => {
           </div>
 
           <div className="md:col-span-6 lg:col-span-3">
-            <h3 className="text-white font-extrabold mb-6 text-lg tracking-wide">
+            <h3 className="text-white font-extrabold mb-5 min-[401px]:mb-6 text-base min-[401px]:text-lg tracking-wide">
               Connect
             </h3>
             <div className="flex flex-col gap-4">
@@ -139,12 +139,12 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit JPCS on Facebook (opens in new window)"
-                className="group flex items-center gap-4 p-2 pr-6 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all w-fit"
+                className="group flex items-center gap-3 min-[401px]:gap-4 p-2 pr-4 min-[401px]:pr-6 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all w-fit"
               >
-                <div className="w-12 h-12 rounded-full bg-charcoal flex items-center justify-center text-white/70 group-hover:bg-[#1877F2] group-hover:text-white transition-colors duration-300 shadow-inner">
+                <div className="w-10 h-10 min-[401px]:w-12 min-[401px]:h-12 rounded-full bg-charcoal flex items-center justify-center text-white/70 group-hover:bg-[#1877F2] group-hover:text-white transition-colors duration-300 shadow-inner">
                   <FacebookIcon aria-hidden="true" focusable="false" />
                 </div>
-                <span className="font-bold text-white/70 group-hover:text-white transition-colors">
+                <span className="font-bold text-sm min-[401px]:text-base text-white/70 group-hover:text-white transition-colors">
                   Facebook
                 </span>
               </a>
@@ -153,12 +153,12 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit JPCS on Instagram (opens in new window)"
-                className="group flex items-center gap-4 p-2 pr-6 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all w-fit"
+                className="group flex items-center gap-3 min-[401px]:gap-4 p-2 pr-4 min-[401px]:pr-6 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all w-fit"
               >
-                <div className="w-12 h-12 rounded-full bg-charcoal flex items-center justify-center text-white/70 group-hover:bg-[#E4405F] group-hover:text-white transition-colors duration-300 shadow-inner">
+                <div className="w-10 h-10 min-[401px]:w-12 min-[401px]:h-12 rounded-full bg-charcoal flex items-center justify-center text-white/70 group-hover:bg-[#E4405F] group-hover:text-white transition-colors duration-300 shadow-inner">
                   <InstagramIcon aria-hidden="true" focusable="false" />
                 </div>
-                <span className="font-bold text-white/70 group-hover:text-white transition-colors">
+                <span className="font-bold text-sm min-[401px]:text-base text-white/70 group-hover:text-white transition-colors">
                   Instagram
                 </span>
               </a>
@@ -166,7 +166,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="relative pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="relative pt-6 min-[401px]:pt-8 flex flex-col md:flex-row items-center justify-between gap-5 min-[401px]:gap-6">
           <p className="text-white/40 font-bold text-sm tracking-wide">
             © {new Date().getFullYear()} Junior Philippine Computer Society. De
             La Salle Lipa.

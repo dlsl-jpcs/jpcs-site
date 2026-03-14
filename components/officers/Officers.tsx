@@ -118,22 +118,22 @@ export default function Officers() {
   return (
     <section
       id="officers"
-      className="relative py-24 md:py-32 bg-charcoal overflow-hidden rounded-t-[3rem] -mt-10 z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.15)]"
+      className="relative py-20 min-[401px]:py-24 md:py-32 bg-charcoal overflow-hidden rounded-t-[3rem] -mt-10 z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.15)]"
     >
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="px-6 md:px-16 mb-16 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+        <div className="px-4 min-[401px]:px-6 md:px-16 mb-12 min-[401px]:mb-16 flex flex-col lg:flex-row lg:items-end justify-between gap-8 min-[401px]:gap-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+            <h2 className="text-5xl min-[401px]:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold text-white tracking-tight leading-tight">
               The <span className="text-neon inline-block">Officers</span>
             </h2>
-            <p className="mt-4 text-white/50 text-lg max-w-md font-medium">
+            <p className="mt-3 min-[401px]:mt-4 text-white/50 text-base min-[401px]:text-lg max-w-md font-medium">
               The dedicated individuals driving JPCS DLSL forward through
               innovation and service.
             </p>
@@ -182,7 +182,7 @@ export default function Officers() {
 
           <div
             ref={containerRef}
-            className={`overflow-hidden px-6 md:px-16 ${!canScroll ? " flex justify-center" : ""}`}
+            className={`overflow-hidden px-4 min-[401px]:px-6 md:px-16 ${!canScroll ? " flex justify-center" : ""}`}
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -225,7 +225,7 @@ export default function Officers() {
           </div>
 
           {canScroll && (
-            <div className="px-6 md:px-16 mt-4 flex items-center justify-end gap-4">
+            <div className="px-4 min-[401px]:px-6 md:px-16 mt-3 min-[401px]:mt-4 flex items-center justify-end gap-3 min-[401px]:gap-4">
               <button
                 onClick={() => slide(-1)}
                 className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-neon hover:border-neon hover:text-navy transition-all duration-300"
@@ -267,7 +267,7 @@ export default function Officers() {
         </div>
 
         {/* Mobile Accordion */}
-        <div className="md:hidden px-6 space-y-4">
+        <div className="md:hidden px-4 min-[401px]:px-6 space-y-3 min-[401px]:space-y-4">
           {SECTIONS.map(({ key, label }, i) => {
             const sectionOfficers = officersData.officers.filter(
               (o) => getCategory(o.Position) === key,
@@ -286,15 +286,15 @@ export default function Officers() {
               >
                 <button
                   onClick={() => toggleAccordion(key)}
-                  className="w-full flex items-center justify-between p-6 text-left"
+                  className="w-full flex items-center justify-between p-5 min-[401px]:p-6 text-left"
                 >
                   <span
-                    className={`text-lg font-extrabold ${isOpen ? "text-neon" : "text-white"}`}
+                    className={`text-base min-[401px]:text-lg font-extrabold ${isOpen ? "text-neon" : "text-white"}`}
                   >
                     {label}
                   </span>
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen ? "bg-neon text-navy" : "bg-white/10 text-white"}`}
+                    className={`w-7 h-7 min-[401px]:w-8 min-[401px]:h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen ? "bg-neon text-navy" : "bg-white/10 text-white"}`}
                   >
                     <svg
                       width="16"
@@ -323,7 +323,7 @@ export default function Officers() {
                       transition={{ duration: 0.3 }}
                       style={{ overflow: "hidden" }}
                     >
-                      <div className="p-6 pt-0 flex overflow-x-auto gap-4 snap-x pb-4">
+                      <div className="p-5 min-[401px]:p-6 pt-0 flex overflow-x-auto gap-3 min-[401px]:gap-4 snap-x pb-4">
                         {sectionOfficers.map((officer) => (
                           <div
                             key={officer.Name}

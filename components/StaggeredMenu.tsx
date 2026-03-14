@@ -721,6 +721,18 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
   .sm-scope .staggered-menu-wrapper[data-open] .staggered-menu-panel { pointer-events: auto; }
   .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img { filter: invert(100%); }
 }
+@media (max-width: 400px) {
+  .sm-scope .staggered-menu-header { padding: 1.1em 1em; }
+  .sm-scope .sm-logo p { font-size: 0.95rem; }
+  .sm-scope .sm-toggle { font-size: 1.5rem; }
+  .sm-scope .staggered-menu-panel { padding: 5em 1.25em 1.5em 1.25em; }
+  .sm-scope .sm-panel-inner { gap: 0.85rem; }
+  .sm-scope .sm-panel-item { font-size: 2.7rem; letter-spacing: -1.5px; }
+  .sm-scope .sm-panel-list[data-numbering] .sm-panel-item::after { right: 2.8em; font-size: 14px; }
+  .sm-scope .sm-socials { padding-top: 1.4rem; }
+  .sm-scope .sm-socials-title { font-size: 0.9rem; }
+  .sm-scope .sm-socials-link { font-size: 1rem; }
+}
       `}</style>
     </div>
   );

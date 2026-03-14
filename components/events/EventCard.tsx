@@ -74,14 +74,11 @@ export default function EventCard({
     >
       <motion.div
         ref={slideRef}
-        className={`relative rounded-[1.3rem] p-6 md:p-8 flex flex-col cursor-pointer overflow-hidden transition-all duration-500 ${
+        className={`relative rounded-[1.1rem] min-[401px]:rounded-[1.3rem] p-4 min-[401px]:p-6 md:p-8 h-[340px] min-[401px]:h-[380px] md:h-[400px] flex flex-col cursor-pointer overflow-hidden transition-all duration-500 ${
           isActive
             ? "bg-white/10 backdrop-blur-2xl border border-neon/50 shadow-[0_20px_40px_-10px_rgba(196,255,71,0.15)]"
             : "bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20"
         }`}
-        style={{
-          height: isMobile ? "380px" : "400px",
-        }}
         onClick={onClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -100,13 +97,13 @@ export default function EventCard({
         )}
 
         <motion.div className="flex flex-col flex-1 min-h-0 relative z-10">
-          <div className="mb-4">
-            <h3 className="text-2xl md:text-3xl font-extrabold text-white leading-tight line-clamp-2">
+          <div className="mb-3 min-[401px]:mb-4">
+            <h3 className="text-xl min-[401px]:text-2xl md:text-3xl font-extrabold text-white leading-tight line-clamp-2">
               {event.title}
             </h3>
           </div>
 
-          <div className="mb-4 flex items-center gap-3 text-white/70">
+          <div className="mb-3 min-[401px]:mb-4 flex items-center gap-2 min-[401px]:gap-3 text-white/70">
             <div className="flex flex-col">
               <p className="text-sm font-bold text-white flex items-center gap-2">
                 <svg
@@ -130,23 +127,23 @@ export default function EventCard({
             </div>
           </div>
 
-          <div className="flex-1 mb-6 min-h-0">
+          <div className="flex-1 mb-4 min-[401px]:mb-6 min-h-0">
             <p className="text-white/60 text-sm leading-relaxed font-medium line-clamp-3">
               {event.description}
             </p>
           </div>
 
-          <div className="pt-5 border-t border-white/10 flex items-center justify-between mt-auto">
+          <div className="pt-4 min-[401px]:pt-5 border-t border-white/10 flex items-center justify-between mt-auto gap-2">
             <a
               href={event.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-neon text-navy hover:bg-neon-hover text-sm font-extrabold py-2.5 px-6 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 shadow-[0_0_20px_rgba(196,255,71,0.2)]"
+              className="inline-flex items-center justify-center bg-neon text-navy hover:bg-neon-hover text-xs min-[401px]:text-sm font-extrabold py-2 min-[401px]:py-2.5 px-4 min-[401px]:px-6 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 shadow-[0_0_20px_rgba(196,255,71,0.2)]"
             >
               Register Now
             </a>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 min-[401px]:gap-4">
               <a
                 href={event.facebook}
                 target="_blank"
