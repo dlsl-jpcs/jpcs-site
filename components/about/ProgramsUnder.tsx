@@ -59,6 +59,7 @@ const ProgramsUnder = () => {
 
               <Link
                 href={`/programs/${prog.slug}`}
+                aria-label={`Explore ${prog.title} track`}
                 className="mt-auto flex items-center gap-4 text-white font-bold text-sm relative z-10 group-hover:text-neon transition-colors duration-300"
               >
                 <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-neon group-hover:border-neon group-hover:text-navy transition-all duration-300 shadow-inner">
