@@ -27,9 +27,7 @@ export default async function ProgramPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const program = programs.find((p) => p.slug === slug);
-
-  if (!program) notFound();
+  const program = programs.find((p) => p.slug === slug) ?? notFound();
 
   return <ProgramDetail program={program} />;
 }
