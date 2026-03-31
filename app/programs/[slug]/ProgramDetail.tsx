@@ -67,14 +67,14 @@ export default function ProgramDetail({ program }: { program: Program }) {
         <div className="bg-[#070b12] border-y border-white/[0.07] py-2.5 overflow-hidden">
           <div
             className="flex items-center whitespace-nowrap animate-marquee-left"
-            style={{ animationDuration: "55s" }}
+            style={{ animationDuration: "10s" }}
           >
             {[0, 1].map((dupe) => (
               <span key={dupe} className="flex items-center">
                 {program.curriculum.map((subject) => (
                   <span key={subject} className="inline-flex items-center gap-3 px-7">
                     <span className="text-neon text-[8px] leading-none">●</span>
-                    <span className="font-mono text-[11px] text-white/35 tracking-[0.14em] uppercase">
+                    <span className="font-mono text-[13px] text-white/35 tracking-[0.14em] uppercase">
                       {subject}
                     </span>
                     <span className="text-white/15 text-xs font-light ml-1">|</span>
@@ -106,7 +106,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left: heading + text */}
             <div>
-              <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none uppercase mb-10">
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-10">
                 <span className="text-white">About the</span>
                 <br />
                 <span className="text-neon">Program</span>
