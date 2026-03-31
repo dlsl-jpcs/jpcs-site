@@ -192,8 +192,8 @@ export default function ProgramDetail({ program }: { program: Program }) {
               </p>
             </div>
 
-            {/* Right: subjects card — dark card on light bg */}
-            <div className="bg-charcoal border border-white/5 rounded-2xl overflow-hidden">
+            {/* Right: subjects card — white card */}
+            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
               <div className="grid grid-cols-2">
                 {program.curriculum.map((subject, i) => {
                   const isLastRow = Math.floor(i / 2) >= Math.floor((program.curriculum.length - 1) / 2);
@@ -202,13 +202,13 @@ export default function ProgramDetail({ program }: { program: Program }) {
                     <div
                       key={subject}
                       className={`flex items-center px-6 py-4 gap-4 ${
-                        isLeftCol ? "border-r border-white/[0.06]" : ""
-                      } ${!isLastRow ? "border-b border-white/[0.06]" : ""}`}
+                        isLeftCol ? "border-r border-gray-200" : ""
+                      } ${!isLastRow ? "border-b border-gray-200" : ""}`}
                     >
-                      <span className="text-white/25 font-mono text-xs flex-shrink-0">
+                      <span className="text-navy/30 font-mono text-xs flex-shrink-0">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="text-sm truncate text-white/60">
+                      <span className="text-sm truncate text-navy/70">
                         {subject}
                       </span>
                     </div>
