@@ -201,25 +201,16 @@ export default function ProgramDetail({ program }: { program: Program }) {
                   return (
                     <div
                       key={subject}
-                      className={`flex items-center justify-between px-6 py-4 gap-3 ${
+                      className={`flex items-center px-6 py-4 gap-4 ${
                         isLeftCol ? "border-r border-white/[0.06]" : ""
-                      } ${!isLastRow ? "border-b border-white/[0.06]" : ""} ${
-                        i === 0 ? "bg-white/[0.05]" : ""
-                      }`}
+                      } ${!isLastRow ? "border-b border-white/[0.06]" : ""}`}
                     >
-                      <div className="flex items-center gap-4 min-w-0">
-                        <span className="text-white/25 font-mono text-xs flex-shrink-0">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className={`text-sm truncate ${i === 0 ? "text-white font-semibold" : "text-white/60"}`}>
-                          {subject}
-                        </span>
-                      </div>
-                      {i === 0 && (
-                        <div className="w-8 h-8 rounded-full border border-neon/50 bg-neon/10 flex items-center justify-center flex-shrink-0">
-                          <span className="text-neon text-[8px]">●</span>
-                        </div>
-                      )}
+                      <span className="text-white/25 font-mono text-xs flex-shrink-0">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-sm truncate text-white/60">
+                        {subject}
+                      </span>
                     </div>
                   );
                 })}
