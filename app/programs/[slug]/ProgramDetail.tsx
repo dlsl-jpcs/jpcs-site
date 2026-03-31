@@ -201,7 +201,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
                   return (
                     <div
                       key={subject}
-                      className={`group flex items-center px-6 py-4 gap-4 ${
+                      className={`group flex items-center px-6 py-4 gap-4 transition-colors duration-200 hover:bg-neon/5 ${
                         isLeftCol ? "border-r border-gray-200" : ""
                       } ${!isLastRow ? "border-b border-gray-200" : ""}`}
                     >
