@@ -193,7 +193,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
             </div>
 
             {/* Right: subjects card — white card */}
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg">
               <div className="grid grid-cols-2">
                 {program.curriculum.map((subject, i) => {
                   const isLastRow = Math.floor(i / 2) >= Math.floor((program.curriculum.length - 1) / 2);
@@ -201,14 +201,14 @@ export default function ProgramDetail({ program }: { program: Program }) {
                   return (
                     <div
                       key={subject}
-                      className={`flex items-center px-6 py-4 gap-4 ${
+                      className={`group flex items-center px-6 py-4 gap-4 ${
                         isLeftCol ? "border-r border-gray-200" : ""
                       } ${!isLastRow ? "border-b border-gray-200" : ""}`}
                     >
-                      <span className="text-navy/30 font-mono text-xs flex-shrink-0">
+                      <span className="font-mono text-xs flex-shrink-0 text-navy/30 group-hover:text-neon group-hover:font-bold transition-colors duration-200">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="text-sm truncate text-navy/70">
+                      <span className="text-xs truncate text-navy/70 group-hover:text-navy transition-colors duration-200">
                         {subject}
                       </span>
                     </div>
