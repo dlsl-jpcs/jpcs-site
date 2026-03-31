@@ -112,9 +112,17 @@ export default function ProgramDetail({ program }: { program: Program }) {
                 <span className="text-neon">Program</span>
               </h2>
               <div className="flex flex-col gap-5">
-                {program.overview.split(". ").filter(Boolean).map((sentence, i) => (
+                {program.overviewParagraphs.map((para, i) => (
                   <p key={i} className="text-white/60 leading-relaxed text-base md:text-lg">
-                    {sentence.endsWith(".") ? sentence : `${sentence}.`}
+                    {para.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
+                      part.startsWith("**") && part.endsWith("**") ? (
+                        <strong key={j} className="text-white font-semibold">
+                          {part.slice(2, -2)}
+                        </strong>
+                      ) : (
+                        part
+                      )
+                    )}
                   </p>
                 ))}
               </div>
