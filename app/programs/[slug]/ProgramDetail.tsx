@@ -12,7 +12,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative bg-gradient-to-br from-navy to-charcoal px-6 md:px-16 py-16 md:py-24 overflow-hidden border-b-2 border-neon"
+        className="relative min-h-screen flex flex-col justify-center bg-gradient-to-br from-navy to-charcoal py-24 overflow-hidden"
       >
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
@@ -21,7 +21,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
           {program.short}
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto">
+        <div className="relative z-10 w-full px-6 md:px-16 max-w-7xl mx-auto">
           {/* Back navigation */}
           <Link
             href="/#programs"
@@ -35,8 +35,14 @@ export default function ProgramDetail({ program }: { program: Program }) {
           <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-neon/10 border border-neon/20 text-neon font-extrabold text-sm tracking-widest uppercase mb-6">
             {program.short}
           </span>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
-            {program.title}
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none uppercase mb-4">
+            <span className="text-white">
+              {program.title.split(" ").slice(0, -1).join(" ")}
+            </span>
+            <br />
+            <span className="text-neon">
+              {program.title.split(" ").slice(-1)[0]}
+            </span>
           </h1>
           <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
             {program.tagline}
@@ -62,7 +68,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </motion.section>
 
       {/* Program Overview — dark section */}
-      <section className="bg-navy border-t border-white/5">
+      <section className="bg-navy border-t-2 border-neon">
         {/* Curriculum marquee ticker */}
         <div className="bg-[#070b12] border-y border-white/[0.07] py-2.5 overflow-hidden">
           <div
