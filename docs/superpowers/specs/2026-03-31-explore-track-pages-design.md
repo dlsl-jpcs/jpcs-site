@@ -61,7 +61,7 @@ export type Program = {
 ## Page Layout
 
 ### Back Navigation
-- Top bar (not sticky/fixed): charcoal background, "← Back to Degree Programs" link (navigates to `/#programs` — confirm this anchor ID exists in `page.tsx`, or use `/` if not)
+- Top bar (not sticky/fixed): charcoal background, "← Back to Degree Programs" link (navigates to `/#about` — confirmed: `ProgramsUnder` lives inside `<div id="about">` in `About.tsx`)
 
 ### Hero Section
 - Background: gradient from `navy` → `charcoal`, with grid dot pattern overlay (matches existing `ProgramsUnder` style)
