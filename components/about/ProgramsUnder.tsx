@@ -1,23 +1,8 @@
 "use client";
-import { motion } from "framer-motion";
 
-const programs = [
-  {
-    title: "Computer Science",
-    short: "BSCS",
-    desc: "Master algorithms, software engineering, AI, and advanced computing theories for research and tech leadership.",
-  },
-  {
-    title: "Information Technology",
-    short: "BSIT",
-    desc: "Develop practical skills in web development, cybersecurity, cloud computing, and enterprise solutions.",
-  },
-  {
-    title: "Computer Technology",
-    short: "ACT",
-    desc: "Two-year intensive program with foundational skills in programming, networking, and hardware.",
-  },
-];
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { programs } from "@/data/programs";
 
 const ProgramsUnder = () => {
   return (
@@ -69,10 +54,13 @@ const ProgramsUnder = () => {
               </h3>
 
               <p className="text-white/60 font-medium leading-relaxed relative z-10 mb-10 flex-grow">
-                {prog.desc}
+                {prog.tagline}
               </p>
 
-              <div className="mt-auto flex items-center gap-4 text-white font-bold text-sm cursor-pointer relative z-10 group-hover:text-neon transition-colors duration-300">
+              <Link
+                href={`/programs/${prog.slug}`}
+                className="mt-auto flex items-center gap-4 text-white font-bold text-sm relative z-10 group-hover:text-neon transition-colors duration-300"
+              >
                 <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-neon group-hover:border-neon group-hover:text-navy transition-all duration-300 shadow-inner">
                   <svg
                     className="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform"
@@ -91,7 +79,7 @@ const ProgramsUnder = () => {
                 <span className="tracking-wide uppercase text-xs transform group-hover:translate-x-1 transition-transform duration-300">
                   Explore Track
                 </span>
-              </div>
+              </Link>
             </motion.div>
           ))}
         </div>
