@@ -161,32 +161,77 @@ export default function ProgramDetail({ program }: { program: Program }) {
         </motion.div>
       </section>
 
+      {/* Core Curriculum */}
+      <section className="bg-off-white">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto"
+        >
+          {/* Section label */}
+          <div className="flex items-center gap-4 mb-12">
+            <span className="text-navy/20 font-mono text-sm">02</span>
+            <div className="h-px w-10 bg-navy/20" />
+            <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
+              Core Curriculum
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-12 lg:gap-16 items-start">
+            {/* Left: heading + description */}
+            <div>
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
+                <span className="text-navy">What You</span>
+                <br />
+                <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform rotate-2">Study</span>
+              </h2>
+              <p className="text-navy/50 leading-relaxed text-base">
+                A rigorous blend of theory and applied practice. Every course is engineered to build on the last, creating a foundation that scales from first principles to industry-grade systems.
+              </p>
+            </div>
+
+            {/* Right: subjects card — dark card on light bg */}
+            <div className="bg-charcoal border border-white/5 rounded-2xl overflow-hidden">
+              <div className="grid grid-cols-2">
+                {program.curriculum.map((subject, i) => {
+                  const isLastRow = Math.floor(i / 2) >= Math.floor((program.curriculum.length - 1) / 2);
+                  const isLeftCol = i % 2 === 0;
+                  return (
+                    <div
+                      key={subject}
+                      className={`flex items-center justify-between px-6 py-4 gap-3 ${
+                        isLeftCol ? "border-r border-white/[0.06]" : ""
+                      } ${!isLastRow ? "border-b border-white/[0.06]" : ""} ${
+                        i === 0 ? "bg-white/[0.05]" : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-4 min-w-0">
+                        <span className="text-white/25 font-mono text-xs flex-shrink-0">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className={`text-sm truncate ${i === 0 ? "text-white font-semibold" : "text-white/60"}`}>
+                          {subject}
+                        </span>
+                      </div>
+                      {i === 0 && (
+                        <div className="w-8 h-8 rounded-full border border-neon/50 bg-neon/10 flex items-center justify-center flex-shrink-0">
+                          <span className="text-neon text-[8px]">●</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
       {/* Remaining sections — off-white */}
       <div className="bg-off-white px-6 md:px-16 py-12 md:py-20">
         <div className="max-w-4xl mx-auto flex flex-col gap-8">
-
-          {/* Core Curriculum */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-charcoal rounded-3xl p-8 md:p-10 border border-white/5"
-          >
-            <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-6">
-              Core Curriculum
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {program.curriculum.map((subject) => (
-                <span
-                  key={subject}
-                  className="bg-charcoal-light border border-white/10 text-white/80 text-sm px-4 py-2 rounded-xl"
-                >
-                  {subject}
-                </span>
-              ))}
-            </div>
-          </motion.div>
 
           {/* Career Paths + Why Choose — 2-column grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
