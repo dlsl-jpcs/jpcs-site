@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import type { Program } from "@/data/programs";
-import ScrollBaseAnimation from "@/components/uilayouts/scroll-text-marque";
 
 export default function ProgramDetail({ program }: { program: Program }) {
   return (
@@ -65,13 +64,25 @@ export default function ProgramDetail({ program }: { program: Program }) {
       {/* Program Overview — dark section */}
       <section className="bg-navy border-t border-white/5">
         {/* Curriculum marquee ticker */}
-        <div className="border-y border-white/10 py-1.5 overflow-hidden">
-          <ScrollBaseAnimation
-            baseVelocity={-0.2}
-            clasname="text-[4px] font-bold tracking-[0.15em] text-white/25 uppercase"
+        <div className="bg-[#070b12] border-y border-white/[0.07] py-2.5 overflow-hidden">
+          <div
+            className="flex items-center whitespace-nowrap animate-marquee-left"
+            style={{ animationDuration: "55s" }}
           >
-            {program.curriculum.map((s) => `• ${s.toUpperCase()}`).join("  |  ")}
-          </ScrollBaseAnimation>
+            {[0, 1].map((dupe) => (
+              <span key={dupe} className="flex items-center">
+                {program.curriculum.map((subject) => (
+                  <span key={subject} className="inline-flex items-center gap-3 px-7">
+                    <span className="text-neon text-[8px] leading-none">●</span>
+                    <span className="font-mono text-[11px] text-white/35 tracking-[0.14em] uppercase">
+                      {subject}
+                    </span>
+                    <span className="text-white/15 text-xs font-light ml-1">|</span>
+                  </span>
+                ))}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Section content */}
