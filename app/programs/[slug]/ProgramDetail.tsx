@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import type { Program } from "@/data/programs";
+import ScrollBaseAnimation from "@/components/uilayouts/scroll-text-marque";
 
 export default function ProgramDetail({ program }: { program: Program }) {
   return (
@@ -61,25 +62,83 @@ export default function ProgramDetail({ program }: { program: Program }) {
         </div>
       </motion.section>
 
-      {/* Sections */}
+      {/* Program Overview — dark section */}
+      <section className="bg-charcoal border-t border-white/5">
+        {/* Curriculum marquee ticker */}
+        <div className="border-b border-white/10 py-3 overflow-hidden">
+          <ScrollBaseAnimation
+            baseVelocity={-2.5}
+            clasname="text-[11px] font-bold tracking-[0.25em] text-white/30 uppercase"
+          >
+            {program.curriculum.map((s) => s.toUpperCase()).join("  •  ")}
+          </ScrollBaseAnimation>
+        </div>
+
+        {/* Section content */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto"
+        >
+          {/* Section label */}
+          <div className="flex items-center gap-4 mb-12">
+            <span className="text-white/20 font-mono text-sm">01</span>
+            <div className="h-px w-10 bg-neon/40" />
+            <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
+              Program Overview
+            </span>
+          </div>
+
+          {/* Two-column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            {/* Left: heading + text */}
+            <div>
+              <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none uppercase mb-10">
+                <span className="text-white">About the</span>
+                <br />
+                <span className="text-neon">Program</span>
+              </h2>
+              <div className="flex flex-col gap-5">
+                {program.overview.split(". ").filter(Boolean).map((sentence, i) => (
+                  <p key={i} className="text-white/60 leading-relaxed text-base md:text-lg">
+                    {sentence.endsWith(".") ? sentence : `${sentence}.`}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: stats card */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden">
+              {[
+                { label: "Core Subjects", value: `${program.curriculum.length}+` },
+                { label: "Career Pathways", value: String(program.careers.length) },
+                { label: "Years of Study", value: String(parseInt(program.duration)) },
+                { label: "Accreditation Body", value: program.accreditation },
+              ].map((stat, i, arr) => (
+                <div
+                  key={stat.label}
+                  className={`flex items-center justify-between px-8 py-6 ${
+                    i < arr.length - 1 ? "border-b border-white/10" : ""
+                  }`}
+                >
+                  <span className="text-white/35 text-[10px] font-bold tracking-[0.2em] uppercase">
+                    {stat.label}
+                  </span>
+                  <span className="text-neon font-black text-3xl md:text-4xl">
+                    {stat.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Remaining sections — off-white */}
       <div className="bg-off-white px-6 md:px-16 py-12 md:py-20">
         <div className="max-w-4xl mx-auto flex flex-col gap-8">
-
-          {/* Program Overview */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="bg-charcoal rounded-3xl p-8 md:p-10 border border-white/5"
-          >
-            <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-4">
-              Program Overview
-            </p>
-            <p className="text-white/70 leading-relaxed text-base md:text-lg">
-              {program.overview}
-            </p>
-          </motion.div>
 
           {/* Core Curriculum */}
           <motion.div
