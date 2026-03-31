@@ -7,17 +7,6 @@ import type { Program } from "@/data/programs";
 export default function ProgramDetail({ program }: { program: Program }) {
   return (
     <div className="min-h-screen bg-charcoal">
-      {/* Back navigation */}
-      <div className="bg-charcoal border-b border-white/10 px-6 md:px-16 py-4">
-        <Link
-          href="/#about"
-          className="inline-flex items-center gap-2 text-white/50 hover:text-neon transition-colors duration-200 text-sm font-medium"
-        >
-          <span>←</span>
-          <span>Back to Degree Programs</span>
-        </Link>
-      </div>
-
       {/* Hero */}
       <motion.section
         initial={{ opacity: 0, y: 30 }}
@@ -33,6 +22,15 @@ export default function ProgramDetail({ program }: { program: Program }) {
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto">
+          {/* Back navigation */}
+          <Link
+            href="/#about"
+            className="flex items-center gap-2 text-white/50 hover:text-neon transition-colors duration-200 text-sm font-medium mb-8 w-fit"
+          >
+            <span>←</span>
+            <span>Back to Degree Programs</span>
+          </Link>
+
           <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-neon/10 border border-neon/20 text-neon font-extrabold text-sm tracking-widest uppercase mb-6">
             {program.short}
           </span>

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { usePathname, useRouter } from "next/navigation";
 
 const StaggeredMenu = dynamic(
   () => import("./StaggeredMenu").then((mod) => mod.StaggeredMenu),
@@ -17,6 +18,8 @@ const Navbar = () => {
   const lastScrollYRef = useRef(0);
   const tickingRef = useRef(false);
   const showNavbarRef = useRef(true);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const navItems = [
     { name: "Home", link: "#home" },
@@ -33,14 +36,14 @@ const Navbar = () => {
   ];
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId.startsWith("#")) {
-      const element = document.querySelector(sectionId);
-      if (element) {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
+    if (!sectionId.startsWith("#")) return;
+    if (pathname !== "/") {
+      router.push(`/${sectionId}`);
+      return;
+    }
+    const element = document.querySelector(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
