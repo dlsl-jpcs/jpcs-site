@@ -6,7 +6,7 @@ import type { Program } from "@/data/programs";
 
 export default function ProgramDetail({ program }: { program: Program }) {
   return (
-    <main className="min-h-screen bg-charcoal">
+    <div className="min-h-screen bg-charcoal">
       {/* Back navigation */}
       <div className="bg-charcoal border-b border-white/10 px-6 md:px-16 py-4">
         <Link
@@ -156,6 +156,6 @@ export default function ProgramDetail({ program }: { program: Program }) {
 
         </div>
       </div>
-    </main>
+    </div>
   );
 }
