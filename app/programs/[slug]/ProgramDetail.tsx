@@ -63,14 +63,14 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </motion.section>
 
       {/* Program Overview — dark section */}
-      <section className="bg-charcoal border-t border-white/5">
+      <section className="bg-navy border-t border-white/5">
         {/* Curriculum marquee ticker */}
-        <div className="border-b border-white/10 py-3 overflow-hidden">
+        <div className="border-y border-white/10 py-1.5 overflow-hidden">
           <ScrollBaseAnimation
-            baseVelocity={-2.5}
-            clasname="text-[11px] font-bold tracking-[0.25em] text-white/30 uppercase"
+            baseVelocity={-0.2}
+            clasname="text-[4px] font-bold tracking-[0.15em] text-white/25 uppercase"
           >
-            {program.curriculum.map((s) => s.toUpperCase()).join("  •  ")}
+            {program.curriculum.map((s) => `• ${s.toUpperCase()}`).join("  |  ")}
           </ScrollBaseAnimation>
         </div>
 
