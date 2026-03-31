@@ -9,6 +9,21 @@ export default function LazySections() {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Disable browser scroll restoration so the page always starts at the
+    // top on refresh. Without this, the browser tries to restore the saved
+    // scroll position while lazy sections are still unmounted, causing the
+    // page to land in the wrong section once they mount.
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    // If an explicit scroll target was set (e.g. from the back link on a
+    // program detail page), load the lazy sections immediately.
+    if (sessionStorage.getItem("scrollTo")) {
+      setIsVisible(true);
+      return;
+    }
+
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
 
@@ -29,6 +44,18 @@ export default function LazySections() {
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
+
+  // After lazy sections mount, scroll to the intended target and clear the flag.
+  useEffect(() => {
+    if (!isVisible) return;
+    const target = sessionStorage.getItem("scrollTo");
+    if (!target) return;
+    sessionStorage.removeItem("scrollTo");
+    const timer = setTimeout(() => {
+      document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [isVisible]);
 
   return (
     <>

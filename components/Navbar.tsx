@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { usePathname, useRouter } from "next/navigation";
 
 const StaggeredMenu = dynamic(
   () => import("./StaggeredMenu").then((mod) => mod.StaggeredMenu),
@@ -17,6 +18,9 @@ const Navbar = () => {
   const lastScrollYRef = useRef(0);
   const tickingRef = useRef(false);
   const showNavbarRef = useRef(true);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isProgramPage = pathname.startsWith("/programs/");
 
   const navItems = [
     { name: "Home", link: "#home" },
@@ -33,14 +37,14 @@ const Navbar = () => {
   ];
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId.startsWith("#")) {
-      const element = document.querySelector(sectionId);
-      if (element) {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
+    if (!sectionId.startsWith("#")) return;
+    if (pathname !== "/") {
+      router.push(`/${sectionId}`);
+      return;
+    }
+    const element = document.querySelector(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -171,64 +175,69 @@ const Navbar = () => {
             </p>
           </div>
 
-          <div
-            onMouseLeave={() => setHoveredIndex(null)}
-            className={`flex items-center justify-center p-2 rounded-full border backdrop-blur-2xl font-bold pointer-events-auto transition-all duration-500 ${
-              navTheme === "light"
-                ? "bg-white/40 border-navy/10 shadow-[0_20px_40px_-15px_rgba(11,19,43,0.15)]"
-                : "bg-charcoal-light/40 border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
-            }`}
-          >
-            {navItems.map((item, idx) => (
-              <a
-                key={item.name}
-                href={item.link}
-                onMouseEnter={() => setHoveredIndex(idx)}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.link);
-                }}
-                className={`relative px-7 py-1 rounded-full transition-colors duration-300 text-[15px] ${
-                  navTheme === "light"
-                    ? hoveredIndex === idx
-                      ? "text-navy"
-                      : "text-navy/60"
-                    : hoveredIndex === idx
-                      ? "text-neon"
-                      : "text-white/70"
-                }`}
-              >
-                {hoveredIndex === idx && (
-                  <motion.div
-                    layoutId="nav-pill-background"
-                    className={`absolute inset-0 rounded-full ${
-                      navTheme === "light" ? "bg-navy/5" : "bg-white/10"
-                    }`}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10">{item.name}</span>
-              </a>
-            ))}
-          </div>
-
-          <div className="pointer-events-auto">
-            <button
-              type="button"
-              onClick={() => scrollToSection("#contact")}
-              className={`px-9 py-3 rounded-full font-extrabold text-[15px] tracking-wide transition-all duration-500 hover:-translate-y-1 ${
+          {!isProgramPage && (
+            <div
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={`flex items-center justify-center p-2 rounded-full border backdrop-blur-2xl font-bold pointer-events-auto transition-all duration-500 ${
                 navTheme === "light"
-                  ? "bg-navy text-white hover:bg-navy-light shadow-[0_15px_30px_-10px_rgba(11,19,43,0.4)]"
-                  : "bg-neon text-navy hover:bg-neon-hover shadow-[0_15px_30px_-10px_rgba(196,255,71,0.3)]"
+                  ? "bg-white/40 border-navy/10 shadow-[0_20px_40px_-15px_rgba(11,19,43,0.15)]"
+                  : "bg-charcoal-light/40 border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)]"
               }`}
             >
-              Contact Us
-            </button>
-          </div>
+              {navItems.map((item, idx) => (
+                <a
+                  key={item.name}
+                  href={item.link}
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(item.link);
+                  }}
+                  className={`relative px-7 py-1 rounded-full transition-colors duration-300 text-[15px] ${
+                    navTheme === "light"
+                      ? hoveredIndex === idx
+                        ? "text-navy"
+                        : "text-navy/60"
+                      : hoveredIndex === idx
+                        ? "text-neon"
+                        : "text-white/70"
+                  }`}
+                >
+                  {hoveredIndex === idx && (
+                    <motion.div
+                      layoutId="nav-pill-background"
+                      className={`absolute inset-0 rounded-full ${
+                        navTheme === "light" ? "bg-navy/5" : "bg-white/10"
+                      }`}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.name}</span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {!isProgramPage && (
+            <div className="pointer-events-auto">
+              <button
+                type="button"
+                onClick={() => scrollToSection("#contact")}
+                className={`px-9 py-3 rounded-full font-extrabold text-[15px] tracking-wide transition-all duration-500 hover:-translate-y-1 ${
+                  navTheme === "light"
+                    ? "bg-navy text-white hover:bg-navy-light shadow-[0_15px_30px_-10px_rgba(11,19,43,0.4)]"
+                    : "bg-neon text-navy hover:bg-neon-hover shadow-[0_15px_30px_-10px_rgba(196,255,71,0.3)]"
+                }`}
+              >
+                Contact Us
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Mobile Menu */}
+      {!isProgramPage && (
       <div
         className={`fixed top-0 left-0 w-full z-50 lg:hidden transition-transform duration-500 ease-in-out ${
           showNavbar ? "translate-y-0" : "-translate-y-16"
@@ -257,6 +266,7 @@ const Navbar = () => {
           changeMenuColorOnOpen={true}
         />
       </div>
+      )}
     </>
   );
 };
