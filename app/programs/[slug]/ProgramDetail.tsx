@@ -185,7 +185,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
               <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
                 <span className="text-navy">What You</span>
                 <br />
-                <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform rotate-2">Study</span>
+                <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2">Study</span>
               </h2>
               <p className="text-navy/50 leading-relaxed text-base">
                 A rigorous blend of theory and applied practice. Every course is engineered to build on the last, creating a foundation that scales from first principles to industry-grade systems.
