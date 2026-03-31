@@ -9,6 +9,12 @@ export default function LazySections() {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // If the URL hash targets content inside the lazy sections, load immediately.
+    if (window.location.hash) {
+      setIsVisible(true);
+      return;
+    }
+
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
 
@@ -29,6 +35,17 @@ export default function LazySections() {
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
+
+  // After lazy sections mount, scroll to the hash target if present.
+  useEffect(() => {
+    if (!isVisible) return;
+    const hash = window.location.hash;
+    if (!hash) return;
+    const timer = setTimeout(() => {
+      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [isVisible]);
 
   return (
     <>
