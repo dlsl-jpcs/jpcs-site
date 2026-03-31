@@ -25,6 +25,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
           {/* Back navigation */}
           <Link
             href="/#programs"
+            onClick={() => sessionStorage.setItem("scrollTo", "#programs")}
             className="flex items-center gap-2 text-white/50 hover:text-neon transition-colors duration-200 text-sm font-medium mb-8 w-fit"
           >
             <span>←</span>

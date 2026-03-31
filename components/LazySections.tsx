@@ -9,8 +9,9 @@ export default function LazySections() {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // If the URL hash targets content inside the lazy sections, load immediately.
-    if (window.location.hash) {
+    // If an explicit scroll target was set (e.g. from the back link on a
+    // program detail page), load the lazy sections immediately.
+    if (sessionStorage.getItem("scrollTo")) {
       setIsVisible(true);
       return;
     }
@@ -36,13 +37,14 @@ export default function LazySections() {
     return () => observer.disconnect();
   }, []);
 
-  // After lazy sections mount, scroll to the hash target if present.
+  // After lazy sections mount, scroll to the intended target and clear the flag.
   useEffect(() => {
     if (!isVisible) return;
-    const hash = window.location.hash;
-    if (!hash) return;
+    const target = sessionStorage.getItem("scrollTo");
+    if (!target) return;
+    sessionStorage.removeItem("scrollTo");
     const timer = setTimeout(() => {
-      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+      document.querySelector(target)?.scrollIntoView({ behavior: "smooth" });
     }, 100);
     return () => clearTimeout(timer);
   }, [isVisible]);
