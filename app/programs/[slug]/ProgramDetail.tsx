@@ -24,7 +24,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
         <div className="relative z-10 max-w-4xl mx-auto">
           {/* Back navigation */}
           <Link
-            href="/#about"
+            href="/#programs"
             className="flex items-center gap-2 text-white/50 hover:text-neon transition-colors duration-200 text-sm font-medium mb-8 w-fit"
           >
             <span>←</span>
