@@ -164,16 +164,16 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* Core Curriculum */}
-      <section className="bg-off-white">
+      <section className="bg-off-white h-screen flex flex-col justify-center overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto"
+          className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full"
         >
           {/* Section label */}
-          <div className="flex items-center gap-4 mb-12">
+          <div className="flex items-center gap-4 mb-8">
             <span className="text-navy/20 font-mono text-sm">02</span>
             <div className="h-px w-10 bg-navy/20" />
             <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
@@ -195,7 +195,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
             </div>
 
             {/* Right: subjects card — white card */}
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
               <div className="grid grid-cols-2">
                 {program.curriculum.map((subject, i) => {
                   const isLastRow = Math.floor(i / 2) >= Math.floor((program.curriculum.length - 1) / 2);
@@ -221,13 +221,6 @@ export default function ProgramDetail({ program }: { program: Program }) {
           </div>
         </motion.div>
       </section>
-
-      {/* Remaining sections — off-white */}
-      <div className="bg-off-white px-6 md:px-16 py-12 md:py-20">
-        <div className="max-w-4xl mx-auto flex flex-col gap-8">
-
-        </div>
-      </div>
 
       {/* Career Paths */}
       <section className="bg-navy min-h-screen flex flex-col justify-center">
