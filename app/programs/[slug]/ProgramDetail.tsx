@@ -332,7 +332,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* Why Choose */}
-      <div className="bg-off-white">
+      <div className="relative z-50 bg-off-white h-screen flex flex-col justify-center overflow-hidden">
         <div className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-8">
@@ -361,18 +361,18 @@ export default function ProgramDetail({ program }: { program: Program }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            className="grid grid-cols-1 md:grid-cols-2 gap-5"
           >
             {program.highlights.map((h, i) => (
               <div
                 key={h.title}
-                className="bg-gray-100 rounded-xl p-8"
+                className="bg-gray-100 border border-gray-200 rounded-2xl p-8"
               >
-                <p className="text-navy/30 font-mono text-xs mb-5">
+                <p className="text-gray-400 font-mono text-xs mb-4">
                   — {String(i + 1).padStart(2, "0")}
                 </p>
-                <p className="text-navy font-extrabold text-lg uppercase tracking-wide mb-3">{h.title}</p>
-                <p className="text-navy/50 text-sm leading-relaxed">{h.desc}</p>
+                <p className="text-navy font-black text-xl uppercase tracking-wide mb-3">{h.title}</p>
+                <p className="text-gray-500 text-sm leading-relaxed">{h.desc}</p>
               </div>
             ))}
           </motion.div>
