@@ -290,11 +290,16 @@ export default function ProgramDetail({ program }: { program: Program }) {
                   <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                        className="overflow-hidden"
+                        key="body"
+                        initial="collapsed"
+                        animate="open"
+                        exit="collapsed"
+                        variants={{
+                          open:      { height: "auto", opacity: 1 },
+                          collapsed: { height: 0,      opacity: 0 },
+                        }}
+                        transition={{ duration: 0.35, ease: [0.04, 0.62, 0.23, 0.98] }}
+                        style={{ overflow: "hidden" }}
                       >
                         <div className="pb-4 px-2 -mx-2 pl-14">
                           <p className="text-white/50 text-sm leading-relaxed mb-3">
