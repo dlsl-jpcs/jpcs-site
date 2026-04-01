@@ -332,7 +332,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* Why Choose */}
-      <div className="relative z-50 bg-off-white h-screen flex flex-col justify-center overflow-hidden">
+      <div className="relative z-40 bg-off-white h-screen flex flex-col justify-center overflow-hidden">
         <div className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-8">
