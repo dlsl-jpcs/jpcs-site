@@ -228,7 +228,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </div>
 
       {/* Career Paths */}
-      <section className="bg-charcoal min-h-screen flex flex-col justify-center">
+      <section className="bg-navy min-h-screen flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
