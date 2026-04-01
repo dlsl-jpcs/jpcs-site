@@ -332,10 +332,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* Why Choose */}
-      <div className="bg-white px-6 md:px-16 py-16 md:py-24">
-        <div className="max-w-7xl mx-auto">
+      <div className="bg-off-white">
+        <div className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
           {/* Section label */}
-          <div className="flex items-center gap-4 mb-12">
+          <div className="flex items-center gap-4 mb-8">
             <span className="text-navy/20 font-mono text-xs border border-navy/15 px-1.5 py-0.5 rounded">04</span>
             <div className="h-px w-10 bg-navy/20" />
             <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
@@ -345,10 +345,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
 
           {/* Heading row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end mb-16">
-            <h2 className="text-5xl md:text-6xl font-black leading-none uppercase">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase">
               <span className="text-navy">The Case For</span>
               <br />
-              <span className="text-neon">Choosing {program.short}</span>
+              <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3">Choosing {program.short}</span>
             </h2>
             <p className="text-navy/50 text-base leading-relaxed lg:pb-2">
               Four reasons this program stands apart — from how it's built to where it takes you.
