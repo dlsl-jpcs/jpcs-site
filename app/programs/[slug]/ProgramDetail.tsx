@@ -336,7 +336,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
         <div className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-8">
-            <span className="text-navy/20 font-mono text-xs border border-navy/15 px-1.5 py-0.5 rounded">04</span>
+            <span className="text-navy/20 font-mono text-sm">04</span>
             <div className="h-px w-10 bg-navy/20" />
             <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
               Why {program.short}
@@ -348,7 +348,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase">
               <span className="text-navy">The Case For</span>
               <br />
-              <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3">Choosing {program.short}</span>
+              <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3 whitespace-nowrap">Choosing {program.short}</span>
             </h2>
             <p className="text-navy/50 text-base leading-relaxed lg:pb-2">
               Four reasons this program stands apart — from how it's built to where it takes you.
