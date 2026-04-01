@@ -280,8 +280,20 @@ export default function ProgramDetail({ program }: { program: Program }) {
                       <span className="border border-neon/40 text-neon font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-sm">
                         {career.tag}
                       </span>
-                      <div className={`w-7 h-7 border rounded flex items-center justify-center text-sm flex-shrink-0 transition-colors duration-200 ${isOpen ? "border-neon text-neon" : "border-white/20 text-white/30"}`}>
-                        {isOpen ? "×" : "+"}
+                      <div className={`w-7 h-7 border rounded flex-shrink-0 transition-colors duration-200 ${isOpen ? "border-neon text-neon" : "border-white/20 text-white/30"}`}>
+                        <svg viewBox="0 0 28 28" fill="none" className="w-full h-full" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                          {isOpen ? (
+                            <>
+                              <line x1="11" y1="11" x2="17" y2="17" />
+                              <line x1="17" y1="11" x2="11" y2="17" />
+                            </>
+                          ) : (
+                            <>
+                              <line x1="14" y1="10" x2="14" y2="18" />
+                              <line x1="10" y1="14" x2="18" y2="14" />
+                            </>
+                          )}
+                        </svg>
                       </div>
                     </div>
                   </div>
