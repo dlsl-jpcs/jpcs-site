@@ -8,7 +8,7 @@ export type Program = {
   accreditation: string;
   overviewParagraphs: string[];
   curriculum: string[];
-  careers: { name: string; tag: string }[];
+  careers: { name: string; tag: string; desc: string; subTags: string[] }[];
   highlights: { title: string; desc: string }[];
 };
 
@@ -47,13 +47,13 @@ export const programs: Program[] = [
       "Automata and Theory Formal Languages",
     ],
     careers: [
-      { name: "Software Engineer", tag: "High Demand" },
-      { name: "Data Scientist", tag: "Growing Fast" },
-      { name: "AI / ML Engineer", tag: "Cutting Edge" },
-      { name: "Systems Architect", tag: "Senior Level" },
-      { name: "Research Scientist", tag: "PhD Pathway" },
-      { name: "Backend / Full-Stack Developer", tag: "Full Stack" },
-      { name: "CTO / Tech Lead", tag: "Leadership" },
+      { name: "Software Engineer", tag: "High Demand", desc: "Design and build scalable software systems at product companies, startups, or enterprise environments. The highest-volume role for CS graduates globally.", subTags: ["Backend", "Frontend", "Full-Stack", "Mobile"] },
+      { name: "Data Scientist", tag: "Growing Fast", desc: "Analyze complex datasets to drive business decisions and build predictive models using statistical methods and machine learning.", subTags: ["Analytics", "ML", "Python", "Statistics"] },
+      { name: "AI / ML Engineer", tag: "Cutting Edge", desc: "Build and deploy machine learning models and AI systems at scale for real-world products and research pipelines.", subTags: ["Deep Learning", "NLP", "Computer Vision", "MLOps"] },
+      { name: "Systems Architect", tag: "Senior Level", desc: "Design high-level software and hardware infrastructure for enterprise-scale distributed systems.", subTags: ["Cloud", "Distributed Systems", "DevOps", "Infrastructure"] },
+      { name: "Research Scientist", tag: "PhD Pathway", desc: "Conduct cutting-edge research in algorithms, artificial intelligence, or theoretical computer science at academia or industry labs.", subTags: ["Academia", "R&D", "Publications", "PhD Track"] },
+      { name: "Backend / Full-Stack Developer", tag: "Full Stack", desc: "Build server-side logic, APIs, and end-to-end web applications that power products used by millions.", subTags: ["Node.js", "Python", "Databases", "REST APIs"] },
+      { name: "CTO / Tech Lead", tag: "Leadership", desc: "Lead engineering teams and define the technical vision and architecture strategy for organizations.", subTags: ["Leadership", "Strategy", "Architecture", "Management"] },
     ],
     highlights: [
       {
@@ -99,13 +99,13 @@ export const programs: Program[] = [
       "Capstone Project",
     ],
     careers: [
-      { name: "Web Developer / Full-Stack Developer", tag: "High Demand" },
-      { name: "IT Manager", tag: "Leadership" },
-      { name: "Cybersecurity Analyst", tag: "Critical" },
-      { name: "Cloud Solutions Architect", tag: "Cloud" },
-      { name: "Systems Administrator", tag: "Infra" },
-      { name: "DevOps Engineer", tag: "Infra" },
-      { name: "IT Consultant", tag: "Consulting" },
+      { name: "Web Developer / Full-Stack Developer", tag: "High Demand", desc: "Build and maintain websites and web applications for clients across all industries using modern frameworks and tools.", subTags: ["HTML/CSS", "JavaScript", "React", "Node.js"] },
+      { name: "IT Manager", tag: "Leadership", desc: "Oversee IT infrastructure, teams, and technology strategy to align systems with business objectives.", subTags: ["Management", "Strategy", "Budgeting", "Teams"] },
+      { name: "Cybersecurity Analyst", tag: "Critical", desc: "Protect systems and networks from digital attacks, breaches, and vulnerabilities across enterprise environments.", subTags: ["Penetration Testing", "SIEM", "Compliance", "Forensics"] },
+      { name: "Cloud Solutions Architect", tag: "Cloud", desc: "Design and implement scalable cloud infrastructure on platforms like AWS and Azure for modern organizations.", subTags: ["AWS", "Azure", "DevOps", "Infrastructure"] },
+      { name: "Systems Administrator", tag: "Infra", desc: "Maintain, configure, and troubleshoot servers, networks, and IT systems that keep businesses running.", subTags: ["Linux", "Windows Server", "Networking", "Virtualization"] },
+      { name: "DevOps Engineer", tag: "Infra", desc: "Bridge development and operations to improve deployment pipelines, automation, and system reliability.", subTags: ["CI/CD", "Docker", "Kubernetes", "Automation"] },
+      { name: "IT Consultant", tag: "Consulting", desc: "Advise organizations on technology solutions and strategies to improve efficiency and competitive advantage.", subTags: ["Strategy", "Analysis", "Solutions", "Communication"] },
     ],
     highlights: [
       {
@@ -147,12 +147,12 @@ export const programs: Program[] = [
       "Cybersecurity Awareness",
     ],
     careers: [
-      { name: "Computer Technician", tag: "Entry Level" },
-      { name: "IT Support Specialist / Help Desk Analyst", tag: "High Demand" },
-      { name: "Web Designer", tag: "Creative" },
-      { name: "Network Technician", tag: "Infra" },
-      { name: "Desktop Support Engineer", tag: "Entry Level" },
-      { name: "Junior Developer", tag: "Growing Fast" },
+      { name: "Computer Technician", tag: "Entry Level", desc: "Install, maintain, and repair computer hardware, peripherals, and software for businesses and individuals.", subTags: ["Hardware", "Troubleshooting", "Repair", "Maintenance"] },
+      { name: "IT Support Specialist / Help Desk Analyst", tag: "High Demand", desc: "Provide technical support and resolve IT issues for end users, ensuring systems run smoothly day to day.", subTags: ["Help Desk", "Ticketing", "Remote Support", "Customer Service"] },
+      { name: "Web Designer", tag: "Creative", desc: "Create visually appealing website layouts and user interfaces that deliver great digital experiences.", subTags: ["UI/UX", "Figma", "HTML/CSS", "Graphics"] },
+      { name: "Network Technician", tag: "Infra", desc: "Install and maintain network infrastructure including routers, switches, and cabling for organizations.", subTags: ["Cisco", "Networking", "Cabling", "Troubleshooting"] },
+      { name: "Desktop Support Engineer", tag: "Entry Level", desc: "Provide on-site technical support for desktop systems, resolving hardware and software issues quickly.", subTags: ["Windows", "Hardware", "Software", "Support"] },
+      { name: "Junior Developer", tag: "Growing Fast", desc: "Write code and assist senior developers in building software applications, growing into a full engineering role.", subTags: ["Programming", "Git", "Debugging", "Collaboration"] },
     ],
     highlights: [
       {

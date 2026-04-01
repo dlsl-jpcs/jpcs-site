@@ -1,10 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import Link from "next/link";
 import type { Program } from "@/data/programs";
 
 export default function ProgramDetail({ program }: { program: Program }) {
+  const [openCareer, setOpenCareer] = useState<number | null>(null);
   return (
     <div className="min-h-screen bg-charcoal">
       {/* Hero */}
@@ -238,7 +240,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
         >
           {/* Section label */}
           <div className="flex items-center gap-4 mb-8">
-            <span className="text-white/20 font-mono text-xs border border-white/15 px-1.5 py-0.5 rounded">03</span>
+            <span className="text-white/20 font-mono text-sm">03</span>
             <div className="h-px w-10 bg-neon/40" />
             <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
               Career Paths
@@ -254,29 +256,67 @@ export default function ProgramDetail({ program }: { program: Program }) {
 
           {/* Career list */}
           <div className="flex flex-col">
-            {program.careers.map((career, i) => (
-              <div
-                key={career.name}
-                className="group flex items-center justify-between py-3 border-b border-white/[0.08] first:border-t first:border-white/[0.08] transition-colors duration-200 hover:bg-white/[0.02] px-2 -mx-2"
-              >
-                <div className="flex items-center gap-6">
-                  <span className="text-white/20 font-mono text-xs w-6 flex-shrink-0">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-white font-extrabold text-xs md:text-sm uppercase tracking-wide">
-                    {career.name}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="border border-neon/40 text-neon font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-sm">
-                    {career.tag}
-                  </span>
-                  <div className="w-7 h-7 border border-white/20 rounded flex items-center justify-center text-white/30 text-sm flex-shrink-0 group-hover:border-neon/40 group-hover:text-neon transition-colors duration-200">
-                    +
+            {program.careers.map((career, i) => {
+              const isOpen = openCareer === i;
+              return (
+                <div
+                  key={career.name}
+                  className="border-b border-white/[0.08] first:border-t first:border-white/[0.08]"
+                >
+                  {/* Row header */}
+                  <div
+                    className="flex items-center justify-between py-3 px-2 -mx-2 cursor-pointer transition-colors duration-200 hover:bg-white/[0.02]"
+                    onClick={() => setOpenCareer(isOpen ? null : i)}
+                  >
+                    <div className="flex items-center gap-6">
+                      <span className={`font-mono text-xs w-6 flex-shrink-0 transition-colors duration-200 ${isOpen ? "text-neon" : "text-white/20"}`}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className={`font-extrabold text-xs md:text-sm uppercase tracking-wide transition-colors duration-200 ${isOpen ? "text-neon" : "text-white"}`}>
+                        {career.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="border border-neon/40 text-neon font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-sm">
+                        {career.tag}
+                      </span>
+                      <div className={`w-7 h-7 border rounded flex items-center justify-center text-sm flex-shrink-0 transition-colors duration-200 ${isOpen ? "border-neon text-neon" : "border-white/20 text-white/30"}`}>
+                        {isOpen ? "×" : "+"}
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Accordion body */}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-4 px-2 -mx-2 pl-14">
+                          <p className="text-white/50 text-sm leading-relaxed mb-3">
+                            {career.desc}
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {career.subTags.map((sub) => (
+                              <span
+                                key={sub}
+                                className="border border-white/15 text-white/40 text-[10px] font-mono tracking-wide uppercase px-3 py-1 rounded-sm"
+                              >
+                                {sub}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
       </section>
