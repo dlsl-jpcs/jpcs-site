@@ -249,7 +249,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
             <span className="text-white">Where You'll</span>
             <br />
-            <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-1 mt-3">Go</span>
+            <span className="text-neon">Go</span>
           </h2>
 
           {/* Career list */}
