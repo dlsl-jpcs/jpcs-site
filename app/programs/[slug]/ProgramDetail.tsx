@@ -332,29 +332,49 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* Why Choose */}
-      <div className="bg-off-white px-6 md:px-16 py-12 md:py-20">
+      <div className="bg-white px-6 md:px-16 py-16 md:py-24">
         <div className="max-w-7xl mx-auto">
+          {/* Section label */}
+          <div className="flex items-center gap-4 mb-12">
+            <span className="text-navy/20 font-mono text-xs border border-navy/15 px-1.5 py-0.5 rounded">04</span>
+            <div className="h-px w-10 bg-navy/20" />
+            <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
+              Why {program.short}
+            </span>
+          </div>
+
+          {/* Heading row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end mb-16">
+            <h2 className="text-5xl md:text-6xl font-black leading-none uppercase">
+              <span className="text-navy">The Case For</span>
+              <br />
+              <span className="text-neon">Choosing {program.short}</span>
+            </h2>
+            <p className="text-navy/50 text-base leading-relaxed lg:pb-2">
+              Four reasons this program stands apart — from how it's built to where it takes you.
+            </p>
+          </div>
+
+          {/* 2×2 cards grid */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="bg-charcoal rounded-3xl p-8 border border-white/5"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
-            <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-6">
-              Why Choose {program.short}?
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {program.highlights.map((h) => (
-                <div
-                  key={h.title}
-                  className="bg-charcoal-light rounded-xl p-4 border-l-2 border-neon"
-                >
-                  <p className="text-white font-bold text-sm mb-1">{h.title}</p>
-                  <p className="text-white/50 text-xs leading-relaxed">{h.desc}</p>
-                </div>
-              ))}
-            </div>
+            {program.highlights.map((h, i) => (
+              <div
+                key={h.title}
+                className="bg-gray-100 rounded-xl p-8"
+              >
+                <p className="text-navy/30 font-mono text-xs mb-5">
+                  — {String(i + 1).padStart(2, "0")}
+                </p>
+                <p className="text-navy font-extrabold text-lg uppercase tracking-wide mb-3">{h.title}</p>
+                <p className="text-navy/50 text-sm leading-relaxed">{h.desc}</p>
+              </div>
+            ))}
           </motion.div>
         </div>
       </div>

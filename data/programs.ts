@@ -58,15 +58,19 @@ export const programs: Program[] = [
     highlights: [
       {
         title: "Theory + Practice",
-        desc: "Strong algorithmic foundations for innovation and research.",
+        desc: "Rigorous algorithmic foundations paired with hands-on project work. You learn to think like a computer scientist and build like an engineer.",
       },
       {
         title: "Grad School Ready",
-        desc: "Direct pathway to MS/PhD programs locally and abroad.",
+        desc: "Direct pathway to MS and PhD programs at top universities locally and abroad. Our curriculum aligns with global academic standards.",
       },
       {
-        title: "High Industry Demand",
-        desc: "Top-paying roles at leading tech companies.",
+        title: "High Demand",
+        desc: "CS graduates command some of the highest starting salaries in any field. Industry demand continues to outpace supply across every specialization.",
+      },
+      {
+        title: "JPCS Network",
+        desc: "Join a community of driven IT students. Access hackathons, seminars, industry mentors, and exclusive opportunities through the JPCS ecosystem.",
       },
     ],
   },
@@ -110,15 +114,19 @@ export const programs: Program[] = [
     highlights: [
       {
         title: "Industry-Ready Skills",
-        desc: "Practical curriculum aligned with real-world IT environments.",
+        desc: "Hands-on training with real enterprise tools and workflows. Graduate ready to contribute from day one across IT roles.",
       },
       {
         title: "Broad Coverage",
-        desc: "From web dev to cloud to security, all in one program.",
+        desc: "From web development to cloud infrastructure to cybersecurity — one program covers the full spectrum of modern IT.",
       },
       {
         title: "Fast Career Entry",
-        desc: "High demand for IT professionals across every industry.",
+        desc: "IT roles are among the fastest-growing and highest-demand positions globally. Employers actively recruit BSIT graduates at every level.",
+      },
+      {
+        title: "JPCS Network",
+        desc: "Join a community of driven IT students. Access hackathons, seminars, industry mentors, and exclusive opportunities through the JPCS ecosystem.",
       },
     ],
   },
@@ -157,15 +165,19 @@ export const programs: Program[] = [
     highlights: [
       {
         title: "Shorter Duration",
-        desc: "Enter the workforce in 2 years with in-demand technical skills.",
+        desc: "Enter the workforce in just two years with skills that employers need immediately. No waiting — start building your career sooner.",
       },
       {
         title: "Certification Paths",
-        desc: "Aligned with TESDA NC II and Cisco certifications.",
+        desc: "Aligned with TESDA NC II and Cisco certifications that carry real industry weight and open doors across the Philippines.",
       },
       {
         title: "Stepping Stone",
-        desc: "Solid foundation for advancing to BSIT or BSCS.",
+        desc: "ACT builds a strong foundation for BSIT or BSCS. Many graduates continue their studies while already working in the field.",
+      },
+      {
+        title: "JPCS Network",
+        desc: "Join a community of driven IT students. Access hackathons, seminars, industry mentors, and exclusive opportunities through the JPCS ecosystem.",
       },
     ],
   },
