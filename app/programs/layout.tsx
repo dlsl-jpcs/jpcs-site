@@ -8,11 +8,13 @@ export default function ProgramsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="w-full relative selection:bg-neon selection:text-navy">
+    <main className="w-full relative bg-off-white selection:bg-neon selection:text-navy">
       <ScrollProgressBar />
       <Navbar />
       {children}
-      <ClientFooter />
+      <div className="[&>footer]:shadow-none">
+        <ClientFooter />
+      </div>
     </main>
   );
 }

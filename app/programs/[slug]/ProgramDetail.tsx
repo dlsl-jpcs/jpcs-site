@@ -366,7 +366,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
             {program.highlights.map((h, i) => (
               <div
                 key={h.title}
-                className="bg-gray-100 border border-gray-200 rounded-2xl p-8"
+                className="bg-white border-0 border-t-2 border-t-transparent rounded-2xl p-8 shadow-none transition-all duration-300 ease-in-out hover:border-t-neon hover:bg-gray-100 hover:shadow-xl"
               >
                 <p className="text-gray-400 font-mono text-xs mb-4">
                   — {String(i + 1).padStart(2, "0")}
