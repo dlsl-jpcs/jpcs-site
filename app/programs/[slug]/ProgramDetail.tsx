@@ -344,8 +344,8 @@ export default function ProgramDetail({ program }: { program: Program }) {
           </div>
 
           {/* Heading row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end mb-16">
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 items-end mb-12">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase min-w-0">
               <span className="text-navy">The Case For</span>
               <br />
               <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3 whitespace-nowrap">Choosing {program.short}</span>
