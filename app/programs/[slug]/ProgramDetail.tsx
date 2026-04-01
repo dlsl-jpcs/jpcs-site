@@ -228,16 +228,16 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </div>
 
       {/* Career Paths */}
-      <section className="bg-charcoal">
+      <section className="bg-charcoal min-h-screen flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto"
+          className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full"
         >
           {/* Section label */}
-          <div className="flex items-center gap-4 mb-12">
+          <div className="flex items-center gap-4 mb-8">
             <span className="text-white/20 font-mono text-xs border border-white/15 px-1.5 py-0.5 rounded">03</span>
             <div className="h-px w-10 bg-neon/40" />
             <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
@@ -246,10 +246,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
           </div>
 
           {/* Heading */}
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-16">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
             <span className="text-white">Where You'll</span>
             <br />
-            <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-1">Go</span>
+            <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-1 mt-3">Go</span>
           </h2>
 
           {/* Career list */}
@@ -257,13 +257,13 @@ export default function ProgramDetail({ program }: { program: Program }) {
             {program.careers.map((career, i) => (
               <div
                 key={career.name}
-                className="group flex items-center justify-between py-5 border-b border-white/[0.08] first:border-t first:border-white/[0.08] transition-colors duration-200 hover:bg-white/[0.02] px-2 -mx-2"
+                className="group flex items-center justify-between py-3 border-b border-white/[0.08] first:border-t first:border-white/[0.08] transition-colors duration-200 hover:bg-white/[0.02] px-2 -mx-2"
               >
                 <div className="flex items-center gap-6">
                   <span className="text-white/20 font-mono text-xs w-6 flex-shrink-0">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-white font-extrabold text-lg md:text-xl uppercase tracking-wide">
+                  <span className="text-white font-extrabold text-xs md:text-sm uppercase tracking-wide">
                     {career.name}
                   </span>
                 </div>
