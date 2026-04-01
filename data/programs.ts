@@ -6,7 +6,7 @@ export type Program = {
   duration: string;
   degree: string;
   accreditation: string;
-  overview: string;
+  overviewParagraphs: string[];
   curriculum: string[];
   careers: string[];
   highlights: { title: string; desc: string }[];
@@ -22,22 +22,29 @@ export const programs: Program[] = [
     duration: "4 Years",
     degree: "BS Degree",
     accreditation: "CHED",
-    overview:
-      "The BS Computer Science program equips students with deep theoretical foundations and practical skills in software development, algorithms, and computing systems. Students explore areas ranging from artificial intelligence and machine learning to software engineering and theory of computation. Graduates are prepared for careers in tech leadership, software development, research, or graduate studies.",
+    overviewParagraphs: [
+      "The **BS Computer Science program** equips students with deep theoretical foundations and practical skills in software development, algorithms, and computing systems.",
+      "Students explore areas ranging from **artificial intelligence and machine learning** to software engineering and theory of computation. The curriculum is designed to develop both technical depth and the critical thinking required for innovation.",
+      "Graduates are prepared for careers in **tech leadership, software development, and research**, or direct entry into graduate studies at world-class institutions.",
+    ],
     curriculum: [
       "Data Structures & Algorithms",
       "Discrete Mathematics",
       "Object-Oriented Programming",
-      "Computer Architecture & Organization",
-      "Operating Systems",
-      "Database Management Systems",
+      "Web Development",
+      "Mobile Application Development",
+      "Data Science",
       "Software Engineering",
-      "Artificial Intelligence",
-      "Machine Learning",
-      "Theory of Computation",
+      "Networking and Communications",
+      "Data Structures and Algorithms",
+      "Architecture and Organization",
+      "Information Management",
+      "Information Assurance and Security",
+      "Project Management",
+      "Operating Systems",
       "Programming Languages",
       "Human-Computer Interaction",
-      "Capstone Project",
+      "Automata and Theory Formal Languages",
     ],
     careers: [
       "Software Engineer",
@@ -72,8 +79,11 @@ export const programs: Program[] = [
     duration: "4 Years",
     degree: "BS Degree",
     accreditation: "CHED",
-    overview:
-      "The BS Information Technology program develops industry-ready professionals skilled in deploying, managing, and securing technology systems for businesses. Students gain hands-on experience in web development, network administration, cybersecurity, cloud platforms, and enterprise IT solutions. Graduates are equipped to immediately contribute to organizations across all industries.",
+    overviewParagraphs: [
+      "The **BS Information Technology program** develops industry-ready professionals skilled in deploying, managing, and securing technology systems for businesses.",
+      "Students gain hands-on experience in **web development, network administration, cybersecurity**, cloud platforms, and enterprise IT solutions. The program bridges theoretical knowledge with practical, job-ready skills.",
+      "Graduates are equipped to immediately contribute to organizations across all industries, in roles spanning **IT management, cloud architecture, and cybersecurity**.",
+    ],
     curriculum: [
       "Web Systems & Technologies",
       "Network Administration",
@@ -121,8 +131,11 @@ export const programs: Program[] = [
     duration: "2 Years",
     degree: "Associate Degree",
     accreditation: "TESDA / CHED",
-    overview:
-      "The Associate in Computer Technology program is a two-year course providing students with essential skills in computer programming, hardware servicing, networking, and technical support. Designed for students who want to enter the IT workforce quickly or build a strong foundation before pursuing a bachelor's degree, ACT combines practical training with industry-relevant certifications.",
+    overviewParagraphs: [
+      "The **Associate in Computer Technology program** is a two-year course providing students with essential skills in computer programming, hardware servicing, networking, and technical support.",
+      "Designed for students who want to enter the IT workforce quickly, ACT combines **practical training with industry-relevant certifications** aligned to TESDA NC II and Cisco NetAcad standards.",
+      "Graduates are ready to step into roles in **technical support, hardware servicing, and web design** — or continue their education with a solid foundation for BSIT or BSCS.",
+    ],
     curriculum: [
       "Computer Programming Fundamentals",
       "Computer Hardware Servicing & Troubleshooting",
