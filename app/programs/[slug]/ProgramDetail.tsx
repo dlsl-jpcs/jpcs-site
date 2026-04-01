@@ -138,7 +138,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
             <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden">
               {[
                 { label: "Core Subjects", value: `${program.curriculum.length}+` },
-                { label: "Career Pathways", value: String(program.careers.length) },
+                { label: "Career Pathways", value: String(program.careers.length) + "+" },
                 { label: "Years of Study", value: String(parseInt(program.duration)) },
                 { label: "Accreditation Body", value: program.accreditation },
               ].map((stat, i, arr) => (
@@ -224,55 +224,88 @@ export default function ProgramDetail({ program }: { program: Program }) {
       <div className="bg-off-white px-6 md:px-16 py-12 md:py-20">
         <div className="max-w-4xl mx-auto flex flex-col gap-8">
 
-          {/* Career Paths + Why Choose — 2-column grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-charcoal rounded-3xl p-8 border border-white/5"
-            >
-              <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-6">
-                Career Paths
-              </p>
-              <ul className="flex flex-col gap-3">
-                {program.careers.map((career) => (
-                  <li
-                    key={career}
-                    className="flex items-center gap-3 text-white/80 text-sm"
-                  >
-                    <span className="text-neon font-bold flex-shrink-0">→</span>
-                    {career}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+        </div>
+      </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-charcoal rounded-3xl p-8 border border-white/5"
-            >
-              <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-6">
-                Why Choose {program.short}?
-              </p>
-              <div className="flex flex-col gap-4">
-                {program.highlights.map((h) => (
-                  <div
-                    key={h.title}
-                    className="bg-charcoal-light rounded-xl p-4 border-l-2 border-neon"
-                  >
-                    <p className="text-white font-bold text-sm mb-1">{h.title}</p>
-                    <p className="text-white/50 text-xs leading-relaxed">{h.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+      {/* Career Paths */}
+      <section className="bg-charcoal">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto"
+        >
+          {/* Section label */}
+          <div className="flex items-center gap-4 mb-12">
+            <span className="text-white/20 font-mono text-xs border border-white/15 px-1.5 py-0.5 rounded">03</span>
+            <div className="h-px w-10 bg-neon/40" />
+            <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
+              Career Paths
+            </span>
           </div>
 
+          {/* Heading */}
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-16">
+            <span className="text-white">Where You'll</span>
+            <br />
+            <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-1">Go</span>
+          </h2>
+
+          {/* Career list */}
+          <div className="flex flex-col">
+            {program.careers.map((career, i) => (
+              <div
+                key={career.name}
+                className="group flex items-center justify-between py-5 border-b border-white/[0.08] first:border-t first:border-white/[0.08] transition-colors duration-200 hover:bg-white/[0.02] px-2 -mx-2"
+              >
+                <div className="flex items-center gap-6">
+                  <span className="text-white/20 font-mono text-xs w-6 flex-shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-white font-extrabold text-lg md:text-xl uppercase tracking-wide">
+                    {career.name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="border border-neon/40 text-neon font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-sm">
+                    {career.tag}
+                  </span>
+                  <div className="w-7 h-7 border border-white/20 rounded flex items-center justify-center text-white/30 text-sm flex-shrink-0 group-hover:border-neon/40 group-hover:text-neon transition-colors duration-200">
+                    +
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Why Choose */}
+      <div className="bg-off-white px-6 md:px-16 py-12 md:py-20">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-charcoal rounded-3xl p-8 border border-white/5"
+          >
+            <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-6">
+              Why Choose {program.short}?
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {program.highlights.map((h) => (
+                <div
+                  key={h.title}
+                  className="bg-charcoal-light rounded-xl p-4 border-l-2 border-neon"
+                >
+                  <p className="text-white font-bold text-sm mb-1">{h.title}</p>
+                  <p className="text-white/50 text-xs leading-relaxed">{h.desc}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

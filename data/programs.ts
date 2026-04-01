@@ -8,7 +8,7 @@ export type Program = {
   accreditation: string;
   overviewParagraphs: string[];
   curriculum: string[];
-  careers: string[];
+  careers: { name: string; tag: string }[];
   highlights: { title: string; desc: string }[];
 };
 
@@ -47,13 +47,13 @@ export const programs: Program[] = [
       "Automata and Theory Formal Languages",
     ],
     careers: [
-      "Software Engineer",
-      "Data Scientist",
-      "AI / ML Engineer",
-      "Systems Architect",
-      "Research Scientist",
-      "Backend / Full-Stack Developer",
-      "CTO / Tech Lead",
+      { name: "Software Engineer", tag: "High Demand" },
+      { name: "Data Scientist", tag: "Growing Fast" },
+      { name: "AI / ML Engineer", tag: "Cutting Edge" },
+      { name: "Systems Architect", tag: "Senior Level" },
+      { name: "Research Scientist", tag: "PhD Pathway" },
+      { name: "Backend / Full-Stack Developer", tag: "Full Stack" },
+      { name: "CTO / Tech Lead", tag: "Leadership" },
     ],
     highlights: [
       {
@@ -99,13 +99,13 @@ export const programs: Program[] = [
       "Capstone Project",
     ],
     careers: [
-      "Web Developer / Full-Stack Developer",
-      "IT Manager",
-      "Cybersecurity Analyst",
-      "Cloud Solutions Architect",
-      "Systems Administrator",
-      "DevOps Engineer",
-      "IT Consultant",
+      { name: "Web Developer / Full-Stack Developer", tag: "High Demand" },
+      { name: "IT Manager", tag: "Leadership" },
+      { name: "Cybersecurity Analyst", tag: "Critical" },
+      { name: "Cloud Solutions Architect", tag: "Cloud" },
+      { name: "Systems Administrator", tag: "Infra" },
+      { name: "DevOps Engineer", tag: "Infra" },
+      { name: "IT Consultant", tag: "Consulting" },
     ],
     highlights: [
       {
@@ -147,12 +147,12 @@ export const programs: Program[] = [
       "Cybersecurity Awareness",
     ],
     careers: [
-      "Computer Technician",
-      "IT Support Specialist / Help Desk Analyst",
-      "Web Designer",
-      "Network Technician",
-      "Desktop Support Engineer",
-      "Junior Developer",
+      { name: "Computer Technician", tag: "Entry Level" },
+      { name: "IT Support Specialist / Help Desk Analyst", tag: "High Demand" },
+      { name: "Web Designer", tag: "Creative" },
+      { name: "Network Technician", tag: "Infra" },
+      { name: "Desktop Support Engineer", tag: "Entry Level" },
+      { name: "Junior Developer", tag: "Growing Fast" },
     ],
     highlights: [
       {
