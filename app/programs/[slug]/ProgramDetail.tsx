@@ -1,28 +1,93 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import type { Program } from "@/data/programs";
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0 } },
+};
+
+const staggerFast = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0 } },
+};
+
+/** Wraps children in a motion container that animates in on enter and out on exit. */
+function Reveal({
+  children,
+  className,
+  variants = stagger,
+  amount = 0.15,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  variants?: typeof stagger;
+  amount?: number;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount });
+  return (
+    <motion.div
+      ref={ref}
+      variants={variants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/** Single animated child — use inside a <Reveal>. */
+function RevealItem({
+  children,
+  className,
+  duration = 0.5,
+  as: Tag = "div",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  duration?: number;
+  as?: React.ElementType;
+}) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      transition={{ duration, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 export default function ProgramDetail({ program }: { program: Program }) {
+  const [openCareer, setOpenCareer] = useState<number | null>(null);
+
   return (
     <div className="min-h-screen bg-charcoal">
-      {/* Hero */}
+      {/* ── Hero ── */}
       <motion.section
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="relative min-h-screen flex flex-col justify-center bg-gradient-to-br from-navy to-charcoal py-24 overflow-hidden"
       >
-        {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-        {/* Ghost watermark */}
         <div className="absolute -bottom-4 -right-8 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none leading-none tracking-tighter">
           {program.short}
         </div>
 
         <div className="relative z-10 w-full px-6 md:px-16 max-w-7xl mx-auto">
-          {/* Back navigation */}
           <Link
             href="/#programs"
             onClick={() => sessionStorage.setItem("scrollTo", "#programs")}
@@ -57,9 +122,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
                 key={stat.label}
                 className="bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-center"
               >
-                <div className="text-neon font-extrabold text-lg">
-                  {stat.value}
-                </div>
+                <div className="text-neon font-extrabold text-lg">{stat.value}</div>
                 <div className="text-white/40 text-xs mt-0.5">{stat.label}</div>
               </div>
             ))}
@@ -67,9 +130,9 @@ export default function ProgramDetail({ program }: { program: Program }) {
         </div>
       </motion.section>
 
-      {/* Program Overview — dark section */}
+      {/* ── Program Overview ── */}
       <section className="bg-navy border-t-2 border-neon">
-        {/* Curriculum marquee ticker */}
+        {/* Ticker */}
         <div className="bg-[#070b12] border-y border-white/[0.07] py-2.5 overflow-hidden">
           <div
             className="flex items-center whitespace-nowrap animate-marquee-left"
@@ -91,189 +154,269 @@ export default function ProgramDetail({ program }: { program: Program }) {
           </div>
         </div>
 
-        {/* Section content */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto"
-        >
-          {/* Section label */}
-          <div className="flex items-center gap-4 mb-12">
-            <span className="text-white/20 font-mono text-sm">01</span>
-            <div className="h-px w-10 bg-neon/40" />
-            <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
-              Program Overview
-            </span>
-          </div>
+        <div className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto">
+          <Reveal>
+            <RevealItem duration={0.45}>
+              <div className="flex items-center gap-4 mb-12">
+                <span className="text-white/20 font-mono text-sm">01</span>
+                <div className="h-px w-10 bg-neon/40" />
+                <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
+                  Program Overview
+                </span>
+              </div>
+            </RevealItem>
 
-          {/* Two-column layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            {/* Left: heading + text */}
-            <div>
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-10">
-                <span className="text-white">About the</span>
-                <br />
-                <span className="text-neon">Program</span>
-              </h2>
-              <div className="flex flex-col gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+              {/* Left */}
+              <div>
+                <RevealItem duration={0.6}>
+                  <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-10">
+                    <span className="text-white">About the</span>
+                    <br />
+                    <span className="text-neon">Program</span>
+                  </h2>
+                </RevealItem>
                 {program.overviewParagraphs.map((para, i) => (
-                  <p key={i} className="text-white/60 leading-relaxed text-base md:text-lg">
-                    {para.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
-                      part.startsWith("**") && part.endsWith("**") ? (
-                        <strong key={j} className="text-white font-semibold">
-                          {part.slice(2, -2)}
-                        </strong>
-                      ) : (
-                        part
-                      )
-                    )}
-                  </p>
+                  <RevealItem key={i} duration={0.5}>
+                    <p className="text-white/60 leading-relaxed text-base md:text-lg mb-5">
+                      {para.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
+                        part.startsWith("**") && part.endsWith("**") ? (
+                          <strong key={j} className="text-white font-semibold">
+                            {part.slice(2, -2)}
+                          </strong>
+                        ) : (
+                          part
+                        )
+                      )}
+                    </p>
+                  </RevealItem>
                 ))}
               </div>
-            </div>
 
-            {/* Right: stats card */}
-            <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden">
-              {[
-                { label: "Core Subjects", value: `${program.curriculum.length}+` },
-                { label: "Career Pathways", value: String(program.careers.length) },
-                { label: "Years of Study", value: String(parseInt(program.duration)) },
-                { label: "Accreditation Body", value: program.accreditation },
-              ].map((stat, i, arr) => (
-                <div
-                  key={stat.label}
-                  className={`flex items-center justify-between px-8 py-6 ${
-                    i < arr.length - 1 ? "border-b border-white/10" : ""
-                  }`}
-                >
-                  <span className="text-white/35 text-[10px] font-bold tracking-[0.2em] uppercase">
-                    {stat.label}
-                  </span>
-                  <span className="text-neon font-black text-3xl md:text-4xl">
-                    {stat.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Core Curriculum */}
-      <section className="bg-off-white">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto"
-        >
-          {/* Section label */}
-          <div className="flex items-center gap-4 mb-12">
-            <span className="text-navy/20 font-mono text-sm">02</span>
-            <div className="h-px w-10 bg-navy/20" />
-            <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
-              Core Curriculum
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-12 lg:gap-16 items-start">
-            {/* Left: heading + description */}
-            <div>
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
-                <span className="text-navy">What You</span>
-                <br />
-                <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2">Study</span>
-              </h2>
-              <p className="text-navy/50 leading-relaxed text-base">
-                A rigorous blend of theory and applied practice. Every course is engineered to build on the last, creating a foundation that scales from first principles to industry-grade systems.
-              </p>
-            </div>
-
-            {/* Right: subjects card — white card */}
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg">
-              <div className="grid grid-cols-2">
-                {program.curriculum.map((subject, i) => {
-                  const isLastRow = Math.floor(i / 2) >= Math.floor((program.curriculum.length - 1) / 2);
-                  const isLeftCol = i % 2 === 0;
-                  return (
-                    <div
-                      key={subject}
-                      className={`group flex items-center px-6 py-4 gap-4 transition-colors duration-200 hover:bg-neon/5 ${
-                        isLeftCol ? "border-r border-gray-200" : ""
-                      } ${!isLastRow ? "border-b border-gray-200" : ""}`}
-                    >
-                      <span className="font-mono text-xs flex-shrink-0 text-navy/30 group-hover:text-neon group-hover:font-bold transition-colors duration-200">
-                        {String(i + 1).padStart(2, "0")}
+              {/* Right: stats */}
+              <Reveal variants={staggerFast} className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden">
+                {[
+                  { label: "Core Subjects", value: `${program.curriculum.length}+` },
+                  { label: "Career Pathways", value: `${program.careers.length}+` },
+                  { label: "Years of Study", value: String(parseInt(program.duration)) },
+                  { label: "Accreditation Body", value: program.accreditation },
+                ].map((stat, i, arr) => (
+                  <RevealItem key={stat.label} duration={0.4}>
+                    <div className={`flex items-center justify-between px-8 py-6 ${i < arr.length - 1 ? "border-b border-white/10" : ""}`}>
+                      <span className="text-white/35 text-[10px] font-bold tracking-[0.2em] uppercase">
+                        {stat.label}
                       </span>
-                      <span className="text-xs truncate text-navy/70 group-hover:text-navy transition-colors duration-200">
-                        {subject}
+                      <span className="text-neon font-black text-3xl md:text-4xl">
+                        {stat.value}
                       </span>
                     </div>
-                  );
-                })}
-              </div>
+                  </RevealItem>
+                ))}
+              </Reveal>
             </div>
-          </div>
-        </motion.div>
+          </Reveal>
+        </div>
       </section>
 
-      {/* Remaining sections — off-white */}
-      <div className="bg-off-white px-6 md:px-16 py-12 md:py-20">
-        <div className="max-w-4xl mx-auto flex flex-col gap-8">
+      {/* ── Core Curriculum ── */}
+      <section className="bg-off-white h-screen flex flex-col justify-center overflow-hidden">
+        <Reveal className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
+          <RevealItem duration={0.45}>
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-navy/20 font-mono text-sm">02</span>
+              <div className="h-px w-10 bg-navy/20" />
+              <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
+                Core Curriculum
+              </span>
+            </div>
+          </RevealItem>
 
-          {/* Career Paths + Why Choose — 2-column grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-charcoal rounded-3xl p-8 border border-white/5"
-            >
-              <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-6">
-                Career Paths
-              </p>
-              <ul className="flex flex-col gap-3">
-                {program.careers.map((career) => (
-                  <li
-                    key={career}
-                    className="flex items-center gap-3 text-white/80 text-sm"
-                  >
-                    <span className="text-neon font-bold flex-shrink-0">→</span>
-                    {career}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-12 lg:gap-16 items-start">
+            <div>
+              <RevealItem duration={0.6}>
+                <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
+                  <span className="text-navy">What You</span>
+                  <br />
+                  <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2">Study</span>
+                </h2>
+              </RevealItem>
+              <RevealItem duration={0.5}>
+                <p className="text-navy/50 leading-relaxed text-base">
+                  A rigorous blend of theory and applied practice. Every course is engineered to build on the last, creating a foundation that scales from first principles to industry-grade systems.
+                </p>
+              </RevealItem>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-charcoal rounded-3xl p-8 border border-white/5"
-            >
-              <p className="text-neon text-xs font-extrabold tracking-[0.2em] uppercase mb-6">
-                Why Choose {program.short}?
-              </p>
-              <div className="flex flex-col gap-4">
-                {program.highlights.map((h) => (
-                  <div
-                    key={h.title}
-                    className="bg-charcoal-light rounded-xl p-4 border-l-2 border-neon"
-                  >
-                    <p className="text-white font-bold text-sm mb-1">{h.title}</p>
-                    <p className="text-white/50 text-xs leading-relaxed">{h.desc}</p>
-                  </div>
-                ))}
+            <RevealItem duration={0.6}>
+              <div className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+                <div className="grid grid-cols-2">
+                  {program.curriculum.map((subject, i) => {
+                    const isLastRow = Math.floor(i / 2) >= Math.floor((program.curriculum.length - 1) / 2);
+                    const isLeftCol = i % 2 === 0;
+                    return (
+                      <div
+                        key={subject}
+                        className={`group flex items-center px-6 py-4 gap-4 transition-colors duration-200 hover:bg-neon/5 ${isLeftCol ? "border-r border-gray-200" : ""} ${!isLastRow ? "border-b border-gray-200" : ""}`}
+                      >
+                        <span className="font-mono text-xs flex-shrink-0 text-navy/30 group-hover:text-neon group-hover:font-bold transition-colors duration-200">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-xs truncate text-navy/70 group-hover:text-navy transition-colors duration-200">
+                          {subject}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </motion.div>
+            </RevealItem>
           </div>
+        </Reveal>
+      </section>
 
-        </div>
+      {/* ── Career Paths ── */}
+      <section className="bg-navy min-h-screen flex flex-col justify-center">
+        <Reveal className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
+          <RevealItem duration={0.45}>
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-white/20 font-mono text-sm">03</span>
+              <div className="h-px w-10 bg-neon/40" />
+              <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
+                Career Paths
+              </span>
+            </div>
+          </RevealItem>
+
+          <RevealItem duration={0.6}>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
+              <span className="text-white">Where You'll</span>
+              <br />
+              <span className="text-neon">Go</span>
+            </h2>
+          </RevealItem>
+
+          <Reveal variants={staggerFast} className="flex flex-col">
+            {program.careers.map((career, i) => {
+              const isOpen = openCareer === i;
+              return (
+                <RevealItem key={career.name} duration={0.4}>
+                  <div className="border-b border-white/[0.08] first:border-t first:border-white/[0.08]">
+                    <div
+                      className="flex items-center justify-between py-3 px-2 -mx-2 cursor-pointer transition-colors duration-200 hover:bg-white/[0.02]"
+                      onClick={() => setOpenCareer(isOpen ? null : i)}
+                    >
+                      <div className="flex items-center gap-6">
+                        <span className={`font-mono text-xs w-6 flex-shrink-0 transition-colors duration-200 ${isOpen ? "text-neon" : "text-white/20"}`}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className={`font-extrabold text-xs md:text-sm uppercase tracking-wide transition-colors duration-200 ${isOpen ? "text-neon" : "text-white"}`}>
+                          {career.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="border border-neon/40 text-neon font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-sm">
+                          {career.tag}
+                        </span>
+                        <div className={`w-7 h-7 border rounded flex-shrink-0 transition-colors duration-200 ${isOpen ? "border-neon text-neon" : "border-white/20 text-white/30"}`}>
+                          <svg viewBox="0 0 28 28" fill="none" className="w-full h-full" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                            {isOpen ? (
+                              <>
+                                <line x1="11" y1="11" x2="17" y2="17" />
+                                <line x1="17" y1="11" x2="11" y2="17" />
+                              </>
+                            ) : (
+                              <>
+                                <line x1="14" y1="10" x2="14" y2="18" />
+                                <line x1="10" y1="14" x2="18" y2="14" />
+                              </>
+                            )}
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          key="body"
+                          initial="collapsed"
+                          animate="open"
+                          exit="collapsed"
+                          variants={{
+                            open:      { height: "auto", opacity: 1 },
+                            collapsed: { height: 0,      opacity: 0 },
+                          }}
+                          transition={{ duration: 0.35, ease: [0.04, 0.62, 0.23, 0.98] }}
+                          style={{ overflow: "hidden" }}
+                        >
+                          <div className="pb-4 px-2 -mx-2 pl-14">
+                            <p className="text-white/50 text-sm leading-relaxed mb-3">
+                              {career.desc}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {career.subTags.map((sub) => (
+                                <span
+                                  key={sub}
+                                  className="border border-white/15 text-white/40 text-[10px] font-mono tracking-wide uppercase px-3 py-1 rounded-sm"
+                                >
+                                  {sub}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </RevealItem>
+              );
+            })}
+          </Reveal>
+        </Reveal>
+      </section>
+
+      {/* ── Why Choose ── */}
+      <div className="relative z-40 bg-off-white h-[calc(100vh+2.5rem)] flex flex-col justify-center overflow-hidden pb-14">
+        <Reveal className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
+          <RevealItem duration={0.45}>
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-navy/20 font-mono text-sm">04</span>
+              <div className="h-px w-10 bg-navy/20" />
+              <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
+                Why {program.short}
+              </span>
+            </div>
+          </RevealItem>
+
+          <RevealItem duration={0.6}>
+            <div className="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-12 mb-12">
+              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase shrink-0">
+                <span className="text-navy">The Case For</span>
+                <br />
+                <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3 whitespace-nowrap">
+                  Choosing {program.short}
+                </span>
+              </h2>
+              <p className="text-navy/50 text-base leading-relaxed max-w-xs">
+                Four reasons this program stands apart — from how it's built to where it takes you.
+              </p>
+            </div>
+          </RevealItem>
+
+          <Reveal variants={staggerFast} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {program.highlights.map((h, i) => (
+              <RevealItem key={h.title} duration={0.4}>
+                <div className="bg-white border-0 border-t-2 border-t-transparent rounded-2xl p-8 shadow-none transition-all duration-300 ease-in-out hover:border-t-neon hover:bg-gray-100 hover:shadow-xl">
+                  <p className="text-gray-400 font-mono text-xs mb-4">
+                    — {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <p className="text-navy font-black text-xl uppercase tracking-wide mb-3">{h.title}</p>
+                  <p className="text-gray-500 text-sm leading-relaxed">{h.desc}</p>
+                </div>
+              </RevealItem>
+            ))}
+          </Reveal>
+        </Reveal>
       </div>
     </div>
   );

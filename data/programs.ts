@@ -8,7 +8,7 @@ export type Program = {
   accreditation: string;
   overviewParagraphs: string[];
   curriculum: string[];
-  careers: string[];
+  careers: { name: string; tag: string; desc: string; subTags: string[] }[];
   highlights: { title: string; desc: string }[];
 };
 
@@ -47,26 +47,30 @@ export const programs: Program[] = [
       "Automata and Theory Formal Languages",
     ],
     careers: [
-      "Software Engineer",
-      "Data Scientist",
-      "AI / ML Engineer",
-      "Systems Architect",
-      "Research Scientist",
-      "Backend / Full-Stack Developer",
-      "CTO / Tech Lead",
+      { name: "Software Engineer", tag: "High Demand", desc: "Design and build scalable software systems at product companies, startups, or enterprise environments. The highest-volume role for CS graduates globally.", subTags: ["Backend", "Frontend", "Full-Stack", "Mobile"] },
+      { name: "Data Scientist", tag: "Growing Fast", desc: "Analyze complex datasets to drive business decisions and build predictive models using statistical methods and machine learning.", subTags: ["Analytics", "ML", "Python", "Statistics"] },
+      { name: "AI / ML Engineer", tag: "Cutting Edge", desc: "Build and deploy machine learning models and AI systems at scale for real-world products and research pipelines.", subTags: ["Deep Learning", "NLP", "Computer Vision", "MLOps"] },
+      { name: "Systems Architect", tag: "Senior Level", desc: "Design high-level software and hardware infrastructure for enterprise-scale distributed systems.", subTags: ["Cloud", "Distributed Systems", "DevOps", "Infrastructure"] },
+      { name: "Research Scientist", tag: "PhD Pathway", desc: "Conduct cutting-edge research in algorithms, artificial intelligence, or theoretical computer science at academia or industry labs.", subTags: ["Academia", "R&D", "Publications", "PhD Track"] },
+      { name: "Backend / Full-Stack Developer", tag: "Full Stack", desc: "Build server-side logic, APIs, and end-to-end web applications that power products used by millions.", subTags: ["Node.js", "Python", "Databases", "REST APIs"] },
+      { name: "CTO / Tech Lead", tag: "Leadership", desc: "Lead engineering teams and define the technical vision and architecture strategy for organizations.", subTags: ["Leadership", "Strategy", "Architecture", "Management"] },
     ],
     highlights: [
       {
         title: "Theory + Practice",
-        desc: "Strong algorithmic foundations for innovation and research.",
+        desc: "Rigorous algorithmic foundations paired with hands-on project work. You learn to think like a computer scientist and build like an engineer.",
       },
       {
         title: "Grad School Ready",
-        desc: "Direct pathway to MS/PhD programs locally and abroad.",
+        desc: "Direct pathway to MS and PhD programs at top universities locally and abroad. Our curriculum aligns with global academic standards.",
       },
       {
-        title: "High Industry Demand",
-        desc: "Top-paying roles at leading tech companies.",
+        title: "High Demand",
+        desc: "CS graduates command some of the highest starting salaries in any field. Industry demand continues to outpace supply across every specialization.",
+      },
+      {
+        title: "JPCS Network",
+        desc: "Join a community of driven IT students. Access hackathons, seminars, industry mentors, and exclusive opportunities through the JPCS ecosystem.",
       },
     ],
   },
@@ -99,26 +103,30 @@ export const programs: Program[] = [
       "Capstone Project",
     ],
     careers: [
-      "Web Developer / Full-Stack Developer",
-      "IT Manager",
-      "Cybersecurity Analyst",
-      "Cloud Solutions Architect",
-      "Systems Administrator",
-      "DevOps Engineer",
-      "IT Consultant",
+      { name: "Web Developer / Full-Stack Developer", tag: "High Demand", desc: "Build and maintain websites and web applications for clients across all industries using modern frameworks and tools.", subTags: ["HTML/CSS", "JavaScript", "React", "Node.js"] },
+      { name: "IT Manager", tag: "Leadership", desc: "Oversee IT infrastructure, teams, and technology strategy to align systems with business objectives.", subTags: ["Management", "Strategy", "Budgeting", "Teams"] },
+      { name: "Cybersecurity Analyst", tag: "Critical", desc: "Protect systems and networks from digital attacks, breaches, and vulnerabilities across enterprise environments.", subTags: ["Penetration Testing", "SIEM", "Compliance", "Forensics"] },
+      { name: "Cloud Solutions Architect", tag: "Cloud", desc: "Design and implement scalable cloud infrastructure on platforms like AWS and Azure for modern organizations.", subTags: ["AWS", "Azure", "DevOps", "Infrastructure"] },
+      { name: "Systems Administrator", tag: "Infra", desc: "Maintain, configure, and troubleshoot servers, networks, and IT systems that keep businesses running.", subTags: ["Linux", "Windows Server", "Networking", "Virtualization"] },
+      { name: "DevOps Engineer", tag: "Infra", desc: "Bridge development and operations to improve deployment pipelines, automation, and system reliability.", subTags: ["CI/CD", "Docker", "Kubernetes", "Automation"] },
+      { name: "IT Consultant", tag: "Consulting", desc: "Advise organizations on technology solutions and strategies to improve efficiency and competitive advantage.", subTags: ["Strategy", "Analysis", "Solutions", "Communication"] },
     ],
     highlights: [
       {
         title: "Industry-Ready Skills",
-        desc: "Practical curriculum aligned with real-world IT environments.",
+        desc: "Hands-on training with real enterprise tools and workflows. Graduate ready to contribute from day one across IT roles.",
       },
       {
         title: "Broad Coverage",
-        desc: "From web dev to cloud to security, all in one program.",
+        desc: "From web development to cloud infrastructure to cybersecurity — one program covers the full spectrum of modern IT.",
       },
       {
         title: "Fast Career Entry",
-        desc: "High demand for IT professionals across every industry.",
+        desc: "IT roles are among the fastest-growing and highest-demand positions globally. Employers actively recruit BSIT graduates at every level.",
+      },
+      {
+        title: "JPCS Network",
+        desc: "Join a community of driven IT students. Access hackathons, seminars, industry mentors, and exclusive opportunities through the JPCS ecosystem.",
       },
     ],
   },
@@ -147,25 +155,29 @@ export const programs: Program[] = [
       "Cybersecurity Awareness",
     ],
     careers: [
-      "Computer Technician",
-      "IT Support Specialist / Help Desk Analyst",
-      "Web Designer",
-      "Network Technician",
-      "Desktop Support Engineer",
-      "Junior Developer",
+      { name: "Computer Technician", tag: "Entry Level", desc: "Install, maintain, and repair computer hardware, peripherals, and software for businesses and individuals.", subTags: ["Hardware", "Troubleshooting", "Repair", "Maintenance"] },
+      { name: "IT Support Specialist / Help Desk Analyst", tag: "High Demand", desc: "Provide technical support and resolve IT issues for end users, ensuring systems run smoothly day to day.", subTags: ["Help Desk", "Ticketing", "Remote Support", "Customer Service"] },
+      { name: "Web Designer", tag: "Creative", desc: "Create visually appealing website layouts and user interfaces that deliver great digital experiences.", subTags: ["UI/UX", "Figma", "HTML/CSS", "Graphics"] },
+      { name: "Network Technician", tag: "Infra", desc: "Install and maintain network infrastructure including routers, switches, and cabling for organizations.", subTags: ["Cisco", "Networking", "Cabling", "Troubleshooting"] },
+      { name: "Desktop Support Engineer", tag: "Entry Level", desc: "Provide on-site technical support for desktop systems, resolving hardware and software issues quickly.", subTags: ["Windows", "Hardware", "Software", "Support"] },
+      { name: "Junior Developer", tag: "Growing Fast", desc: "Write code and assist senior developers in building software applications, growing into a full engineering role.", subTags: ["Programming", "Git", "Debugging", "Collaboration"] },
     ],
     highlights: [
       {
         title: "Shorter Duration",
-        desc: "Enter the workforce in 2 years with in-demand technical skills.",
+        desc: "Enter the workforce in just two years with skills that employers need immediately. No waiting — start building your career sooner.",
       },
       {
         title: "Certification Paths",
-        desc: "Aligned with TESDA NC II and Cisco certifications.",
+        desc: "Aligned with TESDA NC II and Cisco certifications that carry real industry weight and open doors across the Philippines.",
       },
       {
         title: "Stepping Stone",
-        desc: "Solid foundation for advancing to BSIT or BSCS.",
+        desc: "ACT builds a strong foundation for BSIT or BSCS. Many graduates continue their studies while already working in the field.",
+      },
+      {
+        title: "JPCS Network",
+        desc: "Join a community of driven IT students. Access hackathons, seminars, industry mentors, and exclusive opportunities through the JPCS ecosystem.",
       },
     ],
   },
