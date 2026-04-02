@@ -20,7 +20,6 @@ const staggerFast = {
   visible: { transition: { staggerChildren: 0.07, delayChildren: 0 } },
 };
 
-/** Wraps children in a motion container that animates in on enter and out on exit. */
 function Reveal({
   children,
   className,
@@ -47,17 +46,14 @@ function Reveal({
   );
 }
 
-/** Single animated child — use inside a <Reveal>. */
 function RevealItem({
   children,
   className,
   duration = 0.5,
-  as: Tag = "div",
 }: {
   children: React.ReactNode;
   className?: string;
   duration?: number;
-  as?: React.ElementType;
 }) {
   return (
     <motion.div
@@ -80,10 +76,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative min-h-screen flex flex-col justify-center bg-gradient-to-br from-navy to-charcoal py-24 overflow-hidden"
+        className="relative min-h-screen flex flex-col justify-center bg-gradient-to-br from-navy to-charcoal pt-28 pb-16 md:py-24 overflow-hidden"
       >
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-        <div className="absolute -bottom-4 -right-8 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none leading-none tracking-tighter">
+        <div className="absolute -bottom-4 -right-8 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none leading-none tracking-tighter" aria-hidden="true">
           {program.short}
         </div>
 
@@ -100,7 +96,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
           <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-neon/10 border border-neon/20 text-neon font-extrabold text-sm tracking-widest uppercase mb-6">
             {program.short}
           </span>
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none uppercase mb-4">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-none uppercase mb-4">
             <span className="text-white">
               {program.title.split(" ").slice(0, -1).join(" ")}
             </span>
@@ -109,10 +105,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
               {program.title.split(" ").slice(-1)[0]}
             </span>
           </h1>
-          <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
+          <p className="text-white/60 text-base md:text-xl mb-10 max-w-2xl leading-relaxed">
             {program.tagline}
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3">
             {[
               { label: "Duration", value: program.duration },
               { label: "Award", value: program.degree },
@@ -120,9 +116,9 @@ export default function ProgramDetail({ program }: { program: Program }) {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-center"
+                className="bg-white/5 border border-white/10 rounded-xl px-4 md:px-6 py-3 text-center"
               >
-                <div className="text-neon font-extrabold text-lg">{stat.value}</div>
+                <div className="text-neon font-extrabold text-base md:text-lg">{stat.value}</div>
                 <div className="text-white/40 text-xs mt-0.5">{stat.label}</div>
               </div>
             ))}
@@ -154,10 +150,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
           </div>
         </div>
 
-        <div className="px-6 md:px-16 py-16 md:py-24 max-w-7xl mx-auto">
+        <div className="px-6 md:px-16 py-14 md:py-24 max-w-7xl mx-auto">
           <Reveal>
             <RevealItem duration={0.45}>
-              <div className="flex items-center gap-4 mb-12">
+              <div className="flex items-center gap-4 mb-10 md:mb-12">
                 <span className="text-white/20 font-mono text-sm">01</span>
                 <div className="h-px w-10 bg-neon/40" />
                 <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
@@ -166,11 +162,11 @@ export default function ProgramDetail({ program }: { program: Program }) {
               </div>
             </RevealItem>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start">
               {/* Left */}
               <div>
                 <RevealItem duration={0.6}>
-                  <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-10">
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
                     <span className="text-white">About the</span>
                     <br />
                     <span className="text-neon">Program</span>
@@ -178,7 +174,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
                 </RevealItem>
                 {program.overviewParagraphs.map((para, i) => (
                   <RevealItem key={i} duration={0.5}>
-                    <p className="text-white/60 leading-relaxed text-base md:text-lg mb-5">
+                    <p className="text-white/60 leading-relaxed text-sm md:text-lg mb-5">
                       {para.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
                         part.startsWith("**") && part.endsWith("**") ? (
                           <strong key={j} className="text-white font-semibold">
@@ -202,11 +198,11 @@ export default function ProgramDetail({ program }: { program: Program }) {
                   { label: "Accreditation Body", value: program.accreditation },
                 ].map((stat, i, arr) => (
                   <RevealItem key={stat.label} duration={0.4}>
-                    <div className={`flex items-center justify-between px-8 py-6 ${i < arr.length - 1 ? "border-b border-white/10" : ""}`}>
+                    <div className={`flex items-center justify-between px-5 md:px-8 py-4 md:py-6 ${i < arr.length - 1 ? "border-b border-white/10" : ""}`}>
                       <span className="text-white/35 text-[10px] font-bold tracking-[0.2em] uppercase">
                         {stat.label}
                       </span>
-                      <span className="text-neon font-black text-3xl md:text-4xl">
+                      <span className="text-neon font-black text-2xl md:text-4xl">
                         {stat.value}
                       </span>
                     </div>
@@ -219,8 +215,8 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* ── Core Curriculum ── */}
-      <section className="bg-off-white h-screen flex flex-col justify-center overflow-hidden">
-        <Reveal className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
+      <section className="bg-off-white min-h-screen flex flex-col justify-center py-16 md:py-0 md:h-screen md:overflow-hidden">
+        <Reveal className="px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
           <RevealItem duration={0.45}>
             <div className="flex items-center gap-4 mb-8">
               <span className="text-navy/20 font-mono text-sm">02</span>
@@ -231,17 +227,17 @@ export default function ProgramDetail({ program }: { program: Program }) {
             </div>
           </RevealItem>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-12 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-16 items-start">
             <div>
               <RevealItem duration={0.6}>
-                <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
+                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-6 md:mb-8">
                   <span className="text-navy">What You</span>
                   <br />
-                  <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2">Study</span>
+                  <span className="bg-neon text-navy px-4 md:px-5 py-2 rounded-full inline-block transform -rotate-2">Study</span>
                 </h2>
               </RevealItem>
               <RevealItem duration={0.5}>
-                <p className="text-navy/50 leading-relaxed text-base">
+                <p className="text-navy/50 leading-relaxed text-sm md:text-base">
                   A rigorous blend of theory and applied practice. Every course is engineered to build on the last, creating a foundation that scales from first principles to industry-grade systems.
                 </p>
               </RevealItem>
@@ -256,12 +252,12 @@ export default function ProgramDetail({ program }: { program: Program }) {
                     return (
                       <div
                         key={subject}
-                        className={`group flex items-center px-6 py-4 gap-4 transition-colors duration-200 hover:bg-neon/5 ${isLeftCol ? "border-r border-gray-200" : ""} ${!isLastRow ? "border-b border-gray-200" : ""}`}
+                        className={`group flex items-center px-3 md:px-6 py-3 md:py-4 gap-2 md:gap-4 transition-colors duration-200 hover:bg-neon/5 ${isLeftCol ? "border-r border-gray-200" : ""} ${!isLastRow ? "border-b border-gray-200" : ""}`}
                       >
-                        <span className="font-mono text-xs flex-shrink-0 text-navy/30 group-hover:text-neon group-hover:font-bold transition-colors duration-200">
+                        <span className="font-mono text-[10px] md:text-xs flex-shrink-0 text-navy/30 group-hover:text-neon group-hover:font-bold transition-colors duration-200">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className="text-xs truncate text-navy/70 group-hover:text-navy transition-colors duration-200">
+                        <span className="text-[10px] md:text-xs truncate text-navy/70 group-hover:text-navy transition-colors duration-200">
                           {subject}
                         </span>
                       </div>
@@ -275,8 +271,8 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* ── Career Paths ── */}
-      <section className="bg-navy min-h-screen flex flex-col justify-center">
-        <Reveal className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
+      <section className="bg-navy min-h-screen flex flex-col justify-center py-16 md:py-0">
+        <Reveal className="px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
           <RevealItem duration={0.45}>
             <div className="flex items-center gap-4 mb-8">
               <span className="text-white/20 font-mono text-sm">03</span>
@@ -288,7 +284,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
           </RevealItem>
 
           <RevealItem duration={0.6}>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
               <span className="text-white">Where You'll</span>
               <br />
               <span className="text-neon">Go</span>
@@ -305,16 +301,16 @@ export default function ProgramDetail({ program }: { program: Program }) {
                       className="flex items-center justify-between py-3 px-2 -mx-2 cursor-pointer transition-colors duration-200 hover:bg-white/[0.02]"
                       onClick={() => setOpenCareer(isOpen ? null : i)}
                     >
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-4 md:gap-6 min-w-0">
                         <span className={`font-mono text-xs w-6 flex-shrink-0 transition-colors duration-200 ${isOpen ? "text-neon" : "text-white/20"}`}>
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className={`font-extrabold text-xs md:text-sm uppercase tracking-wide transition-colors duration-200 ${isOpen ? "text-neon" : "text-white"}`}>
+                        <span className={`font-extrabold text-xs md:text-sm uppercase tracking-wide transition-colors duration-200 truncate ${isOpen ? "text-neon" : "text-white"}`}>
                           {career.name}
                         </span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="border border-neon/40 text-neon font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-sm">
+                      <div className="flex items-center gap-2 md:gap-3 flex-shrink-0 ml-3">
+                        <span className="hidden sm:inline-flex border border-neon/40 text-neon font-mono text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-sm">
                           {career.tag}
                         </span>
                         <div className={`w-7 h-7 border rounded flex-shrink-0 transition-colors duration-200 ${isOpen ? "border-neon text-neon" : "border-white/20 text-white/30"}`}>
@@ -349,7 +345,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
                           transition={{ duration: 0.35, ease: [0.04, 0.62, 0.23, 0.98] }}
                           style={{ overflow: "hidden" }}
                         >
-                          <div className="pb-4 px-2 -mx-2 pl-14">
+                          <div className="pb-4 px-2 -mx-2 pl-8 md:pl-14">
                             <p className="text-white/50 text-sm leading-relaxed mb-3">
                               {career.desc}
                             </p>
@@ -376,8 +372,8 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* ── Why Choose ── */}
-      <div className="relative z-40 bg-off-white h-[calc(100vh+2.5rem)] flex flex-col justify-center overflow-hidden pb-14">
-        <Reveal className="px-6 md:px-16 py-10 md:py-14 max-w-7xl mx-auto w-full">
+      <div className="relative z-40 bg-off-white min-h-screen md:h-[calc(100vh+2.5rem)] flex flex-col justify-center md:overflow-hidden py-16 md:py-0 pb-20 md:pb-14">
+        <Reveal className="px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
           <RevealItem duration={0.45}>
             <div className="flex items-center gap-4 mb-8">
               <span className="text-navy/20 font-mono text-sm">04</span>
@@ -389,28 +385,28 @@ export default function ProgramDetail({ program }: { program: Program }) {
           </RevealItem>
 
           <RevealItem duration={0.6}>
-            <div className="flex flex-col lg:flex-row lg:items-end gap-6 lg:gap-12 mb-12">
-              <h2 className="text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase shrink-0">
+            <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-12 mb-10 md:mb-12">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase shrink-0">
                 <span className="text-navy">The Case For</span>
                 <br />
-                <span className="bg-neon text-navy px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3 whitespace-nowrap">
+                <span className="bg-neon text-navy px-4 md:px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3">
                   Choosing {program.short}
                 </span>
               </h2>
-              <p className="text-navy/50 text-base leading-relaxed max-w-xs">
+              <p className="text-navy/50 text-sm md:text-base leading-relaxed max-w-xs">
                 Four reasons this program stands apart — from how it's built to where it takes you.
               </p>
             </div>
           </RevealItem>
 
-          <Reveal variants={staggerFast} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Reveal variants={staggerFast} className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
             {program.highlights.map((h, i) => (
               <RevealItem key={h.title} duration={0.4}>
-                <div className="bg-white border-0 border-t-2 border-t-transparent rounded-2xl p-8 shadow-none transition-all duration-300 ease-in-out hover:border-t-neon hover:bg-gray-100 hover:shadow-xl">
+                <div className="bg-white border-0 border-t-2 border-t-transparent rounded-2xl p-6 md:p-8 shadow-none transition-all duration-300 ease-in-out hover:border-t-neon hover:bg-gray-100 hover:shadow-xl">
                   <p className="text-gray-400 font-mono text-xs mb-4">
                     — {String(i + 1).padStart(2, "0")}
                   </p>
-                  <p className="text-navy font-black text-xl uppercase tracking-wide mb-3">{h.title}</p>
+                  <p className="text-navy font-black text-lg md:text-xl uppercase tracking-wide mb-3">{h.title}</p>
                   <p className="text-gray-500 text-sm leading-relaxed">{h.desc}</p>
                 </div>
               </RevealItem>
