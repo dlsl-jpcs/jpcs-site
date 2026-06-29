@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import About from "@/components/about/About";
-import Officers from "@/components/officers/Officers";
 
 export default function LazySections() {
   const [isVisible, setIsVisible] = useState(false);
@@ -61,7 +60,6 @@ export default function LazySections() {
     <>
       <div ref={sentinelRef} className="h-px w-full" aria-hidden="true" />
       {isVisible && <About />}
-      {isVisible && <Officers />}
     </>
   );
 }

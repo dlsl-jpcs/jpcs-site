@@ -25,7 +25,6 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", link: "#home" },
     { name: "About", link: "#about" },
-    { name: "Officers", link: "#officers" },
     { name: "Projects", link: "#projects" },
     { name: "Gallery", link: "#gallery" },
   ];
@@ -99,7 +98,10 @@ const Navbar = () => {
     const getThemeFromSection = (sec: Element) => {
       const className = sec.className;
       if (typeof className === "string") {
-        if (className.includes("bg-white") || className.includes("bg-[#F4F4F5]")) {
+        if (
+          className.includes("bg-white") ||
+          className.includes("bg-[#F4F4F5]")
+        ) {
           return "light" as const;
         }
       }
@@ -118,7 +120,10 @@ const Navbar = () => {
 
         let activeEntry: IntersectionObserverEntry | null = null;
         for (const entry of visibleSections.values()) {
-          if (!activeEntry || entry.intersectionRatio > activeEntry.intersectionRatio) {
+          if (
+            !activeEntry ||
+            entry.intersectionRatio > activeEntry.intersectionRatio
+          ) {
             activeEntry = entry;
           }
         }
@@ -144,11 +149,12 @@ const Navbar = () => {
     <>
       <div
         className={`fixed top-8 left-0 w-full z-50 hidden lg:flex justify-center items-center px-12 bg-transparent pointer-events-none transition-transform duration-500 ease-in-out ${
-          showNavbar
-            ? "translate-y-0 opacity-100"
-            : "-translate-y-12 opacity-0"
+          showNavbar ? "translate-y-0 opacity-100" : "-translate-y-12 opacity-0"
         }`}
-        style={{ transitionDuration: "650ms", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+        style={{
+          transitionDuration: "650ms",
+          transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
       >
         <div className="flex items-center justify-between w-full max-w-7xl">
           <div
@@ -209,7 +215,11 @@ const Navbar = () => {
                       className={`absolute inset-0 rounded-full ${
                         navTheme === "light" ? "bg-navy/5" : "bg-white/10"
                       }`}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 30,
+                      }}
                     />
                   )}
                   <span className="relative z-10">{item.name}</span>
@@ -238,34 +248,37 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {!isProgramPage && (
-      <div
-        className={`fixed top-0 left-0 w-full z-50 lg:hidden transition-transform duration-500 ease-in-out ${
-          showNavbar ? "translate-y-0" : "-translate-y-16"
-        }`}
-        style={{ transitionDuration: "500ms", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
-      >
-        <StaggeredMenu
-          position="right"
-          colors={["#0B132B", "#111111", "#1A1A1A"]}
-          items={navItems.map((item) => ({
-            label: item.name,
-            ariaLabel: `Maps to ${item.name} section`,
-            link: item.link,
-            onClick: () => {
-              scrollToSection(item.link);
-            },
-          }))}
-          socialItems={socialItems}
-          displaySocials={true}
-          displayItemNumbering={true}
-          logoUrl="/jpcslogo.png"
-          menuButtonColor={navTheme === "light" ? "#0B132B" : "#C4FF47"}
-          openMenuButtonColor="#0B132B"
-          accentColor="#C4FF47"
-          isFixed={true}
-          changeMenuColorOnOpen={true}
-        />
-      </div>
+        <div
+          className={`fixed top-0 left-0 w-full z-50 lg:hidden transition-transform duration-500 ease-in-out ${
+            showNavbar ? "translate-y-0" : "-translate-y-16"
+          }`}
+          style={{
+            transitionDuration: "500ms",
+            transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
+        >
+          <StaggeredMenu
+            position="right"
+            colors={["#0B132B", "#111111", "#1A1A1A"]}
+            items={navItems.map((item) => ({
+              label: item.name,
+              ariaLabel: `Maps to ${item.name} section`,
+              link: item.link,
+              onClick: () => {
+                scrollToSection(item.link);
+              },
+            }))}
+            socialItems={socialItems}
+            displaySocials={true}
+            displayItemNumbering={true}
+            logoUrl="/jpcslogo.png"
+            menuButtonColor={navTheme === "light" ? "#0B132B" : "#C4FF47"}
+            openMenuButtonColor="#0B132B"
+            accentColor="#C4FF47"
+            isFixed={true}
+            changeMenuColorOnOpen={true}
+          />
+        </div>
       )}
     </>
   );
