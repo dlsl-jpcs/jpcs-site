@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
+
 import Banner from "@/components/Banner";
 import Contact from "@/components/Contact";
 import ClientFooter from "@/components/ClientFooter";

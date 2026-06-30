@@ -3,8 +3,35 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Events from "./events/Events";
 
+interface UpcomingEvent {
+  org: string;
+  title: string;
+  date: string;
+  time: string;
+  description: string;
+  link: string;
+  image: string;
+  facebook: string;
+  instagram: string;
+}
+
 export default function Hero() {
   const [isMobile, setIsMobile] = useState(false);
+  const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[]>([]);
+
+  useEffect(() => {
+    const fetchUpcomingEvents = async () => {
+      try {
+        const response = await fetch("/api/upcomingEvents");
+        const data = await response.json();
+        setUpcomingEvents(data.data);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+      }
+    };
+
+    fetchUpcomingEvents();
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -14,54 +41,17 @@ export default function Hero() {
   }, []);
 
   const events = [
-    {
-      org: "JPCS DLSL",
-      title: "IQnecct",
-      date: "September 30, 2023",
-      time: "2:30 PM - 5:00 PM",
-      description:
-        "An exciting quiz bee that will challenge your wit, speed, and teamwork! Test your knowledge on technology, general information, and problem-solving while competing with the best minds on campus. Prizes, fun, and bragging rights await! ",
-      link: "https://forms.example.com/techsummit2023",
-      image: "/tech-summit.jpg",
-      facebook: "https://facebook.com/jpcsdlsl/posts/techsummit2023",
-      instagram: "https://instagram.com/jpcsdlsl/posts/techsummit2023",
-    },
-    {
-      org: "JPCS DLSL",
-      title: "CodeFest Hackathon",
-      date: "December 2-3, 2023",
-      time: "24-hour event starting at 10:00 AM",
-      description:
-        "Competitive coding marathon where participants develop innovative solutions to real-world problems. Open to all skill levels with prizes for winners.",
-      link: "https://forms.example.com/codefest2023",
-      image: "/hackathon.jpg",
-      facebook: "https://facebook.com/jpcsdlsl/posts/codefest2023",
-      instagram: "https://instagram.com/jpcsdlsl/posts/codefest2023",
-    },
-    {
-      org: "JPCS DLSL",
-      title: "Web Development Workshop",
-      date: "October 28, 2023",
-      time: "1:00 PM - 4:00 PM",
-      description:
-        "Hands-on workshop covering modern web development technologies including React, Node.js, and responsive design principles.",
-      link: "https://forms.example.com/webdevworkshop",
-      image: "/web-dev.jpg",
-      facebook: "https://facebook.com/jpcsdlsl/posts/webdevworkshop",
-      instagram: "https://instagram.com/jpcsdlsl/posts/webdevworkshop",
-    },
-    {
-      org: "JPCS DLSL",
-      title: "Cyber Security Awareness Seminar",
-      date: "November 10, 2023",
-      time: "2:00 PM - 4:00 PM",
-      description:
-        "Learn about online safety, data protection, and cybersecurity best practices from industry experts in this informative seminar.",
-      link: "https://forms.example.com/cybersecurity2023",
-      image: "/cybersecurity.jpg",
-      facebook: "https://facebook.com/jpcsdlsl/posts/cybersecurity2023",
-      instagram: "https://instagram.com/jpcsdlsl/posts/cybersecurity2023",
-    },
+    ...upcomingEvents.map((event) => ({
+      org: event.org,
+      title: event.title,
+      date: event.date,
+      time: event.time,
+      description: event.description,
+      link: event.link,
+      image: event.image,
+      facebook: event.facebook,
+      instagram: event.instagram,
+    })),
   ];
 
   return (
@@ -76,7 +66,6 @@ export default function Hero() {
 
       <div className="max-w-[95%] sm:max-w-[95%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto px-3 min-[401px]:px-5 sm:px-6 relative z-10 w-full pt-20 min-[401px]:pt-24 lg:pt-14 pb-12 min-[401px]:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-[401px]:gap-8 lg:gap-8 items-center">
-        
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
