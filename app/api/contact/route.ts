@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 type ContactPayload = {
   name?: string;
@@ -55,38 +58,26 @@ export async function POST(req: Request) {
       );
     }
 
-    // Check if the email is already in the database
-    const resendKey = process.env.RESEND_API_KEY; // nicko - used a temporary key for testing purposes. Please replace with your own key in production.
-    if (!resendKey) {
-      return NextResponse.json(
-        {
-          message:
-            "Server email is not configured yet. Add RESEND_API_KEY in .env.local.",
-        },
-        { status: 503 },
-      );
-    }
-
+    // NEED DOMAIN TO SEND EMAILS TO OTHER RECIPIENTS, FOR NOW, USE YOUR OWN EMAIL IN env.local
     const from = process.env.CONTACT_FROM_EMAIL || "onboarding@resend.dev";
     const to = process.env.CONTACT_TO_EMAIL || "jpcs@dlsl.edu.ph";
 
     // Send the email using Resend API
-    const resendResponse = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        reply_to: email,
-        subject: `[JPCS Contact] ${subject}`,
-        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-      }),
+    const { error } = await resend.emails.send({
+      from,
+      to,
+      replyTo: email,
+      subject: `[JPCS Contact] ${subject}`,
+      text: `Name: ${fullname}
+Email: ${email}
+
+Message:
+${message}`,
     });
 
-    if (!resendResponse.ok) {
+    if (error) {
+      console.error(error);
+
       return NextResponse.json(
         { message: "Message could not be sent. Please try again later." },
         { status: 502 },
