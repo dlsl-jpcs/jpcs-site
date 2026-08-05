@@ -8,6 +8,9 @@ import Hero from "@/components/Hero";
 import LazySections from "../components/LazySections";
 import Navbar from "@/components/Navbar";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
+import ProjectsEvents from "@/components/ProjectsEvents";
+import Gallery from "@/components/Gallery";
+import Officers from "@/components/officers/Officers";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -27,6 +30,9 @@ export default async function Home() {
       <Hero />
       <Banner />
       <LazySections />
+      <ProjectsEvents />
+      <Gallery />
+      <Officers />
       <Contact />
       <ClientFooter />
     </main>

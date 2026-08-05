@@ -27,6 +27,7 @@ const Navbar = () => {
     { name: "About", link: "#about" },
     { name: "Projects", link: "#projects" },
     { name: "Gallery", link: "#gallery" },
+    { name: "Officers", link: "#officers" },
   ];
 
   const socialItems = [
