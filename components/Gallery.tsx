@@ -69,7 +69,7 @@ export default function Gallery() {
                 <SwiperSlide key={image.id}>
                   <div className="relative w-full h-full overflow-hidden rounded-2xl border sm:rounded-3xl md:rounded-[2rem]">
                     <div
-                      className="absolute inset-0 bg-contain bg-center flex items-end bg-cover"
+                      className="absolute inset-0 bg-center flex items-end bg-cover"
                       style={{
                         backgroundImage: `url('${image.image_url}')`,
                       }}

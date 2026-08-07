@@ -16,7 +16,9 @@ const Banner: React.FC = () => {
               <span className="px-4 min-[401px]:px-6 text-[11px] min-[401px]:text-sm md:text-lg font-bold text-dark-green tracking-widest uppercase">
                 {text1}
               </span>
-              <span className="text-dark-green/30 text-base min-[401px]:text-lg">✦</span>
+              <span className="text-dark-green/30 text-base min-[401px]:text-lg">
+                ✦
+              </span>
             </div>
           ))}
           {[...Array(4)].map((_, i) => (
@@ -24,7 +26,9 @@ const Banner: React.FC = () => {
               <span className="px-4 min-[401px]:px-6 text-[11px] min-[401px]:text-sm md:text-lg font-bold text-dark-green tracking-widest uppercase">
                 {text1}
               </span>
-              <span className="text-dark-green/30 text-base min-[401px]:text-lg">✦</span>
+              <span className="text-dark-green/30 text-base min-[401px]:text-lg">
+                ✦
+              </span>
             </div>
           ))}
         </div>

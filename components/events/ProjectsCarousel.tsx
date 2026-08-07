@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-coverflow";
-import { EffectCoverflow, Navigation } from "swiper/modules";
+import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
 import { Project } from "@/types/projects";
 import { useState } from "react";
 import EventInfo from "../EventInfo";
@@ -23,17 +23,22 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
         onSlideChange={(swiper) => {
           setCurrentSlide(swiper.realIndex + 1);
         }}
+        allowTouchMove={false}
+        simulateTouch={false}
         effect="coverflow"
         centeredSlides
         loop
         observer
         observeParents
         updateOnWindowResize
-        watchSlidesProgress
-        modules={[EffectCoverflow, Navigation]}
+        modules={[EffectCoverflow, Navigation, Autoplay]}
         navigation={{
           prevEl: ".custom-prev",
           nextEl: ".custom-next",
+        }}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
         }}
         coverflowEffect={{
           rotate: 0,
@@ -80,7 +85,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
               {/* Image Section */}
               <div className="relative overflow-hidden">
                 <div
-                  className="absolute inset-0 bg-contain bg-center flex items-end"
+                  className="absolute inset-0 bg-cover bg-center flex items-end"
                   style={{
                     backgroundImage: `url('${project.image}')`,
                   }}
