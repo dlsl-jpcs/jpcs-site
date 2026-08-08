@@ -91,7 +91,7 @@ export default function GalleryContainer() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-3 sm:gap-6 mt-6 sm:mt-10">
+        <div className="flex justify-center items-center gap-3 sm:gap-6 mt-6 sm:mt-10 mb-10">
           <button
             onClick={() => setCurrentPage((page) => page - 1)}
             disabled={currentPage === 1}
