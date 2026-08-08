@@ -72,7 +72,17 @@ export default function Gallery() {
   return (
     <section
       id="gallery"
-      className="relative w-full min-h-[800px] bg-navy px-6 pt-6 pb-16 md:px-16 md:py-24"
+      className="relative
+    w-full
+    min-h-[800px]
+    bg-navy
+    px-6
+    pt-6
+    pb-16
+    -mt-[200px]
+    sm:mt-0
+    md:px-16
+    md:py-24"
     >
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-10 md:flex-row md:items-center md:justify-between md:gap-16">
         {/* Carousel */}

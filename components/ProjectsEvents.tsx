@@ -88,7 +88,7 @@ bg-[size:auto,4rem_4rem,4rem_4rem]"
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative h-full w-full mt-[-40px]"
+        className="relative h-full w-full mt-[-40px] "
       >
         {loading ? (
           <div className="h-full w-full flex items-center justify-center text-white/60">
