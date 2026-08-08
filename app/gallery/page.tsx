@@ -1,6 +1,7 @@
 import GalleryHeader from "@/components/GalleryHeader";
 import GalleryBanner from "@/components/GalleryBanner";
 import GalleryContainer from "@/components/GalleryContainer";
+import ClientFooter from "@/components/ClientFooter";
 
 export default function GalleryPage() {
   return (
@@ -8,6 +9,7 @@ export default function GalleryPage() {
       <GalleryHeader />
       <GalleryBanner />
       <GalleryContainer />
+      <ClientFooter />
     </main>
   );
 }

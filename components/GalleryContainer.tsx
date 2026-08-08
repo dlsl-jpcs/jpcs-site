@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 export default function GalleryContainer() {
   const images = Array.from({ length: 45 }, (_, index) => ({
@@ -29,7 +32,7 @@ export default function GalleryContainer() {
   return (
     <div
       className="
-        bg-[#0B132B]
+        bg-[#0D172F]
         p-4 sm:p-8 lg:p-20
         flex flex-col
         w-full
@@ -49,14 +52,19 @@ export default function GalleryContainer() {
         "
       >
         {currentImages.map((image) => (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             key={image.id}
             className="
-              bg-amber-200
+              
               w-full
               aspect-square
-              p-1 sm:p-2
+              p-1
               overflow-hidden
+              rounded-[10px]
             "
           >
             <Image
@@ -71,9 +79,10 @@ export default function GalleryContainer() {
                 hover:scale-105
                 transition-transform
                 duration-300
+                rounded-[10px]
               "
             />
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -83,20 +92,8 @@ export default function GalleryContainer() {
           <button
             onClick={() => setCurrentPage((page) => page - 1)}
             disabled={currentPage === 1}
-            className="
-              px-3 py-2 sm:px-5
-              bg-white
-              text-[#0B132B]
-              rounded-md
-              font-semibold
-              text-sm sm:text-base
-              disabled:opacity-30
-              disabled:cursor-not-allowed
-              hover:bg-gray-200
-              transition
-            "
           >
-            Previous
+            <NavigateBeforeIcon />
           </button>
 
           <span className="text-white font-medium text-sm sm:text-base">
@@ -106,20 +103,8 @@ export default function GalleryContainer() {
           <button
             onClick={() => setCurrentPage((page) => page + 1)}
             disabled={currentPage === totalPages}
-            className="
-              px-3 py-2 sm:px-5
-              bg-white
-              text-[#0B132B]
-              rounded-md
-              font-semibold
-              text-sm sm:text-base
-              disabled:opacity-30
-              disabled:cursor-not-allowed
-              hover:bg-gray-200
-              transition
-            "
           >
-            Next
+            <NavigateNextIcon />
           </button>
         </div>
       )}

@@ -1,190 +1,559 @@
-import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/effect-coverflow";
-import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+
 import { Project } from "@/types/projects";
-import { useState } from "react";
 import EventInfo from "../EventInfo";
+
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface ProjectsCarouselProps {
   projects: Project[];
 }
 
+function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+
+    const update = () => {
+      setIsMobile(mql.matches);
+    };
+
+    update();
+
+    mql.addEventListener("change", update);
+
+    return () => {
+      mql.removeEventListener("change", update);
+    };
+  }, [breakpoint]);
+
+  return isMobile;
+}
+
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const isMobile = useIsMobile();
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: "center",
+    containScroll: false,
+    skipSnaps: false,
+  });
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
   const [showPopup, setShowPopup] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  /*
+   * ==========================
+   * CAROUSEL CONTROLS
+   * ==========================
+   */
+
+  const scrollPrev = useCallback(() => {
+    emblaApi?.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    emblaApi?.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback((api: NonNullable<typeof emblaApi>) => {
+    setSelectedIndex(api.selectedScrollSnap());
+    setCanScrollPrev(api.canScrollPrev());
+    setCanScrollNext(api.canScrollNext());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    onSelect(emblaApi);
+
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  /*
+   * ==========================
+   * MODAL
+   * ==========================
+   */
+
+  const openProjectInfo = (project: Project) => {
+    setSelectedProject(project);
+    setShowPopup(true);
+  };
+
+  const closeProjectInfo = () => {
+    setShowPopup(false);
+    setSelectedProject(null);
+  };
+
+  if (!projects || projects.length === 0) {
+    return null;
+  }
+
+  /*
+   * ==========================
+   * FAN EFFECT
+   * ==========================
+   *
+   * Desktop:
+   * Stronger fan effect.
+   *
+   * Mobile:
+   * Almost no fan effect so cards
+   * don't get clipped.
+   */
+
+  const MAX_FAN = isMobile ? 0 : 4;
+
+  const ROTATE_STEP = isMobile ? 0 : -6;
+
+  const TRANSLATE_Y_STEP = isMobile ? 0 : 26;
+
+  const SCALE_STEP = isMobile ? 0.02 : 0.07;
+
+  const OPACITY_STEP = isMobile ? 0.15 : 0.18;
+
   return (
-    <div className="relative w-full h-[380px] sm:h-[430px] md:h-[480px] lg:h-[535px] mx-auto mt-[-40px]">
-      <Swiper
-        onSlideChange={(swiper) => {
-          setCurrentSlide(swiper.realIndex + 1);
-        }}
-        allowTouchMove={false}
-        simulateTouch={false}
-        effect="coverflow"
-        centeredSlides
-        loop
-        observer
-        observeParents
-        updateOnWindowResize
-        modules={[EffectCoverflow, Navigation, Autoplay]}
-        navigation={{
-          prevEl: ".custom-prev",
-          nextEl: ".custom-next",
-        }}
-        autoplay={{
-          delay: 5000,
-          disableOnInteraction: false,
-        }}
-        coverflowEffect={{
-          rotate: 0,
-          stretch: 0,
-          depth: 250,
-          modifier: 1.2,
-          slideShadows: false,
-          scale: 0.85,
-        }}
-        breakpoints={{
-          0: {
-            slidesPerView: 1,
-            spaceBetween: -20,
-          },
-          480: {
-            slidesPerView: 1.2,
-            spaceBetween: -30,
-          },
-          640: {
-            slidesPerView: 1.5,
-            spaceBetween: -40,
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: -60,
-          },
-          1024: {
-            slidesPerView: 2.5,
-            spaceBetween: -80,
-          },
-          1280: {
-            slidesPerView: 3,
-            spaceBetween: -100,
-          },
-        }}
-        className="h-full w-[280px] sm:w-[340px] md:w-[420px] lg:w-[1280px] px-4"
-      >
-        {projects.map((project) => (
-          <SwiperSlide
-            key={project.id}
-            className="flex items-center justify-center h-full"
+    <>
+      {/* =====================================================
+          CAROUSEL
+      ====================================================== */}
+
+      <div className="w-full overflow-hidden">
+        {/* Embla viewport */}
+
+        <div
+          ref={emblaRef}
+          className="
+            w-full
+            overflow-hidden
+            sm:overflow-visible
+          "
+        >
+          {/* Embla container */}
+
+          <div
+            className="
+              flex
+              items-center
+            "
           >
-            <div className="card h-full w-full rounded-xl grid grid-rows-[2fr_1fr] bg-[#0D1522] text-white shadow-2xl overflow-hidden">
-              {/* Image Section */}
-              <div className="relative overflow-hidden">
+            {projects.map((project, index) => {
+              const isActive = index === selectedIndex;
+
+              const diff = index - selectedIndex;
+
+              const clampedDiff = Math.max(-MAX_FAN, Math.min(MAX_FAN, diff));
+
+              const rotation = clampedDiff * ROTATE_STEP;
+
+              const translateY = Math.abs(clampedDiff) * TRANSLATE_Y_STEP;
+
+              const scale = 1 - Math.abs(clampedDiff) * SCALE_STEP;
+
+              const opacity = 1 - Math.abs(clampedDiff) * OPACITY_STEP;
+
+              return (
                 <div
-                  className="absolute inset-0 bg-cover bg-center flex items-end"
-                  style={{
-                    backgroundImage: `url('${project.image}')`,
-                  }}
+                  key={project.id}
+                  className="
+                    relative
+                    shrink-0
+                    grow-0
+                    w-[50px]
+
+                    basis-[78%]
+                    px-2
+
+                    sm:basis-[70%]
+                    sm:px-0
+                    md:basis-[52%]
+                    lg:basis-[38%]
+                    xl:basis-[34%]
+                  "
                 >
-                  <p className="z-10 p-4 text-xl sm:text-2xl lg:text-3xl font-bold">
-                    {project.name}
-                  </p>
-                </div>
+                  {/* ==========================
+                      CARD
+                  =========================== */}
 
-                {/* Gradient */}
-                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0D1522] via-[#27334C]/70 to-transparent" />
-              </div>
+                  <div
+                    className="
+                      card
+                      relative
 
-              {/* Bottom Content */}
-              <div className="grid grid-rows-[1fr_auto]">
-                <div className="p-4">
-                  <p className="text-[#9CA3AF] text-sm sm:text-base lg:text-lg font-medium line-clamp-4">
-                    {project.description}
-                  </p>
-                </div>
+                      mx-0
 
-                <div className="flex items-center px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
-                  <button
-                    className="flex items-center"
-                    onClick={() => {
-                      setSelectedProject(project);
-                      setShowPopup(true);
+                      h-[300px]
+                      
+                      sm:mx-[-10px]
+                      sm:h-[400px]
+
+                      md:h-[460px]
+
+                      lg:h-[485px]
+
+                      rounded-[18px]
+
+                      sm:rounded-[24px]
+
+                      lg:rounded-[28px]
+
+                      overflow-hidden
+
+                      bg-[#0D1522]
+
+                      text-white
+
+                      transition-all
+                      duration-500
+                      ease-out
+                    "
+                    style={{
+                      transform: `
+                        rotate(${rotation}deg)
+                        translateY(${translateY}px)
+                        scale(${scale})
+                      `,
+
+                      opacity: Math.max(opacity, isMobile ? 0.4 : 0.25),
+
+                      zIndex: 20 - Math.abs(clampedDiff),
+
+                      border: isActive
+                        ? "1.5px solid #D0FF47"
+                        : "1px solid rgba(156,163,175,0.25)",
+
+                      boxShadow: isActive
+                        ? "0 0 30px rgba(208,255,71,0.20)"
+                        : "none",
                     }}
                   >
-                    <Image
-                      src="/button1.png"
-                      alt="More Info"
-                      width={40}
-                      height={40}
-                      className="w-8 h-8 sm:w-10 sm:h-10"
+                    {/* ==========================
+                        IMAGE
+                    =========================== */}
+
+                    <div
+                      className="
+                        absolute
+                        inset-x-0
+                        top-0
+
+                        h-[100%]
+
+                        sm:h-[100%]
+
+                        bg-cover
+                        bg-center
+                      "
+                      style={{
+                        backgroundImage: `url('${project.image}')`,
+                      }}
                     />
 
-                    <p className="text-[#9CA3AF] text-xs sm:text-sm font-medium ml-3 sm:ml-4">
-                      MORE INFO
-                    </p>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+                    {/* ==========================
+                        IMAGE GRADIENT
+                    =========================== */}
 
-      {showPopup && (
-        <EventInfo
-          project={selectedProject}
-          onClose={() => setShowPopup(false)}
-        />
-      )}
-      <div className="flex justify-center items-center mt-4">
-        <button className="custom-prev">
-          <Image
-            src="/leftButton.png"
-            alt="Previous"
-            width={40}
-            height={40}
-            className="w-8 h-8 sm:w-10 sm:h-10"
-          />
-        </button>
-        <p className="m-5 text-sm sm:text-base lg:text-lg font-medium">
-          {currentSlide}
-        </p>
-        <button className="custom-next">
-          <Image
-            src="/rightButton.png"
-            alt="Next"
-            width={40}
-            height={40}
-            className="w-8 h-8 sm:w-10 sm:h-10"
-          />
-        </button>
+                    <div
+                      className="
+                        absolute
+                        inset-x-0
+                        top-0
+
+                        h-[65%]
+
+                        bg-gradient-to-b
+                        from-transparent
+                        via-transparent
+                        to-[#0D1522]
+                      "
+                    />
+
+                    {/* ==========================
+                        DARK CONTENT BACKGROUND
+                    =========================== */}
+
+                    <div
+                      className="
+                        absolute
+                        inset-x-0
+                        bottom-0
+
+                        h-[35%]
+
+                        bg-[#0D1522]
+                      "
+                    />
+
+                    {/* ==========================
+                        CONTENT
+                    =========================== */}
+
+                    <div
+                      className="
+                        relative
+                        z-10
+
+                        flex
+                        h-full
+                        flex-col
+                        justify-end
+                      "
+                    >
+                      {/* Project information */}
+
+                      <div
+                        className="
+                          px-4
+                          pb-1
+
+                          sm:px-6
+                          sm:pb-3
+
+                          lg:px-7
+                        "
+                      >
+                        <h3
+                          className="
+                            mb-1
+
+                            text-lg
+                            font-semibold
+
+                            sm:mb-2
+                            sm:text-2xl
+
+                            lg:text-2xl
+                          "
+                        >
+                          {project.name}
+                        </h3>
+
+                        <p
+                          className="
+                            line-clamp-3
+
+                            text-xs
+                            font-medium
+                            leading-relaxed
+
+                            text-[#9CA3AF]
+
+                            sm:line-clamp-4
+                            sm:text-base
+                          "
+                        >
+                          {project.description}
+                        </p>
+                      </div>
+
+                      {/* ==========================
+                          MORE INFO
+                      =========================== */}
+
+                      <div
+                        className="
+                          flex
+                          h-[60px]
+                          items-center
+
+                          px-4
+
+                          sm:h-[72px]
+                          sm:px-6
+
+                          lg:px-7
+                        "
+                      >
+                        {isActive && (
+                          <button
+                            type="button"
+                            onClick={() => openProjectInfo(project)}
+                            className="
+                              group
+                              flex
+                              items-center
+
+                              text-[#9CA3AF]
+
+                              transition-colors
+                              duration-200
+
+                              hover:text-white
+                            "
+                          >
+                            {/* Arrow */}
+
+                            <div
+                              className="
+                                mr-3
+
+                                flex
+                                h-[32px]
+                                w-[32px]
+
+                                items-center
+                                justify-center
+
+                                rounded-full
+
+                                border
+                                border-[#9CA3AF]
+
+                                transition-all
+                                duration-200
+
+                                group-hover:border-white
+                                group-hover:bg-white/5
+
+                                sm:mr-5
+                                sm:h-[38px]
+                                sm:w-[38px]
+                              "
+                            >
+                              <ArrowForwardIcon
+                                fontSize={isMobile ? "small" : "small"}
+                              />
+                            </div>
+
+                            <span
+                              className="
+                                text-[10px]
+                                font-medium
+                                tracking-wide
+
+                                sm:text-sm
+                              "
+                            >
+                              MORE INFO
+                            </span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* =====================================================
+            NAVIGATION
+        ====================================================== */}
+
+        <div
+          className="
+            mt-4
+
+            flex
+            items-center
+            justify-center
+            gap-1
+
+            sm:mt-6
+            sm:gap-2
+          "
+        >
+          {/* Previous */}
+
+          <button
+            type="button"
+            onClick={scrollPrev}
+            disabled={!canScrollPrev}
+            aria-label="Previous project"
+            className="
+              rounded-full
+
+              transition-opacity
+              duration-200
+
+              disabled:cursor-not-allowed
+              disabled:opacity-30
+            "
+          >
+            <NavigateBeforeIcon
+              fontSize={isMobile ? "small" : "medium"}
+              className="
+                rounded-full
+                bg-[#27334C]
+                p-0.5
+              "
+            />
+          </button>
+
+          {/* Current slide */}
+
+          <p
+            className="
+              mx-2
+              min-w-[24px]
+
+              text-center
+              text-xs
+              font-medium
+              text-white
+
+              sm:mx-3
+              sm:text-base
+            "
+          >
+            {String(selectedIndex + 1).padStart(2, "0")}
+          </p>
+
+          {/* Next */}
+
+          <button
+            type="button"
+            onClick={scrollNext}
+            disabled={!canScrollNext}
+            aria-label="Next project"
+            className="
+              rounded-full
+
+              transition-opacity
+              duration-200
+
+              disabled:cursor-not-allowed
+              disabled:opacity-30
+            "
+          >
+            <NavigateNextIcon
+              fontSize={isMobile ? "small" : "medium"}
+              className="
+                rounded-full
+                bg-[#27334C]
+                p-0.5
+              "
+            />
+          </button>
+        </div>
       </div>
 
-      <style jsx global>{`
-        .swiper-slide {
-          opacity: 0.5;
-          transition:
-            opacity 0.35s ease,
-            transform 0.35s ease;
-        }
-        .swiper-slide-active {
-          opacity: 1;
-          z-index: 10;
-        }
-        .swiper-slide-prev,
-        .swiper-slide-next {
-          opacity: 0.85;
-        }
+      {/* =====================================================
+          MODAL
+      ====================================================== */}
 
-        .swiper-slide-active .card {
-          border-width: 2px;
-          border-color: #d0ff47;
-        }
-      `}</style>
-    </div>
+      {showPopup && selectedProject && (
+        <EventInfo project={selectedProject} onClose={closeProjectInfo} />
+      )}
+    </>
   );
 }

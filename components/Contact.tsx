@@ -19,7 +19,10 @@ const initialForm: ContactForm = {
 const Contact = () => {
   const [form, setForm] = useState<ContactForm>(initialForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<{ type: "ok" | "error"; message: string } | null>(null);
+  const [status, setStatus] = useState<{
+    type: "ok" | "error";
+    message: string;
+  } | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,14 +35,22 @@ const Contact = () => {
       message: form.message.trim(),
     };
 
-    if (!payload.name || !payload.email || !payload.subject || !payload.message) {
+    if (
+      !payload.name ||
+      !payload.email ||
+      !payload.subject ||
+      !payload.message
+    ) {
       setStatus({ type: "error", message: "Please complete all fields." });
       return;
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(payload.email)) {
-      setStatus({ type: "error", message: "Please enter a valid email address." });
+      setStatus({
+        type: "error",
+        message: "Please enter a valid email address.",
+      });
       return;
     }
 
@@ -58,9 +69,15 @@ const Contact = () => {
       }
 
       setForm(initialForm);
-      setStatus({ type: "ok", message: "Message sent successfully. We'll get back to you soon." });
+      setStatus({
+        type: "ok",
+        message: "Message sent successfully. We'll get back to you soon.",
+      });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Something went wrong while sending your message.";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while sending your message.";
       setStatus({ type: "error", message });
     } finally {
       setIsSubmitting(false);

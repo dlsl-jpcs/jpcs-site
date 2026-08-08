@@ -5,6 +5,7 @@ import "swiper/css";
 import ProjectsCarousel from "./events/ProjectsCarousel";
 import { Project } from "@/types/projects";
 import { EventImage } from "@/types/eventsImages";
+import { motion } from "framer-motion";
 
 export default function ProjectsEvents() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -63,7 +64,13 @@ export default function ProjectsEvents() {
         className="relative bg-white mt-[-200px] w-[100%] min-h-[160%] rounded-b-[50%] justify-self-center overflow-visible bg-[linear-gradient(to_bottom,transparent,rgba(0,0,0,0.09)),linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)]
 bg-[size:auto,4rem_4rem,4rem_4rem]"
       >
-        <div className="absolute top-[200px] sm:top-[150px] md:top-[180px] lg:top-[200px] left-1/2 -translate-x-1/2 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="absolute top-[200px] sm:top-[150px] md:top-[180px] lg:top-[200px] left-1/2 -translate-x-1/2 text-center"
+        >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight mb-6">
             Our{" "}
             <span className="bg-neon px-5 py-2 rounded-full inline-block transform rotate-2">
@@ -73,10 +80,16 @@ bg-[size:auto,4rem_4rem,4rem_4rem]"
           <p className="text-navy/60 text-lg md:text-xl font-medium max-w-2xl">
             Discover opportunities to build, learn, and connect.
           </p>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="relative h-full w-full mt-[-40px]">
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="relative h-full w-full mt-[-40px]"
+      >
         {loading ? (
           <div className="h-full w-full flex items-center justify-center text-white/60">
             Loading projects...
@@ -88,7 +101,7 @@ bg-[size:auto,4rem_4rem,4rem_4rem]"
         ) : (
           <ProjectsCarousel projects={displayProjects} />
         )}
-      </div>
+      </motion.div>
     </section>
   );
 }

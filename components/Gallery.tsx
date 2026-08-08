@@ -4,12 +4,15 @@ import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import { GalleryMainImages } from "@/types/galleryMainImages";
 
 export default function Gallery() {
+  const router = useRouter();
   const [images, setImages] = useState<GalleryMainImages[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,7 +45,13 @@ export default function Gallery() {
     >
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-10 md:flex-row md:items-center md:justify-between md:gap-16">
         {/* Carousel */}
-        <div className="relative order-2 w-[280px] sm:w-[340px] md:w-[420px] lg:w-[800px] h-[380px] sm:h-[430px] md:h-[480px] lg:h-[535px] mx-auto md:order-1">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative order-2 w-[280px] sm:w-[340px] md:w-[420px] lg:w-[800px] h-[380px] sm:h-[430px] md:h-[480px] lg:h-[535px] mx-auto md:order-1"
+        >
           <Swiper
             loop={true}
             modules={[Pagination]}
@@ -80,9 +89,15 @@ export default function Gallery() {
             )}
           </Swiper>
           <div className="custom-pagination mt-4 flex justify-center" />
-        </div>
+        </motion.div>
         {/* Copy block */}
-        <div className="order-1 flex w-full flex-col items-center gap-3 text-center md:order-2 md:w-2/5 md:items-start md:text-left">
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="order-1 flex w-full flex-col items-center gap-3 text-center md:order-2 md:w-2/5 md:items-start md:text-left"
+        >
           <h2 className="text-5xl font-extrabold leading-tight text-white md:text-6xl">
             JPCS
           </h2>
@@ -91,6 +106,7 @@ export default function Gallery() {
           </span>
 
           <button
+            onClick={() => router.push("/gallery")}
             type="button"
             className="mt-4 flex items-center gap-3 text-sm font-medium uppercase tracking-widest text-white/80 transition-colors hover:text-white"
           >
@@ -99,7 +115,7 @@ export default function Gallery() {
             </span>
             Explore more
           </button>
-        </div>
+        </motion.div>
       </div>
       <style jsx global>
         {`
