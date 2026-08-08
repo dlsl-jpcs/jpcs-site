@@ -33,7 +33,7 @@ export default function GalleryContainer() {
     <div
       className="
         bg-[#0D172F]
-        p-4 sm:p-8 lg:p-20
+        p-4 sm:p-6 lg:p-12
         flex flex-col
         w-full
         relative
@@ -47,8 +47,11 @@ export default function GalleryContainer() {
         className="
           grid
           grid-cols-2
-          sm:grid-cols-5
-          gap-2 sm:gap-4
+          sm:grid-cols-3
+          md:grid-cols-4
+          xl:grid-cols-5
+          gap-2
+          sm:gap-4
         "
       >
         {currentImages.map((image) => (

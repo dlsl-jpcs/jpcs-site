@@ -5,7 +5,7 @@ import ClientFooter from "@/components/ClientFooter";
 
 export default function GalleryPage() {
   return (
-    <main className="w-full relative h-screen overflow-auto m-0 p-0">
+    <main className="w-full relative min-h-screen overflow-auto m-0 p-0">
       <GalleryHeader />
       <GalleryBanner />
       <GalleryContainer />
