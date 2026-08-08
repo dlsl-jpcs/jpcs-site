@@ -11,7 +11,7 @@ export default function GalleryHeader() {
   return (
     <>
       <div className="absolute bg-[#090e1f] inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none"></div>
-      <div className="flex flex-col w-full min-h-[calc(100vh-8rem)] relative">
+      <div className="flex flex-col w-full h-screen relative">
         <div className="relative flex w-full items-center gap-3 px-4 py-4 sm:px-10 sm:py-6">
           <Image src="/jpcslogo.png" alt="jpcslogo" width={60} height={60} />
           <h1 className="text-2xl sm:text-3xl font-bold">JPCS</h1>
