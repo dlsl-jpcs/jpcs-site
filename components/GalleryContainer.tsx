@@ -9,7 +9,7 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 export default function GalleryContainer() {
   const images = Array.from({ length: 45 }, (_, index) => ({
     id: index + 1,
-    src: "/officers/ALVAREZ.jpg",
+    src: "/officers/DE-VILLA.jpg",
     alt: `ALVAREZ ${index + 1}`,
   }));
 

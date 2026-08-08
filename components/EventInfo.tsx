@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { Project } from "@/types/projects";
+import { motion } from "framer-motion";
 interface Props {
   project: Project | null;
   onClose: () => void;
@@ -16,7 +17,11 @@ function EventInfo({ project, onClose }: Props) {
   }, []);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, x: 30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: 0.2 }}
       className="
         fixed inset-0
         z-[9999]
@@ -26,7 +31,7 @@ function EventInfo({ project, onClose }: Props) {
     >
       <div
         className="
-          bg-[#0D172F]
+    bg-[#0D172F]
 
     w-[95vw]
     sm:w-[90vw]
@@ -39,7 +44,8 @@ function EventInfo({ project, onClose }: Props) {
     grid
     grid-rows-[2fr_1fr]
 
-    rounded-xl"
+    rounded-xl
+    overflow-hidden"
       >
         <div
           className="bg-cover rounded-t-xl"
@@ -69,19 +75,19 @@ function EventInfo({ project, onClose }: Props) {
             ✕
           </button>
         </div>
-        <div className="pt-2 pl-7 pr-7 pb-10 flex flex-col">
-          <div className="flex justify-between">
+        <div className="pt-2 pl-7 pr-7 pb-10 flex flex-col min-h-0">
+          <div className="flex justify-between shrink-0">
             <p className="text-2xl font-bold">{project?.name}</p>
             <p className="flex align-middle bg-[#6B728026] p-1.5 rounded-xl">
               {project?.date}
             </p>
           </div>
-          <div className="pt-2">
+          <div className="pt-2 overflow-y-auto pr-2 flex-1 min-h-0">
             <p>{project?.description}</p>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
