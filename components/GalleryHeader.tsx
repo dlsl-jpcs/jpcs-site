@@ -37,15 +37,15 @@ export default function GalleryHeader({ imageCount }: GalleryHeaderProps) {
             className="space-y-8"
           >
             <div className="flex flex-row gap-4 sm:flex-row sm:items-end sm:flex-wrap">
-              <span className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold">
+              <span className="text-7xl sm:text-7xl md:text-7xl lg:text-8xl font-bold">
                 JPCS
               </span>
-              <span className="inline-flex items-center rounded-3xl bg-[#C4FF4D1F] px-4 py-2 text-xs sm:text-sm font-bold text-[#C4FF4D] border border-[#C4FF4D33] rotate-3">
+              <span className="inline-flex self-end items-center h-[30px] rounded-3xl bg-[#C4FF4D1F] px-4 py-2 text-xs sm:text-sm font-bold text-[#C4FF4D] border border-[#C4FF4D33] rotate-3">
                 {imageCount} items
               </span>
             </div>
             <div>
-              <span className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-[#C4FF4D]">
+              <span className="text-7xl sm:text-7xl md:text-7xl lg:text-8xl font-extrabold text-[#C4FF4D]">
                 GALLERY
               </span>
             </div>
