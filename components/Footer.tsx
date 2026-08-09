@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -20,9 +21,15 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const exploreLinks = [
+    { label: "Home", href: "/#home" },
+    { label: "About", href: "/#about" },
+    { label: "Officers", href: "/#officers" },
+    { label: "Projects", href: "/#projects" },
+  ];
+
   return (
     <footer className="relative bg-navy pt-20 min-[401px]:pt-28 pb-10 min-[401px]:pb-12 px-4 min-[401px]:px-6 overflow-hidden rounded-t-[3rem] -mt-10 z-40 shadow-[0_-30px_60px_rgba(0,0,0,0.3)]">
-   
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
       <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-neon/5 rounded-full blur-[150px] pointer-events-none" />
 
@@ -82,7 +89,6 @@ const Footer = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 min-[401px]:gap-12 lg:gap-8 mb-16 min-[401px]:mb-24">
-     
           <div className="md:col-span-12 lg:col-span-6">
             <div className="flex items-center gap-3 min-[401px]:gap-4 mb-4">
               <div className="w-12 h-12 min-[401px]:w-14 min-[401px]:h-14 rounded-full bg-white flex items-center justify-center p-0.3 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
@@ -98,8 +104,6 @@ const Footer = () => {
                 JPCS<span className="text-neon">.</span>
               </span>
             </div>
-
-          
           </div>
 
           <div className="md:col-span-6 lg:col-span-2 lg:col-start-8">
@@ -107,15 +111,15 @@ const Footer = () => {
               Explore
             </h3>
             <ul className="space-y-3 min-[401px]:space-y-4">
-              {["Home", "About", "Officers", "Projects"].map((link) => (
-                <li key={link}>
-                  <a
-                    href={`#${link.toLowerCase()}`}
+              {exploreLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
                     className="group flex items-center gap-2 text-white/50 hover:text-neon font-bold transition-colors text-base min-[401px]:text-lg"
                   >
                     <span className="w-0 h-0.5 bg-neon transition-all duration-300 group-hover:w-3" />
-                    {link}
-                  </a>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

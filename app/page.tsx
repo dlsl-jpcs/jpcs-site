@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import ProjectsEvents from "@/components/ProjectsEvents";
 import Gallery from "@/components/Gallery";
+import HashScrollHandler from "@/components/HashScrollHandler";
 import Officers from "@/components/officers/Officers";
 
 export default async function Home() {
@@ -25,6 +26,7 @@ export default async function Home() {
 
   return (
     <main className="w-full relative selection:bg-neon selection:text-navy">
+      <HashScrollHandler />
       <ScrollProgressBar />
       <Navbar />
       <Hero />

@@ -251,7 +251,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                     =========================== */}
 
                     <Image
-                      src={project.image}
+                      src={project.image || "/jpcslogo.png"}
                       alt={project.name}
                       fill
                       className="object-cover"

@@ -112,7 +112,7 @@ export default function Gallery() {
                   >
                     <div className="relative w-full h-full overflow-hidden rounded-2xl border sm:rounded-3xl md:rounded-[2rem]">
                       <Image
-                        src={image.image_url}
+                        src={image.image_url || "/jpcslogo.png"}
                         alt=""
                         fill
                         className="object-cover"
