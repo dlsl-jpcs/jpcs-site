@@ -74,11 +74,7 @@ export default function EventCard({
     >
       <motion.div
         ref={slideRef}
-        className={`relative rounded-[1.1rem] min-[401px]:rounded-[1.3rem] p-4 min-[401px]:p-6 md:p-8 h-[340px] min-[401px]:h-[380px] md:h-[400px] flex flex-col cursor-pointer overflow-hidden transition-all duration-500 ${
-          isActive
-            ? "bg-white/10 backdrop-blur-2xl border border-neon/50 shadow-[0_20px_40px_-10px_rgba(196,255,71,0.15)]"
-            : "bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20"
-        }`}
+        className="group relative rounded-[1.5rem] min-[401px]:rounded-[1.8rem] p-4 min-[401px]:p-6 md:p-8 h-[340px] min-[401px]:h-[380px] md:h-[400px] flex flex-col cursor-pointer overflow-hidden"
         onClick={onClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -92,6 +88,17 @@ export default function EventCard({
               }
         }
       >
+        {/* Glass layer kept separate from the transformed element above so
+            Chrome/Safari don't drop the backdrop-blur to solid once the
+            scale/rotateX transform settles */}
+        <div
+          className={`absolute inset-0 rounded-[1.5rem] min-[401px]:rounded-[1.8rem] transition-all duration-500 pointer-events-none ${
+            isActive
+              ? "bg-white/[0.06] backdrop-blur-xl border border-neon/40 shadow-[0_20px_40px_-10px_rgba(196,255,71,0.15),inset_0_1px_1px_rgba(255,255,255,0.15)]"
+              : "bg-white/[0.03] backdrop-blur-md border border-white/10 group-hover:border-white/20"
+          }`}
+        />
+
         {isActive && (
           <div className="absolute -top-24 -right-24 w-48 h-48 bg-neon/20 rounded-2xl blur-[60px] pointer-events-none" />
         )}
