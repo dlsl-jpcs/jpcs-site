@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import Image from "next/image";
 
 import { Project } from "@/types/projects";
 import EventInfo from "../EventInfo";
@@ -249,22 +250,13 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                         IMAGE
                     =========================== */}
 
-                    <div
-                      className="
-                        absolute
-                        inset-x-0
-                        top-0
-
-                        h-[100%]
-
-                        sm:h-[100%]
-
-                        bg-cover
-                        bg-center
-                      "
-                      style={{
-                        backgroundImage: `url('${project.image}')`,
-                      }}
+                    <Image
+                      src={project.image}
+                      alt={project.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 78vw, (max-width: 768px) 70vw, (max-width: 1024px) 52vw, (max-width: 1280px) 38vw, 34vw"
+                      priority={index === 0}
                     />
 
                     {/* ==========================

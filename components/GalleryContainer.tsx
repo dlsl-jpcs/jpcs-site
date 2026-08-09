@@ -1,32 +1,52 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import GalleryModal from "./GalleryModal";
+
+interface GalleryImage {
+  id: number;
+  alt: string;
+  src: string;
+}
 
 export default function GalleryContainer() {
-  const images = Array.from({ length: 45 }, (_, index) => ({
-    id: index + 1,
-    src: "/officers/LANTIN.png",
-    alt: `LANTIN ${index + 1}`,
-  }));
+  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await fetch("/api/gallery");
+        if (!response.ok) throw new Error("Failed to load gallery images");
+        const data = await response.json();
+        setImages(data.data);
+      } catch (err) {
+        console.error("Error fetching images:", err);
+        setError("Couldn't load the gallery. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Desktop: 20 images
-  // Mobile: 10 images
   const desktopImagesPerPage = 20;
   const mobileImagesPerPage = 10;
-
-  // For now, use 20 per page
   const imagesPerPage = desktopImagesPerPage;
 
   const totalPages = Math.ceil(images.length / imagesPerPage);
-
   const startIndex = (currentPage - 1) * imagesPerPage;
-
   const currentImages = images.slice(startIndex, startIndex + imagesPerPage);
 
   return (
@@ -42,54 +62,73 @@ export default function GalleryContainer() {
         [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_60%,transparent_100%)]
       "
     >
-      {/* Gallery */}
-      <div
-        className="
-          grid
-          grid-cols-2
-          sm:grid-cols-3
-          md:grid-cols-4
-          xl:grid-cols-5
-          gap-2
-          sm:gap-4
-        "
-      >
-        {currentImages.map((image) => (
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            key={image.id}
-            className="
-              
-              w-full
-              aspect-square
-              p-1
-              overflow-hidden
-              rounded-[10px]
-            "
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              width={300}
-              height={300}
+      {isLoading && (
+        <div className="flex justify-center items-center py-20">
+          <span className="text-white/60 text-sm">Loading gallery…</span>
+        </div>
+      )}
+
+      {!isLoading && error && (
+        <div className="flex justify-center items-center py-20">
+          <span className="text-red-400 text-sm">{error}</span>
+        </div>
+      )}
+
+      {!isLoading && !error && images.length === 0 && (
+        <div className="flex justify-center items-center py-20">
+          <span className="text-white/60 text-sm">No images found.</span>
+        </div>
+      )}
+
+      {!isLoading && !error && images.length > 0 && (
+        <div
+          className="
+            grid
+            grid-cols-2
+            sm:grid-cols-3
+            md:grid-cols-4
+            xl:grid-cols-5
+            gap-2
+            sm:gap-4
+          "
+        >
+          {currentImages.map((image, index) => (
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              key={image.id}
               className="
                 w-full
-                h-full
-                object-cover
-                hover:scale-105
-                transition-transform
-                duration-300
+                aspect-square
+                p-1
+                overflow-hidden
                 rounded-[10px]
+                cursor-pointer
               "
-            />
-          </motion.div>
-        ))}
-      </div>
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={300}
+                height={300}
+                onClick={() => setSelectedIndex(startIndex + index)}
+                className="
+                  w-full
+                  h-full
+                  object-cover
+                  hover:scale-105
+                  transition-transform
+                  duration-300
+                  rounded-[10px]
+                "
+              />
+            </motion.div>
+          ))}
+        </div>
+      )}
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-3 sm:gap-6 mt-6 sm:mt-10 mb-10">
           <button
@@ -111,6 +150,21 @@ export default function GalleryContainer() {
           </button>
         </div>
       )}
+
+      <GalleryModal
+        images={images}
+        currentIndex={selectedIndex ?? 0}
+        isOpen={selectedIndex !== null}
+        onClose={() => setSelectedIndex(null)}
+        onNext={() =>
+          setSelectedIndex((i) => (i === null ? 0 : (i + 1) % images.length))
+        }
+        onPrev={() =>
+          setSelectedIndex((i) =>
+            i === null ? 0 : (i - 1 + images.length) % images.length,
+          )
+        }
+      />
     </div>
   );
 }

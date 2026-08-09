@@ -6,6 +6,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 import { GalleryMainImages } from "@/types/galleryMainImages";
 
@@ -104,17 +105,19 @@ export default function Gallery() {
                   there are no images as of the moment...
                 </div>
               ) : (
-                displayImages.map((image) => (
+                displayImages.map((image, index) => (
                   <div
                     key={image.id}
                     className="relative w-full h-full shrink-0 grow-0 basis-full"
                   >
                     <div className="relative w-full h-full overflow-hidden rounded-2xl border sm:rounded-3xl md:rounded-[2rem]">
-                      <div
-                        className="absolute inset-0 bg-center flex items-end bg-cover"
-                        style={{
-                          backgroundImage: `url('${image.image_url}')`,
-                        }}
+                      <Image
+                        src={image.image_url}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 280px, (max-width: 768px) 340px, (max-width: 1024px) 420px, 800px"
+                        priority={index === 0}
                       />
                     </div>
                   </div>
