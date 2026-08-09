@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Events from "./events/Events";
+import DotField from "./DotField";
 
 interface UpcomingEvent {
   org: string;
@@ -59,6 +60,24 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen w-full bg-navy flex items-center justify-center overflow-hidden z-0"
     >
+      {/* DotField background layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <DotField
+          dotRadius={1.5}
+          dotSpacing={12}
+          bulgeStrength={67}
+          glowRadius={160}
+          sparkle
+          waveAmplitude={3}
+          cursorRadius={450}
+          cursorForce={1}
+          bulgeOnly
+          gradientFrom="#0200c7"
+          gradientTo="#4ae609"
+          glowColor="transparent"
+        />
+      </div>
+
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none" />
 
       <div className="absolute top-1/4 -left-32 w-[30rem] h-[30rem] bg-neon/10 rounded-full blur-[120px] pointer-events-none" />
