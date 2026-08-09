@@ -5,7 +5,11 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-export default function GalleryHeader() {
+interface GalleryHeaderProps {
+  imageCount: number;
+}
+
+export default function GalleryHeader({ imageCount }: GalleryHeaderProps) {
   const router = useRouter();
 
   return (
@@ -37,7 +41,7 @@ export default function GalleryHeader() {
                 JPCS
               </span>
               <span className="inline-flex items-center rounded-3xl bg-[#C4FF4D1F] px-4 py-2 text-xs sm:text-sm font-bold text-[#C4FF4D] border border-[#C4FF4D33] rotate-3">
-                67 items
+                {imageCount} items
               </span>
             </div>
             <div>

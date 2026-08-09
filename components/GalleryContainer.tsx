@@ -13,7 +13,13 @@ interface GalleryImage {
   src: string;
 }
 
-export default function GalleryContainer() {
+interface GalleryContainerProps {
+  setImageCount: (count: number) => void;
+}
+
+export default function GalleryContainer({
+  setImageCount,
+}: GalleryContainerProps) {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,6 +33,7 @@ export default function GalleryContainer() {
         if (!response.ok) throw new Error("Failed to load gallery images");
         const data = await response.json();
         setImages(data.data);
+        setImageCount(data.data.length);
       } catch (err) {
         console.error("Error fetching images:", err);
         setError("Couldn't load the gallery. Please try again later.");
@@ -36,7 +43,7 @@ export default function GalleryContainer() {
     };
 
     fetchImages();
-  }, []);
+  }, [setImageCount]);
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
