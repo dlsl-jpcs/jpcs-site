@@ -18,6 +18,8 @@ const Navbar = () => {
   const lastScrollYRef = useRef(0);
   const tickingRef = useRef(false);
   const showNavbarRef = useRef(true);
+  const clickCountRef = useRef(0);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const isProgramPage = pathname.startsWith("/programs/");
@@ -160,7 +162,22 @@ const Navbar = () => {
         <div className="flex items-center justify-between w-full max-w-7xl">
           <div
             className="flex gap-3 items-center pointer-events-auto cursor-pointer group"
-            onClick={() => scrollToSection("#home")}
+            onClick={() => {
+              // Handle triple click
+              clickCountRef.current += 1;
+              if (clickCountRef.current === 3) {
+                clickCountRef.current = 0;
+                if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+                router.push("/admin/login");
+                return;
+              }
+              
+              if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+              clickTimeoutRef.current = setTimeout(() => {
+                clickCountRef.current = 0;
+                scrollToSection("#home");
+              }, 400); // Wait 400ms to differentiate between single and triple clicks, or just route to home anyway on first click, but that disrupts the triple click.
+            }}
           >
             <div className="relative bg-white rounded-full w-14 h-14 shadow-[0_0_20px_rgba(255,255,255,0.1)] flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
               <Image
