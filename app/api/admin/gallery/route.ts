@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { verifyJwt } from "@/lib/auth";
+import {
+  deleteRecord,
+  insertRecord,
+  listRecords,
+  updateRecord,
+} from "@/lib/mock-data";
 
 async function verifyAdmin() {
   const cookieStore = await cookies();
@@ -12,56 +17,46 @@ async function verifyAdmin() {
 }
 
 export async function GET() {
-  if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
+  if (!(await verifyAdmin()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data, error } = await supabase.from("GalleryMain").select("*").order("display_order", { ascending: true });
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  const data = listRecords("GalleryMain", "display_order");
   return NextResponse.json({ data }, { status: 200 });
 }
 
 export async function POST(req: Request) {
-  if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await verifyAdmin()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
   const body = await req.json();
-
-  const { data, error } = await supabase.from("GalleryMain").insert([body]).select();
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data }, { status: 201 });
+  const data = insertRecord("GalleryMain", body);
+  return NextResponse.json({ data: [data] }, { status: 201 });
 }
 
 export async function PUT(req: Request) {
-  if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await verifyAdmin()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
   const body = await req.json();
   const { id, ...updateData } = body;
-
-  const { data, error } = await supabase.from("GalleryMain").update(updateData).eq("id", id).select();
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data }, { status: 200 });
+  const data = updateRecord("GalleryMain", id, updateData);
+  if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json({ data: [data] }, { status: 200 });
 }
 
 export async function DELETE(req: Request) {
-  if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await verifyAdmin()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
 
   if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
 
-  const { error } = await supabase.from("GalleryMain").delete().eq("id", id);
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ message: "Deleted successfully" }, { status: 200 });
+  if (!deleteRecord("GalleryMain", id))
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json(
+    { message: "Deleted successfully" },
+    { status: 200 },
+  );
 }

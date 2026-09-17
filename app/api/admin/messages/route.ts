@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { verifyJwt } from "@/lib/auth";
+import { deleteContact, listRecords, updateContact } from "@/lib/mock-data";
 
 async function verifyAdmin() {
   const cookieStore = await cookies();
@@ -15,17 +15,7 @@ export async function GET() {
   if (!(await verifyAdmin()))
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
-
-  // We order by id desc to simulate created_at since there's no created_at column natively confirmed yet
-  const { data, error } = await supabase
-    .from("ContactForm")
-    .select("*")
-    .order("form_id", { ascending: false });
-
-  if (error)
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  const data = listRecords("ContactForm", "form_id", false);
   return NextResponse.json({ data }, { status: 200 });
 }
 
@@ -33,40 +23,24 @@ export async function PUT(req: Request) {
   if (!(await verifyAdmin()))
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
   const body = await req.json();
   const { id, is_read } = body;
-
-  const { data, error } = await supabase
-    .from("ContactForm")
-    .update({ is_read })
-    .eq("form_id", id)
-    .select();
-
-  if (error)
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ data }, { status: 200 });
+  const data = updateContact(id, is_read);
+  if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json({ data: [data] }, { status: 200 });
 }
 
 export async function DELETE(req: Request) {
   if (!(await verifyAdmin()))
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("form_id");
 
   if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
 
-  const { error } = await supabase
-    .from("ContactForm")
-    .delete()
-    .eq("form_id", id);
-
-  if (error)
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!deleteContact(id))
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(
     { message: "Deleted successfully" },
     { status: 200 },

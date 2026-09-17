@@ -1,6 +1,3 @@
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
-
 import Banner from "@/components/Banner";
 import Contact from "@/components/Contact";
 import ClientFooter from "@/components/ClientFooter";
@@ -14,16 +11,6 @@ import HashScrollHandler from "@/components/HashScrollHandler";
 import Officers from "@/components/officers/Officers";
 
 export default async function Home() {
-  const cookieStore = await cookies();
-  const supabase = createClient(cookieStore);
-
-  const { data: ContactForm } = await supabase.from("ContactForm").select();
-
-  ContactForm?.map((item) => {
-    // TESTING PURPOSES
-    console.log(item.fullname);
-  });
-
   return (
     <main className="w-full relative selection:bg-neon selection:text-navy">
       <HashScrollHandler />
