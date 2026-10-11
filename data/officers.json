@@ -1,72 +1,72 @@
 {
   "officers": [
     {
-      "Name": "Daniel Luis Sahagun",
-      "Nickname": "Dani",
-      "Image": "/officers/SAHAGUN.jpg",
+      "Name": "Josiah Lamuel Rosell",
+      "Nickname": "Josiah",
+      "Image": "/officers/Rosell_ExecutivePresident.png",
       "Position": "Executive President",
       "Year": "3rd Year",
-      "Course": "BS Information Technology"
+      "Course": "BS Computer Science"
     },
 
     {
-      "Name": "Jane Allyson Paray",
-      "Nickname": "Jane",
-      "Image": "/officers/PARAY.jpg",
+      "Name": "Regina Angeli Cadeliña",
+      "Nickname": "Regina",
+      "Image": "/officers/Cadeliña_ExecutiveVicePresident.png",
       "Position": "Executive Vice President",
-      "Year": "3rd Year",
+      "Year": "4th Year",
       "Course": "BS Information Technology"
     },
 
     {
-      "Name": "Sebastian Angelo Meer",
-      "Nickname": ["Gio", "Meer"],
-      "Image": "/officers/MEER.png",
+      "Name": "Althea Claire Quiatchon",
+      "Nickname": "Althea",
+      "Image": "/officers/Quiatchon_VPforIT.jpg",
       "Position": "Vice President for IT",
       "Year": "3rd Year",
       "Course": "BS Information Technology"
     },
 
     {
-      "Name": "Elwyn Nicole Villegas",
-      "Nickname": "Nicole",
-      "Image": "/officers/VILLEGAS.png",
+      "Name": "Lance Derick De Villa",
+      "Nickname": "Lance",
+      "Image": "/officers/DeVilla_VPforCS.png",
       "Position": "Vice President for CS",
       "Year": "4th Year",
       "Course": "BS Computer Science"
     },
 
     {
-      "Name": "Maxene Sofia Mendoza",
-      "Nickname": "Max",
-      "Image": "/officers/MENDOZA.jpg",
+      "Name": "Justine Margaret Candelaria",
+      "Nickname": "Justine",
+      "Image": "/officers/Candelaria_ExecSecretary.png",
       "Position": "Executive Secretary",
-      "Year": "3rd Year",
-      "Course": "BS Computer Science"
-    },
-
-    {
-      "Name": "Lance Derick De Villa",
-      "Nickname": "Dev",
-      "Image": "/officers/DE-VILLA.jpg",
-      "Position": "Assistant Secretary",
-      "Year": "2nd Year",
-      "Course": "BS Computer Science"
-    },
-
-    {
-      "Name": "Jan Ernest Pacey",
-      "Nickname": "Pacey",
-      "Image": "/officers/NARIO.jpg",
-      "Position": "Executive Finance Manager",
       "Year": "3rd Year",
       "Course": "BS Information Technology"
     },
 
     {
-      "Name": "Regina Angeli Cadeliña",
-      "Nickname": "Regi",
-      "Image": "/officers/CADELINA.jpg",
+      "Name": "Neil Ivan Atienza",
+      "Nickname": "Neil",
+      "Image": "/officers/Atienza_Assistant-Secretary.png",
+      "Position": "Assistant Secretary",
+      "Year": "4th Year",
+      "Course": "BS Information Technology"
+    },
+
+    {
+      "Name": "Arianna Nicole Garcia",
+      "Nickname": "Ariana",
+      "Image": "/officers/Garcia_ExecFinanceManager.png",
+      "Position": "Executive Finance Manager",
+      "Year": "3rd Year",
+      "Course": "BS Computer Science"
+    },
+
+    {
+      "Name": "Jon Francis Kiehl Alvarez",
+      "Nickname": "Jon",
+      "Image": "/officers/Alvarez_AsstFinanceManager.png",
       "Position": "Assistant Finance Manager",
       "Year": "3rd Year",
       "Course": "BS Information Technology"
@@ -75,160 +75,175 @@
     {
       "Name": "Georgina Ramos",
       "Nickname": "George",
-      "Image": "/officers/RAMOS.jpg",
+      "Image": "/officers/Ramos_Auditor.jpg",
       "Position": "Auditor",
-      "Year": "3rd Year",
+      "Year": "4th Year",
       "Course": "BS Computer Science"
     },
 
     {
       "Name": "Theo Junel Garabiles",
       "Nickname": "Theo",
-      "Image": "/officers/GARABILES.jpg",
+      "Image": "/officers/Garabiles_PRO.jpg",
       "Position": "P.R.O",
-      "Year": "2nd Year",
-      "Course": "BS Information Technology"
-    },
-
-    {
-      "Name": "Jashia Eimonah Deveza",
-      "Nickname": "Jashia",
-      "Image": "/officers/DEVEZA.jpg",
-      "Position": "Project Head for Internal Affairs for IT",
       "Year": "3rd Year",
       "Course": "BS Information Technology"
-    },
-
-    {
-      "Name": "Luis Antonio Jopia",
-      "Nickname": "Lui",
-      "Image": "/officers/JOPIA.jpg",
-      "Position": "Project Head for Internal Affairs for CS",
-      "Year": "3rd Year",
-      "Course": "BS Computer Science"
-    },
-
-    {
-      "Name": "Justine Margaret Candelaria",
-      "Nickname": "Jaz",
-      "Image": "/officers/CANDELARIA.jpg",
-      "Position": "Project Head for External Affairs for IT",
-      "Year": "2nd Year",
-      "Course": "BS Information Technology"
-    },
-
-    {
-      "Name": "Josiah Lamuel Rosell",
-      "Nickname": "Lam",
-      "Image": "/officers/ROSELL.jpg",
-      "Position": "Project Head for External Affairs for CS",
-      "Year": "2nd Year",
-      "Course": "BS Computer Science"
-    },
-
-    {
-      "Name": "Neil Ivan Atienza",
-      "Nickname": "Neil",
-      "Image": "/officers/ATIENZA.png",
-      "Position": "Digital Media Officer",
-      "Year": "3rd Year",
-      "Course": "BS Information Technology"
-    },
-
-    {
-      "Name": "Arianna Nicole Garcia",
-      "Nickname": "Yanna",
-      "Image": "/officers/GARCIA.png",
-      "Position": "Digital Media Officer",
-      "Year": "2nd Year",
-      "Course": "BS Computer Science"
-    },
-
-    {
-      "Name": "Mikaela Shane Estrellanes",
-      "Nickname": "Shane",
-      "Image": "/officers/ESTRELLANES.jpg",
-      "Position": "ITEQS Manager",
-      "Year": "3rd Year",
-      "Course": "BS Computer Science"
-    },
-
-    {
-      "Name": "Althea Claire Quiatchon",
-      "Nickname": "Teya",
-      "Image": "/officers/QUIATCHON.png",
-      "Position": "Lasallian Student Ambassador",
-      "Year": "2nd Year",
-      "Course": "BS Information Technology"
-    },
-
-    {
-      "Name": "Prince Luis Tomilluso",
-      "Nickname": "Prince",
-      "Image": "/officers/TOMILLUSO.JPG",
-      "Position": "4th Year Rep for IT",
-      "Year": "4th Year",
-      "Course": "BS Information Technology"
-    },
-
-    {
-      "Name": "Drexler Reyes",
-      "Nickname": "Drex",
-      "Image": "/officers/REYES.png",
-      "Position": "4th Year Rep for CS",
-      "Year": "4th Year",
-      "Course": "BS Computer Science"
     },
 
     {
       "Name": "Moises Ceazar Del Mundo",
-      "Nickname": "Moi",
-      "Image": "/officers/DELMUNDO.jpg",
-      "Position": "3rd Year Rep for IT",
-      "Year": "3rd Year",
-      "Course": "BS Information Technology"
-    },
-
-    {
-      "Name": "Ernalene Rocha",
-      "Nickname": "Erna",
-      "Image": "/officers/ROCHA.jpg",
-      "Position": "3rd Year Rep for CS",
-      "Year": "3rd Year",
-      "Course": "BS Computer Science"
-    },
-
-    {
-      "Name": "Jon Francis Kiehl Alvarez",
-      "Nickname": "Kiehl",
-      "Image": "/officers/ALVAREZ.jpg",
-      "Position": "2nd Year Rep for IT",
-      "Year": "2nd Year",
+      "Nickname": "Moises",
+      "Image": "/officers/DELMUNDO.ProjecctHeadofInternalAffairsforIT.jpg",
+      "Position": "Project Head for Internal Affairs for IT",
+      "Year": "4th Year",
       "Course": "BS Information Technology"
     },
 
     {
       "Name": "Raymond Laurence Cabauatan",
       "Nickname": "Raymond",
-      "Image": "/officers/CABAUATAN.jpg",
+      "Image": "/officers/Cabauatan_ProjectHeadofInternalAffairsforCS.jpg",
+      "Position": "Project Head for Internal Affairs for CS",
+      "Year": "3rd Year",
+      "Course": "BS Computer Science"
+    },
+
+    {
+      "Name": "Jashia Eimonah Deveza",
+      "Nickname": "Jashia",
+      "Image": "/officers/Deveza_ProjectHeadforExternalAffairsforIT.PNG",
+      "Position": "Project Head for External Affairs for IT",
+      "Year": "4th Year",
+      "Course": "BS Information Technology"
+    },
+
+    {
+      "Name": "Mark Jester Guce",
+      "Nickname": "Mark",
+      "Image": "/officers/Guce_ProjectHeadForExternalAffairsForCS.png",
+      "Position": "Project Head for External Affairs for CS",
+      "Year": "3nd Year",
+      "Course": "BS Computer Science"
+    },
+
+    {
+      "Name": "Marcus Ireneo Lantin",
+      "Nickname": "Marcus",
+      "Image": "/officers/Lantin_DIGITALMEDIAOFFICER.jpg",
+      "Position": "Digital Media Officer",
+      "Year": "3rd Year",
+      "Course": "BS Computer Science"
+    },
+
+    {
+      "Name": "Marielle Anne Collera",
+      "Nickname": "Marielle",
+      "Image": "/officers/Collera_DigitalMediaOfficer.PNG",
+      "Position": "Digital Media Officer",
+      "Year": "3rd Year",
+      "Course": "BS Computer Science"
+    },
+    {
+      "Name": "Timothy Raquintan",
+      "Nickname": "Timothy",
+      "Image": "/officers/Raquintan_2ndYearRepforIT.png",
+      "Position": "Digital Media Officer",
+      "Year": "2nd Year",
+      "Course": "BS Information Technology"
+    },
+
+    {
+      "Name": "CJ Nicko Rosales",
+      "Nickname": "Nicko",
+      "Image": "/officers/Rosales_ITEQSManager.jpg",
+      "Position": "ITEQS Manager",
+      "Year": "3rd Year",
+      "Course": "BS Computer Science"
+    },
+    {
+      "Name": "Daniel Luis Sahagun",
+      "Nickname": "Daniel",
+      "Image": "/officers/Sahagun_ITEQS-Manager.JPG",
+      "Position": "ITEQS Manager",
+      "Year": "4th Year",
+      "Course": "BS Information Technology"
+    },
+    {
+      "Name": "Aryl Ross Manalo",
+      "Nickname": "Aryl",
+      "Image": "/officers/Manalo_ITEQSManager.png",
+      "Position": "ITEQS Manager",
+      "Year": "3rd Year",
+      "Course": "BS Information Technology"
+    },
+
+    {
+      "Name": "Jane Allyson Paray",
+      "Nickname": "Jane",
+      "Image": "/officers/Paray_4thYearRepforIT.jpg",
+      "Position": "4th Year Rep for IT",
+      "Year": "4th Year",
+      "Course": "BS Information Technology"
+    },
+
+    {
+      "Name": "Mikaela Shane Estrellanes",
+      "Nickname": "Mikaela",
+      "Image": "/officers/Estrellanes_4thYearRepforCS.jpg",
+      "Position": "4th Year Rep for CS",
+      "Year": "4th Year",
+      "Course": "BS Computer Science"
+    },
+
+    {
+      "Name": "Rafael Rebancos",
+      "Nickname": "Rafael",
+      "Image": "/officers/Rebancos_3rdYearRepforIT.JPG",
+      "Position": "3rd Year Rep for IT",
+      "Year": "3rd Year",
+      "Course": "BS Information Technology"
+    },
+
+    {
+      "Name": "Zachary Scott Ruiz",
+      "Nickname": "Zachary",
+      "Image": "/officers/Ruiz_3rdYearRepForCS.png",
+      "Position": "3rd Year Rep for CS",
+      "Year": "3rd Year",
+      "Course": "BS Computer Science"
+    },
+
+    {
+      "Name": "Joanna Mae Veneracion",
+      "Nickname": "Joanna",
+      "Image": "/officers/VENERACION_2ndYearRepforIT.png",
+      "Position": "2nd Year Rep for IT",
+      "Year": "2nd Year",
+      "Course": "BS Information Technology"
+    },
+
+    {
+      "Name": "Allen Edeline Mari Lanto",
+      "Nickname": "Allen",
+      "Image": "/officers/Lanto_2ndYearRepforCS.jpg",
       "Position": "2nd Year Rep for CS",
       "Year": "2nd Year",
       "Course": "BS Computer Science"
     },
 
     {
-      "Name": "Aeris Amanda Recio",
-      "Nickname": "Aeris",
-      "Image": "/officers/RECIO.jpeg",
+      "Name": "Jan Mariviene Enriquez",
+      "Nickname": "Jan",
+      "Image": "/officers/Enriquez_1stYearRepforIT.png",
       "Position": "1st Year Rep for IT",
       "Year": "1st Year",
       "Course": "BS Information Technology"
     },
 
     {
-      "Name": "Julia Lois Mendoza",
-      "Nickname": "Jia",
-      "Image": "/officers/MENDOZA-JULIA.jpg",
+      "Name": "Elijah Patrick Panique",
+      "Nickname": "Elijah",
+      "Image": "/officers/Panique_1stYearRepForCS.jpg",
       "Position": "1st Year Rep for CS",
       "Year": "1st Year",
       "Course": "BS Computer Science"
