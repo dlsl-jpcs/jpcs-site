@@ -24,8 +24,9 @@ export default function Hero() {
     const fetchUpcomingEvents = async () => {
       try {
         const response = await fetch("/api/upcomingEvents");
+        if (!response.ok) throw new Error("Failed to load upcoming events");
         const data = await response.json();
-        setUpcomingEvents(data.data);
+        setUpcomingEvents(data.data ?? []);
       } catch (error) {
         console.error("Error fetching upcoming events:", error);
       }

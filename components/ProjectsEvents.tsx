@@ -16,6 +16,7 @@ export default function ProjectsEvents() {
     const fetchProjects = async () => {
       try {
         const response = await fetch("/api/projects");
+        if (!response.ok) throw new Error("Failed to load projects");
         const data = await response.json();
         setProjects(data.data ?? []);
       } catch (error) {
@@ -30,6 +31,7 @@ export default function ProjectsEvents() {
     const fetchImages = async () => {
       try {
         const response = await fetch("/api/eventImagesMain");
+        if (!response.ok) throw new Error("Failed to load images");
         const data = await response.json();
         setImage(data.data ?? []);
       } catch (error) {

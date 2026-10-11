@@ -17,7 +17,13 @@ export default function Events({ events, isMobile }: EventsProps) {
         </h2>
       </div>
 
-      <EventCarousel events={events} isMobile={isMobile} />
+      {events.length === 0 ? (
+        <p className="px-2 min-[401px]:px-3 py-8 text-sm text-white/60">
+          No upcoming events right now. Check back soon!
+        </p>
+      ) : (
+        <EventCarousel events={events} isMobile={isMobile} />
+      )}
     </div>
   );
 }

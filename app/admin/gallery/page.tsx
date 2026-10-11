@@ -1,17 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Plus, Trash2, X } from "lucide-react";
+import ImageUploadButton from "@/components/admin/ImageUploadButton";
 
 export default function GalleryManagement() {
   const [images, setImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ image_url: "", display_order: 0 });
+  const [formData, setFormData] = useState({ image_url: "", alt_text: "", display_order: 0 });
+  // "main" = homepage carousel (gallery_main), "gallery" = full gallery page (gallery)
+  const [target, setTarget] = useState<"main" | "gallery">("main");
 
   const fetchImages = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/gallery");
+      const res = await fetch(`/api/admin/gallery?target=${target}`);
       const data = await res.json();
       setImages(data.data || []);
     } catch (err) {
@@ -23,22 +26,24 @@ export default function GalleryManagement() {
 
   useEffect(() => {
     fetchImages();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/admin/gallery", {
+      const res = await fetch(`/api/admin/gallery?target=${target}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         setIsModalOpen(false);
-        setFormData({ image_url: "", display_order: 0 });
+        setFormData({ image_url: "", alt_text: "", display_order: 0 });
         fetchImages();
       } else {
-        alert("Failed to add image");
+        const err = await res.json().catch(() => null);
+        alert(err?.error || "Failed to add image");
       }
     } catch (err) {
       alert("Error adding image");
@@ -48,7 +53,7 @@ export default function GalleryManagement() {
   const handleDelete = async (id: string | number) => {
     if (confirm("Are you sure you want to delete this image?")) {
       try {
-        const res = await fetch(`/api/admin/gallery?id=${id}`, { method: "DELETE" });
+        const res = await fetch(`/api/admin/gallery?target=${target}&id=${id}`, { method: "DELETE" });
         if (res.ok) fetchImages();
         else alert("Failed to delete");
       } catch (err) {
@@ -66,6 +71,18 @@ export default function GalleryManagement() {
         </button>
       </div>
 
+      <div className="flex gap-2 mb-6">
+        {([["main", "Homepage Carousel"], ["gallery", "Gallery Page"]] as const).map(([value, label]) => (
+          <button
+            key={value}
+            onClick={() => setTarget(value)}
+            className={`px-4 py-2 rounded-lg font-semibold text-sm border ${target === value ? "bg-navy text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       {loading ? (
         <div className="text-gray-500 text-center py-12">Loading gallery...</div>
       ) : images.length === 0 ? (
@@ -75,7 +92,7 @@ export default function GalleryManagement() {
           {images.map((img) => (
             <div key={img.id} className="bg-white rounded-xl shadow-sm border overflow-hidden group relative">
               <div className="aspect-square relative overflow-hidden bg-gray-100">
-                <img src={img.image_url} alt="Gallery Image" className="object-cover w-full h-full" />
+                <img src={img.image_url} alt={img.alt_text || "Gallery Image"} className="object-cover w-full h-full" />
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <button onClick={() => handleDelete(img.id)} className="bg-red-600 text-white p-3 rounded-full hover:bg-red-700 transition-colors">
                     <Trash2 size={20} />
@@ -101,12 +118,19 @@ export default function GalleryManagement() {
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-semibold mb-1">Image URL</label>
-                <input required type="text" value={formData.image_url} onChange={e => setFormData({...formData, image_url: e.target.value})} className="w-full border rounded-lg p-2" placeholder="https://example.com/image.jpg" />
+                <div className="flex gap-2">
+                  <input required type="text" value={formData.image_url} onChange={e => setFormData({...formData, image_url: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Upload an image or paste a storage URL" />
+                  <ImageUploadButton folder="gallery" onUploaded={(url) => setFormData({...formData, image_url: url})} />
+                </div>
                 {formData.image_url && (
                    <div className="mt-4 aspect-video rounded-lg overflow-hidden bg-gray-100">
                      <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.src = "")} />
                    </div>
                 )}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Alt Text (optional)</label>
+                <input type="text" maxLength={255} value={formData.alt_text} onChange={e => setFormData({...formData, alt_text: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Short description of the photo" />
               </div>
               <div>
                 <label className="block text-sm font-semibold mb-1">Display Order</label>

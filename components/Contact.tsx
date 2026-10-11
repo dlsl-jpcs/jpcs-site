@@ -7,6 +7,7 @@ type ContactForm = {
   email: string;
   subject: string;
   message: string;
+  website: string; // honeypot: hidden from people, filled in by bots
 };
 
 const initialForm: ContactForm = {
@@ -14,6 +15,7 @@ const initialForm: ContactForm = {
   email: "",
   subject: "",
   message: "",
+  website: "",
 };
 
 const Contact = () => {
@@ -33,6 +35,7 @@ const Contact = () => {
       email: form.email.trim(),
       subject: form.subject.trim(),
       message: form.message.trim(),
+      website: form.website,
     };
 
     if (
@@ -196,6 +199,19 @@ const Contact = () => {
               className="relative z-10 flex flex-col gap-4 min-[401px]:gap-5"
               onSubmit={handleSubmit}
             >
+              {/* Honeypot: invisible to people, bots fill it and the server drops the message. */}
+              <input
+                type="text"
+                name="website"
+                value={form.website}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, website: e.target.value }))
+                }
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute left-[-9999px] h-0 w-0 opacity-0"
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-[401px]:gap-5">
                 <div className="space-y-2">
                   <label className="text-[11px] font-extrabold text-white/50 uppercase tracking-widest ml-1">

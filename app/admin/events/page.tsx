@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, X } from "lucide-react";
+import ImageUploadButton from "@/components/admin/ImageUploadButton";
 
 export default function EventsManagement() {
   const [events, setEvents] = useState<any[]>([]);
@@ -63,7 +64,8 @@ export default function EventsManagement() {
         closeModal();
         fetchEvents();
       } else {
-        alert("Failed to save event");
+        const err = await res.json().catch(() => null);
+        alert(err?.error || "Failed to save event");
       }
     } catch (err) {
       alert("Error saving event");
@@ -160,7 +162,10 @@ export default function EventsManagement() {
                 </div>
                 <div className="col-span-2">
                   <label className="block text-sm font-semibold mb-1">Image URL</label>
-                  <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full border rounded-lg p-2" placeholder="https://example.com/image.jpg" />
+                  <div className="flex gap-2">
+                    <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Upload an image or paste a storage URL" />
+                    <ImageUploadButton folder="events" onUploaded={(url) => setFormData({...formData, image: url})} />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold mb-1">Registration Link</label>
@@ -169,6 +174,14 @@ export default function EventsManagement() {
                 <div>
                   <label className="block text-sm font-semibold mb-1">Organization</label>
                   <input type="text" value={formData.org} onChange={e => setFormData({...formData, org: e.target.value})} className="w-full border rounded-lg p-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Facebook Link</label>
+                  <input type="text" value={formData.facebook} onChange={e => setFormData({...formData, facebook: e.target.value})} className="w-full border rounded-lg p-2" placeholder="https://facebook.com/..." />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Instagram Link</label>
+                  <input type="text" value={formData.instagram} onChange={e => setFormData({...formData, instagram: e.target.value})} className="w-full border rounded-lg p-2" placeholder="https://instagram.com/..." />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4 mt-6 border-t">

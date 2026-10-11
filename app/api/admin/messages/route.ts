@@ -1,48 +1,60 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJwt } from "@/lib/auth";
-import { deleteContact, listRecords, updateContact } from "@/lib/mock-data";
+import { requireAdmin } from "@/lib/admin";
+import type { ContactRow } from "@/types/database";
 
-async function verifyAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_session")?.value;
-  if (!token) return false;
-  const decoded = await verifyJwt(token);
-  return !!decoded;
-}
+const bad = (message: string) => NextResponse.json({ error: message }, { status: 400 });
 
 export async function GET() {
-  if (!(await verifyAdmin()))
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { supabase, error: authError } = await requireAdmin();
+  if (authError) return authError;
 
-  const data = listRecords("ContactForm", "form_id", false);
-  return NextResponse.json({ data }, { status: 200 });
+  const { data, error } = await supabase
+    .from("contact_form")
+    .select("id, fullname, email, subject, message, is_read, created_at")
+    .order("created_at", { ascending: false })
+    .returns<ContactRow[]>();
+  if (error) return NextResponse.json({ error: "Failed to load messages." }, { status: 500 });
+
+  // The admin inbox keys messages by form_id.
+  return NextResponse.json({ data: data.map((row) => ({ ...row, form_id: row.id })) }, { status: 200 });
 }
 
 export async function PUT(req: Request) {
-  if (!(await verifyAdmin()))
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { supabase, error: authError } = await requireAdmin();
+  if (authError) return authError;
 
-  const body = await req.json();
-  const { id, is_read } = body;
-  const data = updateContact(id, is_read);
+  const body = await req.json().catch(() => ({}));
+  const id = Number(body.id);
+  if (!Number.isInteger(id) || typeof body.is_read !== "boolean") return bad("Invalid request");
+
+  const { data, error } = await supabase
+    .from("contact_form")
+    .update({ is_read: body.is_read })
+    .eq("id", id)
+    .select("id, fullname, email, subject, message, is_read, created_at")
+    .maybeSingle<ContactRow>();
+  if (error) return NextResponse.json({ error: "Failed to update message." }, { status: 500 });
   if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ data: [data] }, { status: 200 });
+
+  return NextResponse.json({ data: [{ ...data, form_id: data.id }] }, { status: 200 });
 }
 
 export async function DELETE(req: Request) {
-  if (!(await verifyAdmin()))
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { supabase, error: authError } = await requireAdmin();
+  if (authError) return authError;
 
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("form_id");
+  const params = new URL(req.url).searchParams;
+  const id = Number(params.get("form_id") ?? params.get("id"));
+  if (!Number.isInteger(id)) return bad("Missing ID");
 
-  if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+  const { data, error } = await supabase
+    .from("contact_form")
+    .delete()
+    .eq("id", id)
+    .select("id")
+    .maybeSingle<{ id: number }>();
+  if (error) return NextResponse.json({ error: "Failed to delete message." }, { status: 500 });
+  if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  if (!deleteContact(id))
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json(
-    { message: "Deleted successfully" },
-    { status: 200 },
-  );
+  return NextResponse.json({ message: "Deleted successfully" }, { status: 200 });
 }
