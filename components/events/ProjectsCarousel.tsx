@@ -196,7 +196,8 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                   aria-roledescription="slide"
                   aria-label={`${index + 1} of ${projects.length}`}
                   onClick={() => {
-                    if (!isActive) emblaApi?.scrollTo(index);
+                    if (isActive) openProjectInfo(project);
+                    else emblaApi?.scrollTo(index);
                   }}
                   className={`
                     relative
@@ -212,7 +213,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                     md:basis-[52%]
                     lg:basis-[38%]
                     xl:basis-[34%]
-                    ${isActive ? "" : "cursor-pointer"}
+                    cursor-pointer
                   `}
                 >
                   {/* ==========================
@@ -435,7 +436,10 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                         {isActive && (
                           <button
                             type="button"
-                            onClick={() => openProjectInfo(project)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openProjectInfo(project);
+                            }}
                             className="
                               group
                               flex

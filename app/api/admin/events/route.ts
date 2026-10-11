@@ -12,6 +12,9 @@ function toAdminEvent(row: UpcomingEventRow) {
     title: row.event_name,
     org: row.organization_names,
     ...splitStartsAt(row.starts_at),
+    ...(row.ends_at
+      ? (({ date, time }) => ({ endDate: date, endTime: time }))(splitStartsAt(row.ends_at))
+      : { endDate: "", endTime: "" }),
     location: row.event_location ?? "",
     description: row.event_description,
     link: row.registration_link ?? "",
@@ -26,6 +29,9 @@ function parseEvent(body: Record<string, unknown>) {
   const title = str(body.title);
   const description = str(body.description);
   const startsAt = toStartsAt(str(body.date), str(body.time));
+  const endDate = str(body.endDate);
+  const endTime = str(body.endTime);
+  const endsAt = endDate ? toStartsAt(endDate, endTime || str(body.time)) : null;
   const link = optStr(body.link);
   const facebook = optStr(body.facebook);
   const instagram = optStr(body.instagram);
@@ -35,6 +41,10 @@ function parseEvent(body: Record<string, unknown>) {
   if (!title || title.length > 255) return { error: "Title is required (max 255 characters)." };
   if (!description || description.length > 5000) return { error: "Description is required (max 5000 characters)." };
   if (!startsAt) return { error: "A valid date and time are required." };
+  if (endDate && !endsAt) return { error: "The end date and time are not valid." };
+  if (endsAt && startsAt && new Date(endsAt) < new Date(startsAt)) {
+    return { error: "The event cannot end before it starts." };
+  }
   for (const url of [link, facebook, instagram]) {
     if (url && !isHttpUrl(url)) return { error: "Links must start with http:// or https://." };
   }
@@ -47,6 +57,7 @@ function parseEvent(body: Record<string, unknown>) {
       event_name: title,
       organization_names: str(body.org) || "JPCS",
       starts_at: startsAt,
+      ends_at: endsAt,
       event_location: location,
       event_description: description,
       registration_link: link,

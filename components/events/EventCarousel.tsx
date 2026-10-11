@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import EventCard from "./EventCard";
+import EventDetails from "./EventDetails";
 import { Event } from "@/types/events";
 
 interface EventCarouselProps {
@@ -15,6 +16,7 @@ export default function EventCarousel({
   isMobile,
 }: EventCarouselProps) {
   const [current, setCurrent] = useState(0);
+  const [openEvent, setOpenEvent] = useState<Event | null>(null);
   const [[page, direction], setPage] = useState([0, 0]);
 
   const paginate = (newDirection: number) => {
@@ -76,6 +78,7 @@ export default function EventCarousel({
                 current={current}
                 isMobile={false}
                 onClick={() => setCurrent(i)}
+                onOpen={() => setOpenEvent(event)}
               />
             ))}
           </div>
@@ -126,6 +129,7 @@ export default function EventCarousel({
                 current={index}
                 isMobile={true}
                 onClick={() => {}}
+                onOpen={() => setOpenEvent(events[index])}
               />
             </motion.div>
           </AnimatePresence>
@@ -187,6 +191,12 @@ export default function EventCarousel({
           </svg>
         </button>
       </div>
+
+      <AnimatePresence>
+        {openEvent && (
+          <EventDetails event={openEvent} onClose={() => setOpenEvent(null)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

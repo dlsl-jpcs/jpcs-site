@@ -8,6 +8,7 @@ interface EventCardProps {
   current: number;
   isMobile: boolean;
   onClick: () => void;
+  onOpen: () => void;
 }
 
 export default function EventCard({
@@ -16,6 +17,7 @@ export default function EventCard({
   current,
   isMobile,
   onClick,
+  onOpen,
 }: EventCardProps) {
   const slideRef = useRef<HTMLDivElement>(null);
   const xRef = useRef(0);
@@ -46,6 +48,16 @@ export default function EventCard({
     };
   }, [isMobile]);
 
+  // A tap or click opens the details; a drag/swipe that happens to end on the card does not.
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    const start = pointerStart.current;
+    if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8) return;
+    if (isActive) onOpen();
+    else onClick();
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile || !slideRef.current) return;
 
@@ -75,7 +87,10 @@ export default function EventCard({
       <motion.div
         ref={slideRef}
         className="group relative focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neon rounded-[1.5rem] min-[401px]:rounded-[1.8rem] p-4 min-[401px]:p-6 md:p-8 h-[340px] min-[401px]:h-[380px] md:h-[400px] flex flex-col cursor-pointer overflow-hidden"
-        onClick={onClick}
+        onClick={handleCardClick}
+        onPointerDown={(e) => {
+          pointerStart.current = { x: e.clientX, y: e.clientY };
+        }}
         {...(!isActive && {
           role: "button",
           tabIndex: 0,
@@ -174,12 +189,26 @@ export default function EventCard({
             </p>
           </div>
 
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpen();
+            }}
+            aria-haspopup="dialog"
+            className="mb-3 -mt-1 w-fit rounded-full text-xs min-[401px]:text-sm font-bold text-neon underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon"
+          >
+            View details
+            <span className="sr-only"> for {event.title}</span>
+          </button>
+
           <div className="pt-4 min-[401px]:pt-5 border-t border-white/10 flex items-center justify-between mt-auto gap-2">
             {event.link ? (
             <a
               href={event.link}
               target="_blank"
               rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
               className="inline-flex items-center justify-center bg-neon text-navy hover:bg-neon-hover text-xs min-[401px]:text-sm font-extrabold py-2 min-[401px]:py-2.5 px-4 min-[401px]:px-6 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 shadow-[0_0_20px_rgba(196,255,71,0.2)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Register Now
@@ -195,6 +224,7 @@ export default function EventCard({
                 href={event.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 aria-label={`View ${event.title} on Facebook (opens in new window)`}
                 className="-m-1.5 p-1.5 rounded-full text-white/60 hover:text-neon transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-neon"
               >
@@ -214,6 +244,7 @@ export default function EventCard({
                 href={event.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 aria-label={`View ${event.title} on Instagram (opens in new window)`}
                 className="-m-1.5 p-1.5 rounded-full text-white/60 hover:text-neon transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-neon"
               >

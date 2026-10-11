@@ -9,6 +9,7 @@ interface UpcomingEvent {
   title: string;
   date: string;
   time: string;
+  location: string;
   description: string;
   link: string;
   image: string;
@@ -48,6 +49,7 @@ export default function Hero() {
       title: event.title,
       date: event.date,
       time: event.time,
+      location: event.location,
       description: event.description,
       link: event.link,
       image: event.image,

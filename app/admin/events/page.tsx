@@ -11,7 +11,7 @@ export default function EventsManagement() {
 
   // Form State
   const [formData, setFormData] = useState({
-    title: "", org: "JPCS", date: "", time: "", description: "", link: "", image: "", facebook: "", instagram: ""
+    title: "", org: "JPCS", date: "", time: "", endDate: "", endTime: "", location: "", description: "", link: "", image: "", facebook: "", instagram: ""
   });
 
   const fetchEvents = async () => {
@@ -34,11 +34,11 @@ export default function EventsManagement() {
   const openModal = (event: any = null) => {
     if (event) {
       setEditingEvent(event);
-      setFormData(event);
+      setFormData({ ...formData, ...event });
     } else {
       setEditingEvent(null);
       setFormData({
-        title: "", org: "JPCS", date: "", time: "", description: "", link: "", image: "", facebook: "", instagram: ""
+        title: "", org: "JPCS", date: "", time: "", endDate: "", endTime: "", location: "", description: "", link: "", image: "", facebook: "", instagram: ""
       });
     }
     setIsModalOpen(true);
@@ -110,13 +110,16 @@ export default function EventsManagement() {
               <tr><td colSpan={4} className="p-8 text-center text-gray-500">No events found.</td></tr>
             ) : (
               events.map((evt) => {
-                const eventDate = new Date(`${evt.date} ${evt.time}`);
+                const eventDate = new Date(`${evt.endDate || evt.date} ${evt.endTime || evt.time}`);
                 const isPast = eventDate < new Date();
                 
                 return (
                   <tr key={evt.id} className="border-b hover:bg-gray-50">
                     <td className="p-4 font-medium text-navy">{evt.title}</td>
-                    <td className="p-4 text-gray-600">{evt.date} {evt.time}</td>
+                    <td className="p-4 text-gray-600">
+                      {evt.date} {evt.time}
+                      {evt.endDate && <span className="block text-sm text-gray-500">to {evt.endDate} {evt.endTime}</span>}
+                    </td>
                     <td className="p-4">
                       <span className={`px-3 py-1 text-xs font-bold rounded-full ${isPast ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'}`}>
                         {isPast ? 'Completed' : 'Upcoming'}
@@ -149,12 +152,24 @@ export default function EventsManagement() {
                   <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full border rounded-lg p-2" />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Date (YYYY-MM-DD)</label>
+                  <label className="block text-sm font-semibold mb-1">Start date</label>
                   <input required type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full border rounded-lg p-2" />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Time</label>
+                  <label className="block text-sm font-semibold mb-1">Start time</label>
                   <input required type="time" value={formData.time} onChange={e => setFormData({...formData, time: e.target.value})} className="w-full border rounded-lg p-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">End date <span className="font-normal text-gray-500">(optional, for multi-day events)</span></label>
+                  <input type="date" min={formData.date || undefined} value={formData.endDate} onChange={e => setFormData({...formData, endDate: e.target.value})} className="w-full border rounded-lg p-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">End time <span className="font-normal text-gray-500">(optional)</span></label>
+                  <input type="time" value={formData.endTime} onChange={e => setFormData({...formData, endTime: e.target.value})} className="w-full border rounded-lg p-2" />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-semibold mb-1">Location</label>
+                  <input type="text" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full border rounded-lg p-2" placeholder="e.g. DLSL Auditorium" />
                 </div>
                 <div className="col-span-2">
                   <label className="block text-sm font-semibold mb-1">Description</label>

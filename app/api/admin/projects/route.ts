@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireAdmin } from "@/lib/admin";
-import { toProject } from "@/lib/projects";
+import { MAX_GALLERY_IMAGES, toProject } from "@/lib/projects";
 import { isAllowedImageUrl, isHttpUrl, mediaPathFromUrl, optStr, str } from "@/lib/validation";
 import type { ProjectImageRow, ProjectRow } from "@/types/database";
 
@@ -15,6 +15,9 @@ function parseProject(body: Record<string, unknown>) {
   const facebook = optStr(body.facebook);
   const instagram = optStr(body.instagram);
   const image = optStr(body.image);
+  const gallery = Array.isArray(body.gallery)
+    ? body.gallery.map(str).filter((u) => u !== "")
+    : [];
 
   if (!name || name.length > 255) return { error: "Project name is required (max 255 characters)." };
   if (!description || description.length > 5000) return { error: "Description is required (max 5000 characters)." };
@@ -25,9 +28,19 @@ function parseProject(body: Record<string, unknown>) {
   if (image && !isAllowedImageUrl(image)) {
     return { error: "Image must be uploaded to storage or be a site-relative path like /image.png." };
   }
+  if (gallery.length > MAX_GALLERY_IMAGES) {
+    return { error: `A project can have at most ${MAX_GALLERY_IMAGES} extra photos besides its cover.` };
+  }
+  if (gallery.length > 0 && !image) {
+    return { error: "Add a cover image before adding extra photos." };
+  }
+  if (gallery.some((u) => !isAllowedImageUrl(u))) {
+    return { error: "Photos must be uploaded to storage or be a site-relative path like /image.png." };
+  }
 
   return {
     image,
+    gallery,
     row: {
       project_name: name,
       project_description: description,
@@ -39,40 +52,50 @@ function parseProject(body: Record<string, unknown>) {
   };
 }
 
-/** Keeps the project's cover image (lowest display_order) in sync with the single "image" form field. */
-async function syncCover(supabase: SupabaseClient, projectId: number, image: string | null, alt: string) {
+/**
+ * Rewrites a project's photos from the form: the cover first (display_order 1),
+ * then up to MAX_GALLERY_IMAGES extra photos. Stored files that are no longer used are deleted.
+ */
+async function syncImages(
+  supabase: SupabaseClient,
+  projectId: number,
+  image: string | null,
+  gallery: string[],
+  alt: string,
+) {
   const { data: existing, error } = await supabase
     .from("projects_and_events_images")
-    .select("id, image_url, display_order")
+    .select("image_url")
     .eq("project_id", projectId)
-    .order("display_order", { ascending: true })
-    .limit(1)
-    .returns<Pick<ProjectImageRow, "id" | "image_url" | "display_order">[]>();
+    .returns<Pick<ProjectImageRow, "image_url">[]>();
   if (error) return error;
 
-  const cover = existing[0];
-  if (image) {
-    const result = cover
-      ? await supabase
-          .from("projects_and_events_images")
-          .update({ image_url: image, alt_text: alt })
-          .eq("id", cover.id)
-      : await supabase
-          .from("projects_and_events_images")
-          .insert({ project_id: projectId, image_url: image, alt_text: alt, display_order: 1 });
-    if (result.error) return result.error;
-  } else if (cover) {
-    const { error: delError } = await supabase
-      .from("projects_and_events_images")
-      .delete()
-      .eq("id", cover.id);
-    if (delError) return delError;
+  const urls = image ? [image, ...gallery] : [];
+
+  const { error: delError } = await supabase
+    .from("projects_and_events_images")
+    .delete()
+    .eq("project_id", projectId);
+  if (delError) return delError;
+
+  if (urls.length > 0) {
+    const { error: insError } = await supabase.from("projects_and_events_images").insert(
+      urls.map((url, i) => ({
+        project_id: projectId,
+        image_url: url,
+        alt_text: i === 0 ? alt : `${alt} photo ${i + 1}`,
+        display_order: i + 1,
+      })),
+    );
+    if (insError) return insError;
   }
 
-  if (cover && cover.image_url !== image) {
-    const oldPath = mediaPathFromUrl(cover.image_url);
-    if (oldPath) await supabase.storage.from("media").remove([oldPath]);
-  }
+  const removed = existing
+    .map((i) => i.image_url)
+    .filter((u) => !urls.includes(u))
+    .map((u) => mediaPathFromUrl(u))
+    .filter((p): p is string => !!p);
+  if (removed.length) await supabase.storage.from("media").remove(removed);
   return null;
 }
 
@@ -104,7 +127,7 @@ export async function POST(req: Request) {
     .single<{ id: number }>();
   if (error) return NextResponse.json({ error: "Failed to save project." }, { status: 500 });
 
-  const imageError = await syncCover(supabase, data.id, parsed.image ?? null, parsed.row.project_name);
+  const imageError = await syncImages(supabase, data.id, parsed.image ?? null, parsed.gallery ?? [], parsed.row.project_name);
   if (imageError) {
     // Don't leave a half-created project behind.
     await supabase.from("projects_and_events").delete().eq("id", data.id);
@@ -139,7 +162,7 @@ export async function PUT(req: Request) {
   if (error) return NextResponse.json({ error: "Failed to save project." }, { status: 500 });
   if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const imageError = await syncCover(supabase, id, parsed.image ?? null, parsed.row.project_name);
+  const imageError = await syncImages(supabase, id, parsed.image ?? null, parsed.gallery ?? [], parsed.row.project_name);
   if (imageError) return NextResponse.json({ error: "Failed to save project image." }, { status: 500 });
 
   const { data: full } = await supabase

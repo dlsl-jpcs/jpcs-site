@@ -52,6 +52,7 @@ export default function ProjectsEvents() {
     date: project.date,
     facebook: project.facebook,
     instagram: project.instagram,
+    gallery: project.gallery ?? [],
     image:
       image.find((img) => img.projects_and_events_id === project.id)
         ?.image_url || "",

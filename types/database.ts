@@ -3,6 +3,7 @@ export interface UpcomingEventRow {
   id: number;
   event_name: string;
   starts_at: string;
+  ends_at: string | null;
   event_location: string | null;
   event_description: string;
   registration_link: string | null;

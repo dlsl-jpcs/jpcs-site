@@ -7,4 +7,6 @@ export interface Project {
   facebook: string;
   instagram: string;
   image: string;
+  /** Up to 4 extra photos shown in the details modal (the cover is not repeated). */
+  gallery?: string[];
 }

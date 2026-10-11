@@ -11,7 +11,7 @@ export default function ProjectsManagement() {
 
   // Form State
   const [formData, setFormData] = useState({
-    name: "", org: "JPCS", date: "", description: "", facebook: "", instagram: "", image: ""
+    name: "", org: "JPCS", date: "", description: "", facebook: "", instagram: "", image: "", gallery: [] as string[]
   });
 
   const fetchProjects = async () => {
@@ -34,11 +34,11 @@ export default function ProjectsManagement() {
   const openModal = (project: any = null) => {
     if (project) {
       setEditingProject(project);
-      setFormData(project);
+      setFormData({ ...formData, ...project, gallery: project.gallery ?? [] });
     } else {
       setEditingProject(null);
       setFormData({
-        name: "", org: "JPCS", date: "", description: "", facebook: "", instagram: "", image: ""
+        name: "", org: "JPCS", date: "", description: "", facebook: "", instagram: "", image: "", gallery: [] as string[]
       });
     }
     setIsModalOpen(true);
@@ -156,6 +156,42 @@ export default function ProjectsManagement() {
                   <div className="flex gap-2">
                     <input type="text" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Upload an image or paste a storage URL" />
                     <ImageUploadButton folder="projects" onUploaded={(url) => setFormData({...formData, image: url})} />
+                  </div>
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-semibold mb-1">
+                    More photos <span className="font-normal text-gray-500">(up to 4, shown in the project details; the image above stays on the card)</span>
+                  </label>
+                  <div className="space-y-2">
+                    {formData.gallery.map((url, i) => (
+                      <div key={i} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={url}
+                          onChange={e => setFormData({...formData, gallery: formData.gallery.map((u, j) => (j === i ? e.target.value : u))})}
+                          className="w-full border rounded-lg p-2"
+                          placeholder="Upload an image or paste a storage URL"
+                        />
+                        <ImageUploadButton folder="projects" onUploaded={(u) => setFormData({...formData, gallery: formData.gallery.map((x, j) => (j === i ? u : x))})} />
+                        <button
+                          type="button"
+                          onClick={() => setFormData({...formData, gallery: formData.gallery.filter((_, j) => j !== i)})}
+                          className="shrink-0 px-3 py-2 border rounded-lg text-red-600 hover:bg-red-50"
+                          aria-label={`Remove photo ${i + 1}`}
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    ))}
+                    {formData.gallery.length < 4 && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData({...formData, gallery: [...formData.gallery, ""]})}
+                        className="px-3 py-2 border rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-gray-50"
+                      >
+                        <Plus size={16} /> Add photo ({formData.gallery.length}/4)
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div>
