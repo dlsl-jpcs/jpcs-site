@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -52,110 +52,154 @@ export default function GalleryContainer({
   const mobileImagesPerPage = 10;
   const imagesPerPage = desktopImagesPerPage;
 
+  const gridTopRef = useRef<HTMLDivElement>(null);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    gridTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const totalPages = Math.ceil(images.length / imagesPerPage);
   const startIndex = (currentPage - 1) * imagesPerPage;
   const currentImages = images.slice(startIndex, startIndex + imagesPerPage);
 
   return (
     <div
+      ref={gridTopRef}
       className="
         bg-[#0D172F]
         p-4 sm:p-6 lg:p-12
         flex flex-col
         w-full
         relative
-        bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]
-        bg-[size:4rem_4rem]
-        [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_60%,transparent_100%)]
+        scroll-mt-4
       "
     >
+      <div
+        aria-hidden="true"
+        className="
+          absolute inset-0 pointer-events-none
+          bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]
+          bg-[size:4rem_4rem]
+          [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_60%,transparent_100%)]
+        "
+      />
+
       {isLoading && (
-        <div className="flex justify-center items-center py-20">
+        <div role="status" className="relative flex justify-center items-center py-20">
           <span className="text-white/60 text-sm">Loading gallery…</span>
         </div>
       )}
 
       {!isLoading && error && (
-        <div className="flex justify-center items-center py-20">
+        <div role="alert" className="relative flex justify-center items-center py-20">
           <span className="text-red-400 text-sm">{error}</span>
         </div>
       )}
 
       {!isLoading && !error && images.length === 0 && (
-        <div className="flex justify-center items-center py-20">
-          <span className="text-white/60 text-sm">No images found.</span>
+        <div className="relative flex justify-center items-center py-20">
+          <span className="text-white/60 text-sm">No photos yet. Check back soon!</span>
         </div>
       )}
 
       {!isLoading && !error && images.length > 0 && (
-        <div
+        <ul
           className="
+            relative
             grid
             grid-cols-2
             sm:grid-cols-3
             md:grid-cols-4
             xl:grid-cols-5
-            gap-2
+            gap-3
             sm:gap-4
           "
         >
           {currentImages.map((image, index) => (
-            <motion.div
-              initial={{ opacity: 0, y: -30 }}
+            <motion.li
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: (index % 5) * 0.05 }}
               key={image.id}
-              className="
-                w-full
-                aspect-square
-                p-1
-                overflow-hidden
-                rounded-[10px]
-                cursor-pointer
-              "
+              className="list-none"
             >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                width={300}
-                height={300}
+              <button
+                type="button"
                 onClick={() => setSelectedIndex(startIndex + index)}
+                aria-label={`View photo: ${image.alt}`}
                 className="
+                  group
+                  relative
+                  block
                   w-full
-                  h-full
-                  object-cover
-                  hover:scale-105
-                  transition-transform
+                  aspect-[4/3]
+                  overflow-hidden
+                  rounded-xl
+                  bg-[#111B33]
+                  ring-1 ring-white/10
+                  transition-shadow
                   duration-300
-                  rounded-[10px]
+                  hover:ring-neon/50
+                  focus-visible:outline-2
+                  focus-visible:outline-offset-2
+                  focus-visible:outline-neon
+                  cursor-pointer
                 "
-              />
-            </motion.div>
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                  className="
+                    object-cover
+                    transition-transform
+                    duration-300
+                    group-hover:scale-105
+                    motion-reduce:transition-none
+                    motion-reduce:group-hover:scale-100
+                  "
+                />
+              </button>
+            </motion.li>
           ))}
-        </div>
+        </ul>
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-3 sm:gap-6 mt-6 sm:mt-10 mb-10">
+        <nav
+          aria-label="Gallery pages"
+          className="relative flex justify-center items-center gap-3 sm:gap-6 mt-6 sm:mt-10 mb-10"
+        >
           <button
-            onClick={() => setCurrentPage((page) => page - 1)}
+            type="button"
+            onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
+            aria-label="Previous page"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white/10"
           >
             <NavigateBeforeIcon />
           </button>
 
-          <span className="text-white font-medium text-sm sm:text-base">
+          <span
+            className="text-white font-medium text-sm sm:text-base tabular-nums"
+            aria-live="polite"
+          >
             {currentPage} / {totalPages}
           </span>
 
           <button
-            onClick={() => setCurrentPage((page) => page + 1)}
+            type="button"
+            onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
+            aria-label="Next page"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white/10"
           >
             <NavigateNextIcon />
           </button>
-        </div>
+        </nav>
       )}
 
       <GalleryModal

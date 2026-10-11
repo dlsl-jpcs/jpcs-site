@@ -6,10 +6,10 @@ export async function GET() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("gallery_main")
-    .select("id, image_url, display_order")
+    .select("id, image_url, alt_text, display_order")
     .order("display_order", { ascending: true })
     .order("id", { ascending: true })
-    .returns<Pick<GalleryRow, "id" | "image_url" | "display_order">[]>();
+    .returns<Pick<GalleryRow, "id" | "image_url" | "alt_text" | "display_order">[]>();
 
   if (error) {
     console.error("gallery_main query failed:", error.message);

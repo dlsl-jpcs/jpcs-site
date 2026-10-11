@@ -74,8 +74,19 @@ export default function EventCard({
     >
       <motion.div
         ref={slideRef}
-        className="group relative rounded-[1.5rem] min-[401px]:rounded-[1.8rem] p-4 min-[401px]:p-6 md:p-8 h-[340px] min-[401px]:h-[380px] md:h-[400px] flex flex-col cursor-pointer overflow-hidden"
+        className="group relative focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neon rounded-[1.5rem] min-[401px]:rounded-[1.8rem] p-4 min-[401px]:p-6 md:p-8 h-[340px] min-[401px]:h-[380px] md:h-[400px] flex flex-col cursor-pointer overflow-hidden"
         onClick={onClick}
+        {...(!isActive && {
+          role: "button",
+          tabIndex: 0,
+          "aria-label": `Show ${event.title}`,
+          onKeyDown: (e: React.KeyboardEvent) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onClick();
+            }
+          },
+        })}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         animate={{ scale: isActive ? 1 : 0.9, rotateX: isActive ? 0 : 4 }}
@@ -103,39 +114,62 @@ export default function EventCard({
           <div className="absolute -top-24 -right-24 w-48 h-48 bg-neon/20 rounded-2xl blur-[60px] pointer-events-none" />
         )}
 
-        <motion.div className="flex flex-col flex-1 min-h-0 relative z-10">
+        <motion.div
+          className="flex flex-col flex-1 min-h-0 relative z-10"
+          inert={!isActive}
+        >
           <div className="mb-3 min-[401px]:mb-4">
+            {event.org && (
+              <p className="mb-1 truncate text-xs font-medium text-white/60">
+                {event.org}
+              </p>
+            )}
             <h3 className="text-xl min-[401px]:text-2xl md:text-3xl font-extrabold text-white leading-tight line-clamp-2">
               {event.title}
             </h3>
           </div>
 
-          <div className="mb-3 min-[401px]:mb-4 flex items-center gap-2 min-[401px]:gap-3 text-white/70">
-            <div className="flex flex-col">
-              <p className="text-sm font-bold text-white flex items-center gap-2">
+          <div className="mb-3 min-[401px]:mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+            <p className="text-sm font-bold text-white flex items-center gap-2">
+              <svg
+                className="w-4 h-4 shrink-0 text-neon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2.5"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                ></path>
+              </svg>
+              {event.date}
+            </p>
+            {event.time && (
+              <p className="text-sm font-medium text-white/70 flex items-center gap-2">
                 <svg
-                  className="w-4 h-4 text-neon"
+                  className="w-4 h-4 shrink-0 text-neon"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="2.5"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-                {event.date}
-              </p>
-              <p className="text-xs font-medium text-white/50 mt-1 ml-6">
                 {event.time}
               </p>
-            </div>
+            )}
           </div>
 
-          <div className="flex-1 mb-4 min-[401px]:mb-6 min-h-0">
-            <p className="text-white/60 text-sm leading-relaxed font-medium line-clamp-3">
+          <div className="flex-1 mb-4 min-[401px]:mb-5 min-h-0 overflow-hidden">
+            <p className="text-white/70 text-sm leading-relaxed font-medium line-clamp-3">
               {event.description}
             </p>
           </div>
@@ -146,22 +180,23 @@ export default function EventCard({
               href={event.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-neon text-navy hover:bg-neon-hover text-xs min-[401px]:text-sm font-extrabold py-2 min-[401px]:py-2.5 px-4 min-[401px]:px-6 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 shadow-[0_0_20px_rgba(196,255,71,0.2)]"
+              className="inline-flex items-center justify-center bg-neon text-navy hover:bg-neon-hover text-xs min-[401px]:text-sm font-extrabold py-2 min-[401px]:py-2.5 px-4 min-[401px]:px-6 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 shadow-[0_0_20px_rgba(196,255,71,0.2)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Register Now
+              <span className="sr-only"> for {event.title} (opens in new window)</span>
             </a>
             ) : (
               <span />
             )}
 
-            <div className="flex items-center gap-3 min-[401px]:gap-4">
+            <div className="flex items-center gap-3 min-[401px]:gap-4 ml-auto">
               {event.facebook && (
               <a
                 href={event.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`View ${event.title} on Facebook (opens in new window)`}
-                className="text-white/40 hover:text-neon transition-colors duration-300"
+                className="-m-1.5 p-1.5 rounded-full text-white/60 hover:text-neon transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-neon"
               >
                 <svg
                   className="w-5 h-5"
@@ -180,7 +215,7 @@ export default function EventCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`View ${event.title} on Instagram (opens in new window)`}
-                className="text-white/40 hover:text-neon transition-colors duration-300"
+                className="-m-1.5 p-1.5 rounded-full text-white/60 hover:text-neon transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-neon"
               >
                 <svg
                   className="w-5 h-5"

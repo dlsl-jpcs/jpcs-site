@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
+import { AnimatePresence } from "framer-motion";
 
 import { Project } from "@/types/projects";
 import EventInfo from "../EventInfo";
@@ -67,6 +68,17 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const scrollNext = useCallback(() => {
     emblaApi?.scrollNext();
   }, [emblaApi]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (showPopup) return;
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scrollPrev();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scrollNext();
+    }
+  };
 
   const onSelect = useCallback((api: NonNullable<typeof emblaApi>) => {
     setSelectedIndex(api.selectedScrollSnap());
@@ -137,7 +149,13 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           CAROUSEL
       ====================================================== */}
 
-      <div className="w-full overflow-hidden">
+      <div
+        className="w-full overflow-hidden"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Projects"
+        onKeyDown={handleKeyDown}
+      >
         {/* Embla viewport */}
 
         <div
@@ -174,11 +192,17 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
               return (
                 <div
                   key={project.id}
-                  className="
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`${index + 1} of ${projects.length}`}
+                  onClick={() => {
+                    if (!isActive) emblaApi?.scrollTo(index);
+                  }}
+                  className={`
                     relative
                     shrink-0
                     grow-0
-                    w-[50px]
+                    min-w-0
 
                     basis-[78%]
                     px-2
@@ -188,7 +212,8 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                     md:basis-[52%]
                     lg:basis-[38%]
                     xl:basis-[34%]
-                  "
+                    ${isActive ? "" : "cursor-pointer"}
+                  `}
                 >
                   {/* ==========================
                       CARD
@@ -259,6 +284,38 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                       priority={index === 0}
                     />
 
+                    {project.date && (
+                      <p
+                        className="
+                          absolute
+                          right-3
+                          top-3
+                          z-10
+
+                          max-w-[70%]
+                          truncate
+
+                          rounded-full
+
+                          bg-[#0D1522]/80
+                          px-3
+                          py-1
+
+                          text-[11px]
+                          font-medium
+                          text-gray-200
+
+                          backdrop-blur-sm
+
+                          sm:right-4
+                          sm:top-4
+                          sm:text-xs
+                        "
+                      >
+                        {project.date}
+                      </p>
+                    )}
+
                     {/* ==========================
                         IMAGE GRADIENT
                     =========================== */}
@@ -325,6 +382,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                         <h3
                           className="
                             mb-1
+                            line-clamp-2
 
                             text-lg
                             font-semibold
@@ -342,7 +400,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                           className="
                             line-clamp-3
 
-                            text-xs
+                            text-[13px]
                             font-medium
                             leading-relaxed
 
@@ -385,11 +443,20 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
 
                               text-[#9CA3AF]
 
+                              rounded-full
+                              py-1
+                              pr-3
+
                               transition-colors
                               duration-200
 
                               hover:text-white
+                              focus-visible:outline-2
+                              focus-visible:outline-offset-2
+                              focus-visible:outline-neon
                             "
+                            aria-haspopup="dialog"
+                            aria-label={`More info about ${project.name}`}
                           >
                             {/* Arrow */}
 
@@ -421,13 +488,13 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
                               "
                             >
                               <ArrowForwardIcon
-                                fontSize={isMobile ? "small" : "small"}
+                                fontSize="small"
                               />
                             </div>
 
                             <span
                               className="
-                                text-[10px]
+                                text-[11px]
                                 font-medium
                                 tracking-wide
 
@@ -472,35 +539,42 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
             disabled={!canScrollPrev}
             aria-label="Previous project"
             className="
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+
               rounded-full
+              bg-[#27334C]
 
               transition-opacity
               duration-200
+
+              hover:bg-[#33415f]
+              focus-visible:outline-2
+              focus-visible:outline-offset-2
+              focus-visible:outline-neon
 
               disabled:cursor-not-allowed
               disabled:opacity-30
             "
           >
-            <NavigateBeforeIcon
-              fontSize={isMobile ? "small" : "medium"}
-              className="
-                rounded-full
-                bg-[#27334C]
-                p-0.5
-              "
-            />
+            <NavigateBeforeIcon fontSize="small" />
           </button>
 
           {/* Current slide */}
 
           <p
+            aria-live="polite"
             className="
               mx-2
-              min-w-[24px]
+              min-w-[56px]
 
               text-center
               text-xs
               font-medium
+              tabular-nums
               text-white
 
               sm:mx-3
@@ -508,6 +582,10 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
             "
           >
             {String(selectedIndex + 1).padStart(2, "0")}
+            <span className="text-white/50">
+              {" / "}
+              {String(projects.length).padStart(2, "0")}
+            </span>
           </p>
 
           {/* Next */}
@@ -518,23 +596,28 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
             disabled={!canScrollNext}
             aria-label="Next project"
             className="
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+
               rounded-full
+              bg-[#27334C]
 
               transition-opacity
               duration-200
+
+              hover:bg-[#33415f]
+              focus-visible:outline-2
+              focus-visible:outline-offset-2
+              focus-visible:outline-neon
 
               disabled:cursor-not-allowed
               disabled:opacity-30
             "
           >
-            <NavigateNextIcon
-              fontSize={isMobile ? "small" : "medium"}
-              className="
-                rounded-full
-                bg-[#27334C]
-                p-0.5
-              "
-            />
+            <NavigateNextIcon fontSize="small" />
           </button>
         </div>
       </div>
@@ -543,9 +626,11 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           MODAL
       ====================================================== */}
 
-      {showPopup && selectedProject && (
-        <EventInfo project={selectedProject} onClose={closeProjectInfo} />
-      )}
+      <AnimatePresence>
+        {showPopup && selectedProject && (
+          <EventInfo project={selectedProject} onClose={closeProjectInfo} />
+        )}
+      </AnimatePresence>
     </>
   );
 }

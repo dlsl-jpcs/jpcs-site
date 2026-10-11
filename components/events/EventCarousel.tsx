@@ -50,7 +50,11 @@ export default function EventCarousel({
   };
  */
   return (
-    <>
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Upcoming events"
+    >
       {/* Desktop*/}
       {!isMobile && (
         <div
@@ -132,11 +136,12 @@ export default function EventCarousel({
       <div className="flex items-center justify-center gap-4 mt-4 mb-5 md:mb-2">
         <button
           onClick={handlePrevious}
-          className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all duration-300"
-          aria-label="Previous card"
+          className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2.5 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon"
+          aria-label="Previous event"
         >
           <svg
             className="w-4 h-4 text-foreground"
+            aria-hidden="true"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -150,17 +155,25 @@ export default function EventCarousel({
           </svg>
         </button>
 
-        <span className="text-foreground/60 text-sm">
+        <span
+          className="text-foreground/70 text-sm tabular-nums"
+          aria-live="polite"
+        >
           {(index + 1).toString().padStart(2, "0")}
+          <span className="text-foreground/50">
+            {" / "}
+            {events.length.toString().padStart(2, "0")}
+          </span>
         </span>
 
         <button
           onClick={handleNext}
-          className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2 transition-all duration-300"
-          aria-label="Next card"
+          className="bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-2.5 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon"
+          aria-label="Next event"
         >
           <svg
             className="w-4 h-4 text-foreground"
+            aria-hidden="true"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -174,6 +187,6 @@ export default function EventCarousel({
           </svg>
         </button>
       </div>
-    </>
+    </div>
   );
 }

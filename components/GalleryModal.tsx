@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useModalA11y } from "@/lib/useModalA11y";
 import CloseIcon from "@mui/icons-material/Close";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
@@ -38,6 +39,7 @@ export default function GalleryModal({
   const [mounted, setMounted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const dialogRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
@@ -45,16 +47,8 @@ export default function GalleryModal({
     setMounted(true);
   }, []);
 
-  // Lock body scroll while modal is open
-  useEffect(() => {
-    if (isOpen) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = originalOverflow;
-      };
-    }
-  }, [isOpen]);
+  // Scroll lock, focus trap and focus restore
+  useModalA11y(isOpen && mounted, dialogRef);
 
   // Reset expanded state whenever the modal closes
   useEffect(() => {
@@ -126,7 +120,7 @@ export default function GalleryModal({
             fixed inset-0
             z-[9999]
             flex items-center justify-center
-            bg-black/70
+            bg-black/80
             p-0 sm:p-8
           "
         >
@@ -137,6 +131,11 @@ export default function GalleryModal({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Photo viewer, image ${currentIndex + 1} of ${images.length}`}
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
@@ -145,6 +144,7 @@ export default function GalleryModal({
               bg-[#111827]
               overflow-hidden
               shadow-2xl
+              outline-none
               w-full h-full
               rounded-none
               sm:h-auto
@@ -158,17 +158,19 @@ export default function GalleryModal({
             {/* Close button */}
             <button
               onClick={onClose}
+              data-autofocus
               className="
-                absolute top-3 left-3 sm:top-4 sm:left-4
+                absolute top-3 right-3 sm:top-4 sm:right-4
                 flex items-center justify-center
-                w-8 h-8 sm:w-9 sm:h-9
+                w-10 h-10
                 rounded-full
-                bg-black/40 hover:bg-black/60
+                bg-black/50 hover:bg-black/70
                 text-white
                 transition-colors
                 z-10
+                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
               "
-              aria-label="Close"
+              aria-label="Close photo viewer"
             >
               <CloseIcon fontSize="small" />
             </button>
@@ -178,14 +180,15 @@ export default function GalleryModal({
               onClick={() => setIsExpanded((prev) => !prev)}
               className="
                 hidden sm:flex
-                absolute top-4 right-4
+                absolute top-4 right-16
                 items-center justify-center
-                w-9 h-9
+                w-10 h-10
                 rounded-full
-                bg-black/40 hover:bg-black/60
+                bg-black/50 hover:bg-black/70
                 text-white
                 transition-colors
                 z-10
+                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
               "
               aria-label={isExpanded ? "Exit full screen" : "Full screen"}
             >
@@ -196,17 +199,17 @@ export default function GalleryModal({
               )}
             </button>
 
-            {/* Image counter (mobile only, replaces expand button spot) */}
+            {/* Image counter */}
             <div
+              aria-hidden="true"
               className="
-                sm:hidden
-                absolute top-3 right-3
+                absolute top-3 left-3 sm:top-4 sm:left-4
                 flex items-center justify-center
-                px-2.5 py-1
+                px-3 h-8 sm:h-10
                 rounded-full
-                bg-black/40
+                bg-black/50
                 text-white
-                text-xs font-medium
+                text-xs sm:text-sm font-medium tabular-nums
                 z-10
               "
             >
@@ -214,16 +217,24 @@ export default function GalleryModal({
             </div>
 
             {/* Image */}
-            <div className="relative w-full h-full flex items-center justify-center">
+            <motion.div
+              key={currentImage.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full h-full flex items-center justify-center"
+            >
               <Image
                 src={currentImage.src}
                 alt={currentImage.alt}
                 fill
                 className="object-contain"
-                sizes="100vw"
+                sizes={
+                  isExpanded ? "100vw" : "(min-width: 640px) 768px, 100vw"
+                }
                 priority
               />
-            </div>
+            </motion.div>
 
             {/* Nav arrows — always visible on mobile (inside card), and inside card when expanded on desktop */}
             <button
@@ -241,6 +252,7 @@ export default function GalleryModal({
                 text-white
                 transition-colors
                 z-10
+                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
               "
               aria-label="Previous image"
             >
@@ -261,6 +273,7 @@ export default function GalleryModal({
                 text-white
                 transition-colors
                 z-10
+                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
               "
               aria-label="Next image"
             >
@@ -284,6 +297,7 @@ export default function GalleryModal({
                     text-white
                     transition-colors
                     z-10
+                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
                   "
                   aria-label="Previous image"
                 >
@@ -304,6 +318,7 @@ export default function GalleryModal({
                     text-white
                     transition-colors
                     z-10
+                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
                   "
                   aria-label="Next image"
                 >
@@ -331,6 +346,7 @@ export default function GalleryModal({
                   text-white
                   transition-colors
                   z-10
+                  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
                 "
                 aria-label="Previous image"
               >
@@ -351,6 +367,7 @@ export default function GalleryModal({
                   text-white
                   transition-colors
                   z-10
+                  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon
                 "
                 aria-label="Next image"
               >
