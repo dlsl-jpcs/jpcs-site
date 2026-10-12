@@ -1,5 +1,7 @@
 "use client";
 
+// toggle once gallery ready
+
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -28,7 +30,7 @@ const Navbar = () => {
     { name: "Home", link: "#home" },
     { name: "About", link: "#about" },
     { name: "Projects", link: "#projects" },
-    { name: "Gallery", link: "#gallery" },
+    //{ name: "Gallery", link: "#gallery" },
     { name: "Officers", link: "#officers" },
   ];
 
@@ -167,12 +169,14 @@ const Navbar = () => {
               clickCountRef.current += 1;
               if (clickCountRef.current === 3) {
                 clickCountRef.current = 0;
-                if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+                if (clickTimeoutRef.current)
+                  clearTimeout(clickTimeoutRef.current);
                 router.push("/admin/login");
                 return;
               }
-              
-              if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+
+              if (clickTimeoutRef.current)
+                clearTimeout(clickTimeoutRef.current);
               clickTimeoutRef.current = setTimeout(() => {
                 clickCountRef.current = 0;
                 scrollToSection("#home");

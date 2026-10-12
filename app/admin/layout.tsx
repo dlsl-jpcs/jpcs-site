@@ -48,11 +48,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             icon={<FolderKanban size={20} />}
             label="Projects"
           />
-          <NavItem
+          {/* <NavItem
             href="/admin/gallery"
             icon={<ImageIcon size={20} />}
             label="Gallery"
-          />
+          /> */}
           <NavItem
             href="/admin/messages"
             icon={<Mail size={20} />}
