@@ -6,7 +6,7 @@ import LazySections from "../components/LazySections";
 import Navbar from "@/components/Navbar";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import ProjectsEvents from "@/components/ProjectsEvents";
-import Gallery from "@/components/Gallery";
+// import Gallery from "@/components/Gallery"; // toggle once gallery ready
 import HashScrollHandler from "@/components/HashScrollHandler";
 import Officers from "@/components/officers/Officers";
 
@@ -20,7 +20,7 @@ export default async function Home() {
       <Banner />
       <LazySections />
       <ProjectsEvents />
-      <Gallery />
+      {/* <Gallery /> */}
       <Officers />
       <Contact />
       <ClientFooter />
