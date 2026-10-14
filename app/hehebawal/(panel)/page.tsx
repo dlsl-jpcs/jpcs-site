@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { CalendarDays, CalendarPlus, FolderKanban, FolderPlus, Mail } from "lucide-react";
+import { CalendarDays, CalendarPlus, FolderKanban, FolderPlus, Mail, Users } from "lucide-react";
 import { PageHeader, panelClass } from "@/components/admin/ui";
 import { ADMIN_PATH } from "@/lib/adminPath";
 import { eventStatus, formatEventRange, toStartsAt } from "@/lib/site";
@@ -12,6 +12,7 @@ type MessageLite = { form_id: number; fullname: string; subject: string; is_read
 type Overview = {
   events: EventLite[];
   projects: number;
+  officers: number;
   messages: MessageLite[];
 };
 
@@ -30,9 +31,10 @@ export default function AdminOverview() {
       getJson("/api/admin/events"),
       getJson("/api/admin/projects"),
       getJson("/api/admin/messages"),
+      getJson("/api/admin/officers"),
     ])
-      .then(([events, projects, messages]) =>
-        setData({ events, projects: projects.length, messages }),
+      .then(([events, projects, messages, officers]) =>
+        setData({ events, projects: projects.length, officers: officers.length, messages }),
       )
       .catch(() => setFailed(true));
   }, []);
@@ -57,7 +59,7 @@ export default function AdminOverview() {
         </p>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           href={`${ADMIN_PATH}/events`}
           label="Upcoming events"
@@ -73,6 +75,13 @@ export default function AdminOverview() {
           value={data ? data.projects : null}
           icon={<FolderKanban size={18} />}
           note={data ? "In the Projects carousel" : ""}
+        />
+        <StatCard
+          href={`${ADMIN_PATH}/officers`}
+          label="Officers"
+          value={data ? data.officers : null}
+          icon={<Users size={18} />}
+          note={data ? "On the home page" : ""}
         />
         <StatCard
           href={`${ADMIN_PATH}/messages`}

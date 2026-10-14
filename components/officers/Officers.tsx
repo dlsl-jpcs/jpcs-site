@@ -6,65 +6,32 @@ import {
   useMotionValue,
   animate,
 } from "framer-motion";
-import officersData from "@/data/officers.json";
+import { OFFICER_CATEGORIES, type Officer, type OfficerCategory } from "@/lib/officers";
 import OfficerCard from "./OfficerCard";
 
-type Category = "Executive" | "Project Heads" | "Officers" | "Reps";
+type Category = OfficerCategory;
 
-const SECTIONS: {
-  key: Category;
-  label: string;
-  short: string;
-  description: string;
-}[] = [
-  {
-    key: "Executive",
-    label: "Executive Officers",
-    short: "Executive",
-    description: "Leading the organization",
-  },
-  {
-    key: "Project Heads",
-    label: "Project Heads",
-    short: "Proj. Heads",
-    description: "Driving our initiatives",
-  },
-  {
-    key: "Officers",
-    label: "Officers",
-    short: "Officers",
-    description: "Supporting our operations",
-  },
-  {
-    key: "Reps",
-    label: "Representatives",
-    short: "Reps",
-    description: "Representing our members",
-  },
-];
-
-function getCategory(position: string): Category {
-  if (
-    /president|vice president|secretary|finance|auditor|p\.r\.o/i.test(position)
-  )
-    return "Executive";
-  if (/project head/i.test(position)) return "Project Heads";
-  if (/rep/i.test(position)) return "Reps";
-  return "Officers";
-}
+const SECTIONS = OFFICER_CATEGORIES.map((c) => ({
+  key: c.value,
+  label: c.label,
+  short: c.short,
+  description: c.description,
+}));
 
 const CARD_W = 300;
 const CARD_GAP = 24; // Increased gap for breathability
 const STEP = CARD_W + CARD_GAP;
 
 export default function Officers() {
-  const [active, setActive] = useState<Category>("Executive");
+  // null until the first response, so the empty message doesn't flash while loading.
+  const [allOfficers, setAllOfficers] = useState<Officer[] | null>(null);
+  const [activeChoice, setActive] = useState<Category>("executive");
   const [canScroll, setCanScroll] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
 
-  const [open, setOpen] = useState<Category | null>("Executive");
+  const [open, setOpen] = useState<Category | null>("executive");
   const accordionRefs = useRef<Partial<Record<Category, HTMLDivElement>>>({});
 
   const toggleAccordion = (key: Category) => {
@@ -76,9 +43,29 @@ export default function Officers() {
     }
   };
 
-  const officers = officersData.officers.filter(
-    (o) => getCategory(o.Position) === active,
-  );
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch("/api/officers");
+        if (!res.ok) throw new Error("Failed to load officers");
+        const body = await res.json();
+        setAllOfficers(body.data ?? []);
+      } catch (error) {
+        console.error("Error fetching officers:", error);
+        setAllOfficers([]);
+      }
+    };
+    load();
+  }, []);
+
+  const loading = allOfficers === null;
+  const all = allOfficers ?? [];
+  // Groups with nobody in them are left out.
+  const sections = SECTIONS.filter((sec) => all.some((o) => o.category === sec.key));
+  const active = sections.some((sec) => sec.key === activeChoice)
+    ? activeChoice
+    : (sections[0]?.key ?? activeChoice);
+  const officers = all.filter((o) => o.category === active);
 
   useEffect(() => {
     animate(x, 0, { duration: 0.4, ease: [0.4, 0, 0.2, 1] });
@@ -146,9 +133,9 @@ export default function Officers() {
             transition={{ duration: 0.6, delay: 0.1 }}
             role="tablist"
             aria-label="Officer groups"
-            className="hidden md:flex items-center p-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
+            className={`${sections.length > 1 ? "hidden md:flex" : "hidden"} items-center p-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md`}
           >
-            {SECTIONS.map(({ key, short, label }) => {
+            {sections.map(({ key, short, label }) => {
               const isActive = active === key;
               return (
                 <button
@@ -183,7 +170,25 @@ export default function Officers() {
           </motion.div>
         </div>
 
-        <div className="hidden md:block relative">
+        {loading && (
+          <div role="status" className="flex gap-4 overflow-hidden px-4 min-[401px]:px-6 md:px-16 md:gap-6">
+            <span className="sr-only">Loading officers</span>
+            {[0, 1, 2, 3].map((i) => (
+              <div
+                key={i}
+                aria-hidden="true"
+                className={`aspect-[4/5] w-[220px] min-[401px]:w-[248px] md:w-[300px] shrink-0 animate-pulse rounded-[1.7rem] border border-white/5 bg-white/[0.05] min-[401px]:rounded-[2rem] ${i > 1 ? "hidden md:block" : ""} ${i === 1 ? "hidden min-[560px]:block" : ""}`}
+              />
+            ))}
+          </div>
+        )}
+        {!loading && all.length === 0 && (
+          <p className="px-4 min-[401px]:px-6 md:px-16 text-white/60">
+            Our officers will be announced here soon.
+          </p>
+        )}
+
+        <div className={`${all.length > 0 ? "hidden md:block" : "hidden"} relative`}>
           <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none bg-gradient-to-r from-charcoal to-transparent" />
           <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 z-10 pointer-events-none bg-gradient-to-l from-charcoal to-transparent" />
 
@@ -191,7 +196,7 @@ export default function Officers() {
             ref={containerRef}
             id="officers-track"
             role="tabpanel"
-            aria-label={SECTIONS.find((sec) => sec.key === active)?.label}
+            aria-label={sections.find((sec) => sec.key === active)?.label}
             className={`overflow-hidden px-4 min-[401px]:px-6 md:px-16 ${!canScroll ? " flex justify-center" : ""}`}
           >
             <AnimatePresence mode="wait">
@@ -213,19 +218,18 @@ export default function Officers() {
                 >
                   {officers.map((officer, idx) => (
                     <motion.div
-                      key={officer.Name}
+                      key={officer.id}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.4, delay: idx * 0.05 }}
                       className="flex-shrink-0"
                     >
                       <OfficerCard
-                        name={officer.Name}
-                        nickname={officer.Nickname}
-                        image={officer.Image}
-                        position={officer.Position}
-                        year={officer.Year}
-                        course={officer.Course}
+                        name={officer.name}
+                        image={officer.image}
+                        position={officer.position}
+                        year={officer.year}
+                        course={officer.course}
                       />
                     </motion.div>
                   ))}
@@ -281,12 +285,9 @@ export default function Officers() {
         </div>
 
         {/* Mobile Accordion */}
-        <div className="md:hidden px-4 min-[401px]:px-6 space-y-3 min-[401px]:space-y-4">
-          {SECTIONS.map(({ key, label }, i) => {
-            const sectionOfficers = officersData.officers.filter(
-              (o) => getCategory(o.Position) === key,
-            );
-            if (sectionOfficers.length === 0) return null;
+        <div className={`${all.length > 0 ? "md:hidden" : "hidden"} px-4 min-[401px]:px-6 space-y-3 min-[401px]:space-y-4`}>
+          {sections.map(({ key, label }, i) => {
+            const sectionOfficers = all.filter((o) => o.category === key);
             const isOpen = open === key;
 
             return (
@@ -344,16 +345,15 @@ export default function Officers() {
                       <div className="p-5 min-[401px]:p-6 min-[401px]:pt-0 flex overflow-x-auto gap-3 min-[401px]:gap-4 pt-0 snap-x pb-4">
                         {sectionOfficers.map((officer) => (
                           <div
-                            key={officer.Name}
+                            key={officer.id}
                             className="snap-center shrink-0"
                           >
                             <OfficerCard
-                              name={officer.Name}
-                              nickname={officer.Nickname}
-                              image={officer.Image}
-                              position={officer.Position}
-                              year={officer.Year}
-                              course={officer.Course}
+                              name={officer.name}
+                              image={officer.image}
+                              position={officer.position}
+                              year={officer.year}
+                              course={officer.course}
                             />
                           </div>
                         ))}

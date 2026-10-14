@@ -56,3 +56,17 @@ export interface ContactRow {
   is_read: boolean;
   created_at: string;
 }
+
+export interface OfficerRow {
+  id: number;
+  full_name: string;
+  position: string;
+  category: "executive" | "project_head" | "officer" | "rep";
+  year_level: string;
+  course: "BSCS" | "BSIT" | "ACT";
+  image_url: string | null;
+  /** Position on the website; lower shows first within its category. */
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}

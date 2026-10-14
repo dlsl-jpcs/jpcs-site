@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { CheckCircle2, Loader2, X, XCircle } from "lucide-react";
+import { CheckCircle2, ChevronDown, ChevronUp, Loader2, X, XCircle } from "lucide-react";
 import { useModalA11y } from "@/lib/useModalA11y";
 
 /* ---------------------------------------------------------------- styles */
@@ -21,6 +21,8 @@ export const panelClass = "rounded-panel border border-zinc-200 bg-white";
 
 export const inputClass =
   "block w-full h-10 rounded-control border border-zinc-300 bg-white px-3 text-[15px] text-navy placeholder:text-zinc-400 transition-colors hover:border-zinc-400 focus:border-navy focus:outline-none focus:ring-2 focus:ring-navy/15 disabled:bg-zinc-50 disabled:text-zinc-500";
+
+export const selectClass = `${inputClass} pr-8`;
 
 export const textareaClass = inputClass.replace("h-10", "min-h-32 py-2.5 leading-relaxed resize-y");
 
@@ -83,6 +85,35 @@ export function IconButton({
     >
       {children}
     </button>
+  );
+}
+
+/** Up/down arrows around the item's position number. Pair with useReorder (it refocuses by id). */
+export function ReorderControl({
+  id,
+  name,
+  position,
+  count,
+  onMove,
+}: {
+  id: number;
+  name: string;
+  position: number;
+  count: number;
+  onMove: (delta: -1 | 1) => void;
+}) {
+  const arrow =
+    "flex h-6 w-8 items-center justify-center rounded-control text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-navy focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-navy disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent";
+  return (
+    <div className="flex flex-col items-center" role="group" aria-label={`Order of ${name}`}>
+      <button type="button" id={`move-up-${id}`} onClick={() => onMove(-1)} disabled={position === 1} aria-label={`Move ${name} up`} title="Move up" className={arrow}>
+        <ChevronUp size={17} aria-hidden="true" />
+      </button>
+      <span className="text-xs leading-5 font-bold tabular-nums text-navy" aria-hidden="true">{position}</span>
+      <button type="button" id={`move-down-${id}`} onClick={() => onMove(1)} disabled={position === count} aria-label={`Move ${name} down`} title="Move down" className={arrow}>
+        <ChevronDown size={17} aria-hidden="true" />
+      </button>
+    </div>
   );
 }
 
@@ -189,12 +220,21 @@ export function SkeletonRows({ rows = 3 }: { rows?: number }) {
 }
 
 /** Small square image for list rows, with an icon when there's no image. */
-export function ListThumb({ url, fallback }: { url: string; fallback: ReactNode }) {
+export function ListThumb({
+  url,
+  fallback,
+  anchorTop = false,
+}: {
+  url: string;
+  fallback: ReactNode;
+  /** Keep the top of the photo in frame, for portraits. */
+  anchorTop?: boolean;
+}) {
   return (
     <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-control bg-zinc-100 text-zinc-400">
       {url ? (
         // eslint-disable-next-line @next/next/no-img-element -- small admin thumbnail of any stored URL
-        <img src={url} alt="" className="h-full w-full object-cover" loading="lazy" />
+        <img src={url} alt="" className={`h-full w-full object-cover ${anchorTop ? "object-top" : ""}`} loading="lazy" />
       ) : (
         fallback
       )}

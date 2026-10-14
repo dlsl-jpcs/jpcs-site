@@ -10,7 +10,7 @@ const EXTENSIONS: Record<string, string> = {
   "image/gif": "gif",
   "image/avif": "avif",
 };
-const FOLDERS = ["events", "projects", "gallery"];
+const FOLDERS = ["events", "projects", "gallery", "officers"];
 
 // Admin-only image upload into the public "media" bucket; returns the public URL to store in image_url.
 export async function POST(req: Request) {

@@ -5,7 +5,7 @@ import { useSingleFlight } from "@/lib/useSingleFlight";
 import { Button, errorMessage, useToast } from "./ui";
 
 interface ImageUploadButtonProps {
-  folder: "events" | "projects" | "gallery";
+  folder: "events" | "projects" | "gallery" | "officers";
   onUploaded: (url: string) => void;
   /** Lets the form hold its Save button until the upload finishes. */
   onBusyChange?: (busy: boolean) => void;

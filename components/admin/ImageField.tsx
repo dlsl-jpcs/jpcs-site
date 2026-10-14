@@ -9,7 +9,7 @@ interface ImageFieldProps {
   label: string;
   hint?: string;
   optional?: boolean;
-  folder: "events" | "projects" | "gallery";
+  folder: "events" | "projects" | "gallery" | "officers";
   value: string;
   onChange: (url: string) => void;
   onBusyChange?: (busy: boolean) => void;
