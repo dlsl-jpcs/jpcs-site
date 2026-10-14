@@ -2,6 +2,11 @@
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 
+const ADDRESS = "1962 J.P. Laurel National Highway, Mataas na Lupa, 4217, Batangas";
+const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  `De La Salle Lipa, ${ADDRESS}`,
+)}`;
+
 type ContactForm = {
   name: string;
   email: string;
@@ -145,8 +150,13 @@ const Contact = () => {
                 </div>
               </a>
 
-              <div className="flex items-start gap-4 min-[401px]:gap-5 w-fit">
-                <div className="w-10 h-10 min-[401px]:w-12 min-[401px]:h-12 rounded-2xl bg-navy/5 border border-navy/10 flex items-center justify-center text-navy">
+              <a
+                href={MAP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-start gap-4 min-[401px]:gap-5 w-fit max-w-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-navy"
+              >
+                <div className="w-10 h-10 min-[401px]:w-12 min-[401px]:h-12 shrink-0 rounded-2xl bg-navy/5 border border-navy/10 flex items-center justify-center text-navy group-hover:bg-neon group-hover:border-neon group-hover:text-navy transition-all duration-300">
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -172,11 +182,12 @@ const Contact = () => {
                   <p className="text-[13px] font-bold text-navy/50 mb-1">
                     Find us at
                   </p>
-                  <p className="text-navy font-bold text-base min-[401px]:text-lg tracking-tight">
-                    De La Salle Lipa
+                  <p className="text-navy font-bold text-base min-[401px]:text-lg tracking-tight underline decoration-navy/20 decoration-2 underline-offset-4 group-hover:decoration-neon transition-colors duration-300">
+                    {ADDRESS}
+                    <span className="sr-only"> (opens map in new window)</span>
                   </p>
                 </div>
-              </div>
+              </a>
             </div>
           </motion.div>
 
