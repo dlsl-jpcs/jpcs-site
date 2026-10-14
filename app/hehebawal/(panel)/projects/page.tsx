@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useId, useRef, useState, type ChangeEvent } from "react";
-import { FolderKanban, Images, Pencil, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, FolderKanban, Images, Pencil, Plus, Trash2 } from "lucide-react";
 import ImageField from "@/components/admin/ImageField";
 import {
   Button,
@@ -172,6 +172,54 @@ export default function ProjectsManagement() {
     }
   };
 
+  // ---- Carousel order -------------------------------------------------------------------
+  // The list order is the carousel order. A move updates the list at once, then saves the whole
+  // order; saves run one after another so the last click always wins on the server.
+  const [orderSaving, setOrderSaving] = useState(0);
+  const [announce, setAnnounce] = useState("");
+  const saveChain = useRef<Promise<void>>(Promise.resolve());
+  const refocus = useRef<{ id: number; dir: "up" | "down" } | null>(null);
+
+  // Reordering moves the row's DOM node, which drops keyboard focus; put it back.
+  useEffect(() => {
+    const target = refocus.current;
+    if (!target) return;
+    refocus.current = null;
+    const mine = document.getElementById(`move-${target.dir}-${target.id}`) as HTMLButtonElement | null;
+    const other = document.getElementById(`move-${target.dir === "up" ? "down" : "up"}-${target.id}`) as HTMLButtonElement | null;
+    (mine && !mine.disabled ? mine : other)?.focus();
+  }, [projects]);
+
+  const moveProject = (id: number, delta: -1 | 1) => {
+    const from = projects.findIndex((p) => p.id === id);
+    const to = from + delta;
+    if (from < 0 || to < 0 || to >= projects.length) return;
+
+    const next = [...projects];
+    [next[from], next[to]] = [next[to], next[from]];
+    setProjects(next);
+    refocus.current = { id, dir: delta < 0 ? "up" : "down" };
+    setAnnounce(`${next[to].name} moved to position ${to + 1} of ${next.length}`);
+    setOrderSaving((n) => n + 1);
+
+    const ids = next.map((p) => p.id);
+    saveChain.current = saveChain.current.then(async () => {
+      try {
+        const res = await fetch("/api/admin/projects/reorder", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids }),
+        });
+        if (!res.ok) throw new Error(await errorMessage(res, "Couldn't save the new order. Try again."));
+      } catch (err) {
+        toast(err instanceof Error ? err.message : "Couldn't reach the server. Check your connection and try again.", "error");
+        await fetchProjects(); // show what the server actually has
+      } finally {
+        setOrderSaving((n) => n - 1);
+      }
+    });
+  };
+
   const addButton = (
     <Button onClick={() => openForm(null)}>
       <Plus size={18} aria-hidden="true" /> Add project
@@ -183,12 +231,18 @@ export default function ProjectsManagement() {
     <div>
       <PageHeader
         title="Projects"
-        description="Past activities shown in the Projects carousel on the home page, newest first."
+        description="Projects show in the home page carousel in the order listed here, top first. Use the arrows to move one; new projects are added to the top."
         action={addButton}
       />
 
+      <div className="mb-3 flex h-5 items-center justify-end text-sm text-zinc-500" aria-hidden={orderSaving === 0}>
+        {orderSaving > 0 ? "Saving order…" : ""}
+      </div>
+      <p role="status" className="sr-only">{announce}</p>
+
       <section className={`${panelClass} overflow-hidden`} aria-busy={loading}>
-        <div className="hidden grid-cols-[2.75rem_minmax(0,1fr)_11rem_6rem_5rem] gap-x-4 border-b border-zinc-200 bg-zinc-50 px-5 py-2.5 text-[13px] font-semibold text-zinc-500 md:grid">
+        <div className="hidden grid-cols-[2.25rem_2.75rem_minmax(0,1fr)_11rem_6rem_5rem] gap-x-4 border-b border-zinc-200 bg-zinc-50 px-5 py-2.5 text-[13px] font-semibold text-zinc-500 md:grid">
+          <span>Order</span>
           <span className="col-span-2">Project</span>
           <span>Date</span>
           <span>Photos</span>
@@ -213,11 +267,36 @@ export default function ProjectsManagement() {
           />
         ) : (
           <ul className="divide-y divide-zinc-100">
-            {projects.map((proj) => (
+            {projects.map((proj, index) => (
               <li
                 key={proj.id}
-                className="grid grid-cols-[2.75rem_minmax(0,1fr)_auto] items-start gap-x-4 md:items-center px-4 py-3.5 sm:px-5 md:grid-cols-[2.75rem_minmax(0,1fr)_11rem_6rem_5rem]"
+                className="grid grid-cols-[2.25rem_2.75rem_minmax(0,1fr)_auto] items-start gap-x-3 px-4 py-3.5 sm:gap-x-4 sm:px-5 md:grid-cols-[2.25rem_2.75rem_minmax(0,1fr)_11rem_6rem_5rem] md:items-center"
               >
+                <div className="flex flex-col items-center" role="group" aria-label={`Order of ${proj.name}`}>
+                  <button
+                    type="button"
+                    id={`move-up-${proj.id}`}
+                    onClick={() => moveProject(proj.id, -1)}
+                    disabled={index === 0}
+                    aria-label={`Move ${proj.name} up`}
+                    title="Move up"
+                    className="flex h-6 w-8 items-center justify-center rounded-control text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-navy focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-navy disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
+                  >
+                    <ChevronUp size={17} aria-hidden="true" />
+                  </button>
+                  <span className="text-xs font-bold tabular-nums leading-5 text-navy" aria-hidden="true">{index + 1}</span>
+                  <button
+                    type="button"
+                    id={`move-down-${proj.id}`}
+                    onClick={() => moveProject(proj.id, 1)}
+                    disabled={index === projects.length - 1}
+                    aria-label={`Move ${proj.name} down`}
+                    title="Move down"
+                    className="flex h-6 w-8 items-center justify-center rounded-control text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-navy focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-navy disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
+                  >
+                    <ChevronDown size={17} aria-hidden="true" />
+                  </button>
+                </div>
                 <ListThumb url={proj.image} fallback={<FolderKanban size={18} aria-hidden="true" />} />
                 <div className="min-w-0">
                   <p className="truncate font-bold text-navy">{proj.name}</p>

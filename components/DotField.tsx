@@ -163,34 +163,51 @@ const DotField = memo(
         m.prevY = m.y;
       }
 
-      const speedInterval = setInterval(updateMouseSpeed, 20);
+      let onScreen = true;
+      const speedInterval = setInterval(() => {
+        if (onScreen) updateMouseSpeed();
+      }, 20);
 
       let frameCount = 0;
+      // ~7,000 dots are redrawn per frame, so draw at 30fps. Easing below is scaled by the
+      // real elapsed time, so the motion looks the same as it did at 60fps.
+      const FRAME_MS = 1000 / 30;
+      let lastDraw = 0;
+      let gradient: CanvasGradient | null = null;
+      let gradientKey = "";
+      const ease = (k: number, dt: number) => 1 - Math.pow(1 - k, dt / (1000 / 60));
+      const glowVisible = glowEl !== null && glowColor !== "transparent";
       // Only animate while the field is on screen, and hold it still for reduced motion.
-      let onScreen = true;
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-      function tick() {
+      function tick(now: number) {
         if (!onScreen) {
           rafRef.current = 0;
           return;
         }
+        const dt = now - lastDraw;
+        if (dt < FRAME_MS - 2 && frameCount > 0) {
+          rafRef.current = requestAnimationFrame(tick);
+          return;
+        }
+        lastDraw = now;
         if (!reducedMotion.matches || frameCount === 0) frameCount++;
         const dots = dotsRef.current;
         const m = mouseRef.current;
         const { w, h } = sizeRef.current;
         const p = propsRef.current;
         const len = dots.length;
-        const t = frameCount * 0.02;
+        const t = now * 0.0012;
+        const step = Math.min(dt, 100);
 
         const targetEngagement = Math.min(m.speed / 5, 1);
-        engagement.current += (targetEngagement - engagement.current) * 0.06;
+        engagement.current += (targetEngagement - engagement.current) * ease(0.06, step);
         if (engagement.current < 0.001) engagement.current = 0;
         const eng = engagement.current;
 
-        glowOpacity.current += (eng - glowOpacity.current) * 0.08;
+        glowOpacity.current += (eng - glowOpacity.current) * ease(0.08, step);
 
-        if (glowEl) {
+        if (glowVisible && glowEl) {
           glowEl.setAttribute("cx", String(m.x));
           glowEl.setAttribute("cy", String(m.y));
           glowEl.style.opacity = String(glowOpacity.current);
@@ -198,14 +215,21 @@ const DotField = memo(
 
         ctx!.clearRect(0, 0, w, h);
 
-        const grad = ctx!.createLinearGradient(0, 0, w, h);
-        grad.addColorStop(0, p.gradientFrom as string);
-        grad.addColorStop(1, p.gradientTo as string);
-        ctx!.fillStyle = grad;
+        const key = `${w}x${h}|${p.gradientFrom}|${p.gradientTo}`;
+        if (!gradient || key !== gradientKey) {
+          gradient = ctx!.createLinearGradient(0, 0, w, h);
+          gradient.addColorStop(0, p.gradientFrom as string);
+          gradient.addColorStop(1, p.gradientTo as string);
+          gradientKey = key;
+        }
+        ctx!.fillStyle = gradient;
+        const pull = ease(0.15, step);
+        const settle = ease(0.1, step);
 
         const cr = p.cursorRadius as number;
         const crSq = cr * cr;
         const rad = (p.dotRadius as number) / 2;
+        const diameter = rad * 2;
         const isBulge = p.bulgeOnly as boolean;
 
         ctx!.beginPath();
@@ -222,8 +246,8 @@ const DotField = memo(
               const t = 1 - dist / cr;
               const push = t * t * (p.bulgeStrength as number) * eng;
               const angle = Math.atan2(dy, dx);
-              d.sx += (d.ax - Math.cos(angle) * push - d.sx) * 0.15;
-              d.sy += (d.ay - Math.sin(angle) * push - d.sy) * 0.15;
+              d.sx += (d.ax - Math.cos(angle) * push - d.sx) * pull;
+              d.sy += (d.ay - Math.sin(angle) * push - d.sy) * pull;
             } else {
               const angle = Math.atan2(dy, dx);
               const move = (500 / dist) * (m.speed * (p.cursorForce as number));
@@ -231,8 +255,8 @@ const DotField = memo(
               d.vy += Math.sin(angle) * -move;
             }
           } else if (isBulge) {
-            d.sx += (d.ax - d.sx) * 0.1;
-            d.sy += (d.ay - d.sy) * 0.1;
+            d.sx += (d.ax - d.sx) * settle;
+            d.sy += (d.ay - d.sy) * settle;
           }
 
           if (!isBulge) {
@@ -240,8 +264,8 @@ const DotField = memo(
             d.vy *= 0.9;
             d.x = d.ax + d.vx;
             d.y = d.ay + d.vy;
-            d.sx += (d.x - d.sx) * 0.1;
-            d.sy += (d.y - d.sy) * 0.1;
+            d.sx += (d.x - d.sx) * settle;
+            d.sy += (d.y - d.sy) * settle;
           }
 
           let drawX = d.sx;
@@ -254,18 +278,13 @@ const DotField = memo(
               0.5;
           }
 
-          if (p.sparkle) {
-            const hash = ((i * 2654435761) ^ (frameCount >> 3)) >>> 0;
-            if (hash % 100 < 3) {
-              ctx!.moveTo(drawX + rad * 1.8, drawY);
-              ctx!.arc(drawX, drawY, rad * 1.8, 0, TWO_PI);
-            } else {
-              ctx!.moveTo(drawX + rad, drawY);
-              ctx!.arc(drawX, drawY, rad, 0, TWO_PI);
-            }
+          // Dots are under 2px, so a square reads as a dot; far cheaper to rasterize than an
+          // anti-aliased arc, which matters with thousands of them per frame. Sparkles stay round.
+          if (p.sparkle && (((i * 2654435761) ^ (frameCount >> 2)) >>> 0) % 100 < 3) {
+            ctx!.moveTo(drawX + rad * 1.8, drawY);
+            ctx!.arc(drawX, drawY, rad * 1.8, 0, TWO_PI);
           } else {
-            ctx!.moveTo(drawX + rad, drawY);
-            ctx!.arc(drawX, drawY, rad, 0, TWO_PI);
+            ctx!.rect(drawX - rad, drawY - rad, diameter, diameter);
           }
         }
 

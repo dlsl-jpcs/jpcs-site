@@ -8,7 +8,10 @@ export async function GET() {
   const { data, error } = await supabase
     .from("projects_and_events")
     .select("*, projects_and_events_images(id, image_url, display_order)")
+    // The order admins set in the dashboard; ties (and untouched rows) fall back to newest first.
+    .order("display_order", { ascending: true })
     .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
     .returns<ProjectRow[]>();
 
   if (error) {

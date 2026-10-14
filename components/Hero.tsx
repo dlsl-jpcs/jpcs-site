@@ -85,8 +85,8 @@ export default function Hero() {
 
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none" />
 
-      <div className="absolute top-1/4 -left-32 w-[30rem] h-[30rem] bg-neon/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[40rem] h-[40rem] bg-blue-500/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/4 -left-32 w-[36rem] h-[36rem] bg-[radial-gradient(circle,rgba(196,255,71,0.1),transparent_65%)] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[48rem] h-[48rem] bg-[radial-gradient(circle,rgba(59,130,246,0.1),transparent_65%)] pointer-events-none" />
 
       <div className="max-w-[95%] sm:max-w-[95%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto px-3 min-[401px]:px-5 sm:px-6 relative z-10 w-full pt-20 min-[401px]:pt-24 lg:pt-14 pb-12 min-[401px]:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-[401px]:gap-8 lg:gap-8 items-center">

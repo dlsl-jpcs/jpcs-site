@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Event } from "@/types/events";
 
@@ -19,34 +19,7 @@ export default function EventCard({
   onClick,
   onOpen,
 }: EventCardProps) {
-  const slideRef = useRef<HTMLDivElement>(null);
-  const xRef = useRef(0);
-  const yRef = useRef(0);
-  const frameRef = useRef<number | null>(null);
-
   const isActive = current === index;
-
-  useEffect(() => {
-    if (isMobile) return;
-
-    const animate = () => {
-      if (!slideRef.current) return;
-
-      slideRef.current.style.setProperty("--x", `${xRef.current}px`);
-      slideRef.current.style.setProperty("--y", `${yRef.current}px`);
-
-      frameRef.current = requestAnimationFrame(animate);
-    };
-
-    frameRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (frameRef.current !== null) {
-        cancelAnimationFrame(frameRef.current);
-        frameRef.current = null;
-      }
-    };
-  }, [isMobile]);
 
   // A tap or click opens the details; a drag/swipe that happens to end on the card does not.
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
@@ -56,19 +29,6 @@ export default function EventCard({
     if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8) return;
     if (isActive) onOpen();
     else onClick();
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || !slideRef.current) return;
-
-    const r = slideRef.current.getBoundingClientRect();
-    xRef.current = e.clientX - (r.left + r.width / 2);
-    yRef.current = e.clientY - (r.top + r.height / 2);
-  };
-
-  const handleMouseLeave = () => {
-    xRef.current = 0;
-    yRef.current = 0;
   };
 
   if (isMobile && !isActive) return null;
@@ -85,7 +45,6 @@ export default function EventCard({
       transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
     >
       <motion.div
-        ref={slideRef}
         className="group relative focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neon rounded-[1.5rem] min-[401px]:rounded-[1.8rem] p-4 min-[401px]:p-6 md:p-8 h-[340px] min-[401px]:h-[380px] md:h-[400px] flex flex-col cursor-pointer overflow-hidden"
         onClick={handleCardClick}
         onPointerDown={(e) => {
@@ -102,8 +61,6 @@ export default function EventCard({
             }
           },
         })}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
         animate={{ scale: isActive ? 1 : 0.9, rotateX: isActive ? 0 : 4 }}
         transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
         whileHover={
@@ -114,19 +71,18 @@ export default function EventCard({
               }
         }
       >
-        {/* Glass layer kept separate from the transformed element above so
-            Chrome/Safari don't drop the backdrop-blur to solid once the
-            scale/rotateX transform settles */}
+        {/* Card surface. A translucent fill, not backdrop-blur: the dot field behind it
+            repaints every frame, which would force the blur to be recomputed each time. */}
         <div
           className={`absolute inset-0 rounded-[1.5rem] min-[401px]:rounded-[1.8rem] transition-all duration-500 pointer-events-none ${
             isActive
-              ? "bg-white/[0.06] backdrop-blur-xl border border-neon/40 shadow-[0_20px_40px_-10px_rgba(196,255,71,0.15),inset_0_1px_1px_rgba(255,255,255,0.15)]"
-              : "bg-white/[0.03] backdrop-blur-md border border-white/10 group-hover:border-white/20"
+              ? "bg-[#16224a]/80 border border-neon/40 shadow-[0_20px_40px_-10px_rgba(196,255,71,0.15),inset_0_1px_1px_rgba(255,255,255,0.15)]"
+              : "bg-[#101b3d]/70 border border-white/10 group-hover:border-white/20"
           }`}
         />
 
         {isActive && (
-          <div className="absolute -top-24 -right-24 w-48 h-48 bg-neon/20 rounded-2xl blur-[60px] pointer-events-none" />
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-[radial-gradient(circle,rgba(196,255,71,0.2),transparent_65%)] pointer-events-none" />
         )}
 
         <motion.div

@@ -248,7 +248,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
 
                       text-white
 
-                      transition-all
+                      transition-[transform,opacity,border-color,box-shadow]
                       duration-500
                       ease-out
                     "

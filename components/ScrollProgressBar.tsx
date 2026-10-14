@@ -15,7 +15,7 @@ export default function ScrollProgressBar() {
           document.documentElement.scrollHeight - window.innerHeight;
         const scrolled = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
         if (barRef.current) {
-          barRef.current.style.width = `${scrolled}%`;
+          barRef.current.style.transform = `scaleX(${scrolled / 100})`;
         }
       });
     };
@@ -30,8 +30,8 @@ export default function ScrollProgressBar() {
   return (
     <div
       ref={barRef}
-      className="fixed top-0 left-0 h-1 bg-light-green z-50"
-      style={{ width: "0%" }}
+      className="fixed top-0 left-0 h-1 w-full origin-left bg-light-green z-50"
+      style={{ transform: "scaleX(0)" }}
     />
   );
 }

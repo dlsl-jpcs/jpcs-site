@@ -32,6 +32,8 @@ export interface ProjectRow {
   organization_names: string;
   facebook_link: string | null;
   instagram_link: string | null;
+  /** Position in the Projects carousel; lower shows first. */
+  display_order: number;
   created_at: string;
   updated_at: string;
   projects_and_events_images?: Pick<ProjectImageRow, "id" | "image_url" | "display_order">[];

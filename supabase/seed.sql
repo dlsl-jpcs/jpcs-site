@@ -18,12 +18,13 @@ VALUES
 
 WITH p AS (
     INSERT INTO public.projects_and_events
-        (project_name, project_description, project_date, organization_names, facebook_link, instagram_link)
+        (project_name, project_description, project_date, organization_names, facebook_link, instagram_link,
+         display_order)
     VALUES
         ('[SAMPLE] Tech Talk Series', 'Sample project used to preview the projects carousel.',
-         'November 2025', 'JPCS', 'https://facebook.com/', 'https://instagram.com/'),
+         'November 2025', 'JPCS', 'https://facebook.com/', 'https://instagram.com/', 1),
         ('[SAMPLE] Coding Bootcamp', 'Another sample project with no cover image.',
-         'February 2026', 'JPCS', NULL, NULL)
+         'February 2026', 'JPCS', NULL, NULL, 2)
     RETURNING id, project_name
 )
 INSERT INTO public.projects_and_events_images (project_id, image_url, alt_text, display_order)

@@ -106,7 +106,9 @@ export async function GET() {
   const { data, error } = await supabase
     .from("projects_and_events")
     .select(SELECT)
+    .order("display_order", { ascending: true })
     .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
     .returns<ProjectRow[]>();
   if (error) return NextResponse.json({ error: "Failed to load projects." }, { status: 500 });
 
@@ -120,9 +122,17 @@ export async function POST(req: Request) {
   const parsed = parseProject(await req.json().catch(() => ({})));
   if (!parsed.row) return bad(parsed.error!);
 
+  // New projects go to the top of the carousel; admins can move them from the list.
+  const { data: first } = await supabase
+    .from("projects_and_events")
+    .select("display_order")
+    .order("display_order", { ascending: true })
+    .limit(1)
+    .maybeSingle<{ display_order: number }>();
+
   const { data, error } = await supabase
     .from("projects_and_events")
-    .insert(parsed.row)
+    .insert({ ...parsed.row, display_order: (first?.display_order ?? 1) - 1 })
     .select("id")
     .single<{ id: number }>();
   if (error) return NextResponse.json({ error: "Failed to save project." }, { status: 500 });
