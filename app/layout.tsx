@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import IntroSplash from "@/components/IntroSplash";
+import MotionProvider from "@/components/MotionProvider";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -25,7 +25,7 @@ export default function RootLayout({
       <body
         className={`${plusJakarta.variable} font-sans antialiased bg-charcoal text-white overflow-x-hidden`}
       >
-        <IntroSplash>{children}</IntroSplash>
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

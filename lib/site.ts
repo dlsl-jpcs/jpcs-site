@@ -88,3 +88,21 @@ export function formatEventRange(startsAt: string, endsAt?: string | null) {
 export function startOfTodayISO(now = new Date()) {
   return `${ymdFormat.format(now)}T00:00:00${SITE_UTC_OFFSET}`;
 }
+
+export type EventStatus = "upcoming" | "ongoing" | "past";
+
+/**
+ * Where an event (admin form values, site time) sits relative to now. "ongoing" means it has
+ * started but is still listed on the website (same rule as /api/upcomingEvents); "past" ones are not.
+ */
+export function eventStatus(
+  e: { date: string; time: string; endDate?: string; endTime?: string },
+  now = new Date(),
+): EventStatus {
+  const start = toStartsAt(e.date, e.time);
+  if (!start) return "upcoming";
+  const end = (e.endDate && toStartsAt(e.endDate, e.endTime || e.time)) || start;
+  if (new Date(start) > now) return "upcoming";
+  if (new Date(end) >= new Date(startOfTodayISO(now))) return "ongoing";
+  return "past";
+}
