@@ -115,13 +115,17 @@ const Contact = () => {
             </p>
 
             <div className="flex flex-col gap-5 min-[401px]:gap-6">
-              <div className="group flex items-start gap-4 min-[401px]:gap-5 w-fit cursor-default">
+              <a
+                href="mailto:jpcs@dlsl.edu.ph"
+                className="group flex items-start gap-4 min-[401px]:gap-5 w-fit rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-navy"
+              >
                 <div className="w-10 h-10 min-[401px]:w-12 min-[401px]:h-12 rounded-2xl bg-navy/5 border border-navy/10 flex items-center justify-center text-navy group-hover:bg-neon group-hover:border-neon group-hover:text-navy transition-all duration-300">
                   <svg
                     className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -132,22 +136,23 @@ const Contact = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold text-navy/40 uppercase tracking-widest mb-1">
-                    Email Us
+                  <p className="text-[13px] font-bold text-navy/50 mb-1">
+                    Email us
                   </p>
-                  <p className="text-navy font-bold text-base min-[401px]:text-lg tracking-tight group-hover:text-neon transition-colors duration-300">
+                  <p className="text-navy font-bold text-base min-[401px]:text-lg tracking-tight underline decoration-navy/20 decoration-2 underline-offset-4 group-hover:decoration-neon transition-colors duration-300">
                     jpcs@dlsl.edu.ph
                   </p>
                 </div>
-              </div>
+              </a>
 
-              <div className="group flex items-start gap-4 min-[401px]:gap-5 w-fit cursor-default">
-                <div className="w-10 h-10 min-[401px]:w-12 min-[401px]:h-12 rounded-2xl bg-navy/5 border border-navy/10 flex items-center justify-center text-navy group-hover:bg-neon group-hover:border-neon group-hover:text-navy transition-all duration-300">
+              <div className="flex items-start gap-4 min-[401px]:gap-5 w-fit">
+                <div className="w-10 h-10 min-[401px]:w-12 min-[401px]:h-12 rounded-2xl bg-navy/5 border border-navy/10 flex items-center justify-center text-navy">
                   <svg
                     className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -164,8 +169,8 @@ const Contact = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-[11px] font-extrabold text-navy/40 uppercase tracking-widest mb-1">
-                    Location
+                  <p className="text-[13px] font-bold text-navy/50 mb-1">
+                    Find us at
                   </p>
                   <p className="text-navy font-bold text-base min-[401px]:text-lg tracking-tight">
                     De La Salle Lipa
@@ -214,11 +219,13 @@ const Contact = () => {
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-[401px]:gap-5">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-extrabold text-white/50 uppercase tracking-widest ml-1">
-                    Full Name
+                  <label htmlFor="contact-name" className="block text-[13px] font-bold text-white/70 ml-1">
+                    Full name
                   </label>
                   <input
                     type="text"
+                    id="contact-name"
+                    autoComplete="name"
                     name="name"
                     value={form.name}
                     onChange={(e) =>
@@ -226,15 +233,17 @@ const Contact = () => {
                     }
                     placeholder="John Doe"
                     required
-                    className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 outline-none transition-all placeholder:text-white/20 font-medium"
+                    className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 focus:ring-2 focus:ring-neon/30 outline-none transition-all placeholder:text-white/20 font-medium"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[11px] font-extrabold text-white/50 uppercase tracking-widest ml-1">
-                    Email Address
+                  <label htmlFor="contact-email" className="block text-[13px] font-bold text-white/70 ml-1">
+                    Email
                   </label>
                   <input
                     type="email"
+                    id="contact-email"
+                    autoComplete="email"
                     name="email"
                     value={form.email}
                     onChange={(e) =>
@@ -242,17 +251,18 @@ const Contact = () => {
                     }
                     placeholder="john@example.com"
                     required
-                    className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 outline-none transition-all placeholder:text-white/20 font-medium"
+                    className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 focus:ring-2 focus:ring-neon/30 outline-none transition-all placeholder:text-white/20 font-medium"
                   />
                 </div>
               </div>
 
               <div className="space-y-2 mt-2">
-                <label className="text-[11px] font-extrabold text-white/50 uppercase tracking-widest ml-1">
+                <label htmlFor="contact-subject" className="block text-[13px] font-bold text-white/70 ml-1">
                   Subject
                 </label>
                 <input
                   type="text"
+                  id="contact-subject"
                   name="subject"
                   value={form.subject}
                   onChange={(e) =>
@@ -260,15 +270,16 @@ const Contact = () => {
                   }
                   placeholder="How can we help?"
                   required
-                  className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 outline-none transition-all placeholder:text-white/20 font-medium"
+                  className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 focus:ring-2 focus:ring-neon/30 outline-none transition-all placeholder:text-white/20 font-medium"
                 />
               </div>
 
               <div className="space-y-2 mt-2">
-                <label className="text-[11px] font-extrabold text-white/50 uppercase tracking-widest ml-1">
+                <label htmlFor="contact-message" className="block text-[13px] font-bold text-white/70 ml-1">
                   Message
                 </label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   value={form.message}
                   onChange={(e) =>
@@ -277,27 +288,27 @@ const Contact = () => {
                   placeholder="Tell us about your inquiry..."
                   rows={4}
                   required
-                  className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 outline-none transition-all placeholder:text-white/20 font-medium resize-none"
+                  className="w-full bg-white/5 text-white px-4 min-[401px]:px-5 py-3 min-[401px]:py-4 rounded-2xl border border-white/10 focus:border-neon focus:bg-white/10 focus:ring-2 focus:ring-neon/30 outline-none transition-all placeholder:text-white/20 font-medium resize-none"
                 ></textarea>
               </div>
 
-              {status && (
-                <p
-                  className={`text-sm font-semibold mt-2 ${
-                    status.type === "ok" ? "text-neon" : "text-red-300"
-                  }`}
-                >
-                  {status.message}
-                </p>
-              )}
+              <p
+                role={status?.type === "error" ? "alert" : "status"}
+                className={`text-sm font-semibold empty:hidden mt-2 ${
+                  status?.type === "ok" ? "text-neon" : "text-red-300"
+                }`}
+              >
+                {status?.message}
+              </p>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="group relative w-full bg-neon text-navy font-extrabold text-base min-[401px]:text-lg py-3 min-[401px]:py-4 mt-4 min-[401px]:mt-6 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(196,255,71,0.3)] hover:-translate-y-1"
+                aria-busy={isSubmitting || undefined}
+                className="group relative w-full bg-neon text-navy font-extrabold text-base min-[401px]:text-lg py-3 min-[401px]:py-4 mt-4 min-[401px]:mt-6 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(196,255,71,0.3)] hover:-translate-y-1 disabled:cursor-wait disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:shadow-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neon"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  {isSubmitting ? "Sending..." : "Send"}
+                  {isSubmitting ? "Sending…" : "Send message"}
                 </span>
               </button>
             </form>

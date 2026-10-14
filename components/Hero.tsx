@@ -19,7 +19,8 @@ interface UpcomingEvent {
 
 export default function Hero() {
   const [isMobile, setIsMobile] = useState(false);
-  const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[]>([]);
+  // null until the first response, so the empty message doesn't flash while loading.
+  const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[] | null>(null);
 
   useEffect(() => {
     const fetchUpcomingEvents = async () => {
@@ -30,6 +31,7 @@ export default function Hero() {
         setUpcomingEvents(data.data ?? []);
       } catch (error) {
         console.error("Error fetching upcoming events:", error);
+        setUpcomingEvents([]);
       }
     };
 
@@ -44,7 +46,7 @@ export default function Hero() {
   }, []);
 
   const events = [
-    ...upcomingEvents.map((event) => ({
+    ...(upcomingEvents ?? []).map((event) => ({
       org: event.org,
       title: event.title,
       date: event.date,
@@ -115,7 +117,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
             className="flex items-center justify-center order-2 lg:order-2 w-full"
           >
-            <Events events={events} isMobile={isMobile} />
+            <Events events={events} isMobile={isMobile} loading={upcomingEvents === null} />
           </motion.div>
         </div>
       </div>

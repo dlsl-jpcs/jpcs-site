@@ -1,0 +1,40 @@
+# Runs the production build at http://localhost:3000 against the local Supabase stack.
+# Start Supabase first (`npx supabase start`), then: docker compose up --build
+#
+# Inside a container 127.0.0.1 is the container itself, so the site could not reach Supabase at
+# http://127.0.0.1:55321. The `supabase-tunnel` service forwards that address to the Supabase
+# running on your machine, and `web` shares its network, so every URL (API calls, uploaded image
+# URLs, the next/image allow-list) stays exactly the same as when running `npm run dev`.
+
+services:
+  supabase-tunnel:
+    image: node:22-alpine
+    command:
+      - node
+      - -e
+      - >-
+        const net = require("net");
+        net.createServer((client) => {
+          const upstream = net.connect(55321, "host.docker.internal");
+          client.pipe(upstream).pipe(client);
+          upstream.on("error", () => client.destroy());
+          client.on("error", () => upstream.destroy());
+        }).listen(55321, "127.0.0.1", () => console.log("Forwarding 127.0.0.1:55321 to the host's Supabase"));
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # The site's port is published here because `web` uses this service's network.
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      args:
+        # Matches [api].port in supabase/config.toml.
+        NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:55321
+    env_file: .env.local
+    network_mode: "service:supabase-tunnel"
+    depends_on:
+      - supabase-tunnel
+    restart: unless-stopped

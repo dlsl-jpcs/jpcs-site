@@ -7,7 +7,8 @@ const Banner: React.FC = () => {
   const text2 = "DE LA SALLE LIPA · JPCS ·";
 
   return (
-    <div className="w-full overflow-hidden">
+    // Decorative: the repeated name would otherwise be read out ~20 times.
+    <div className="w-full overflow-hidden" aria-hidden="true">
       {/* Strip 1: white bg, dark green text, scrolls left */}
       <div className="bg-white py-2 min-[401px]:py-2.5">
         <div className="flex animate-marquee-left">

@@ -1,36 +1,47 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Upload } from "lucide-react";
+import { useSingleFlight } from "@/lib/useSingleFlight";
+import { Button, errorMessage, useToast } from "./ui";
 
 interface ImageUploadButtonProps {
   folder: "events" | "projects" | "gallery";
   onUploaded: (url: string) => void;
+  /** Lets the form hold its Save button until the upload finishes. */
+  onBusyChange?: (busy: boolean) => void;
+  label?: string;
 }
 
 /** Uploads an image to Supabase Storage through /api/admin/upload and hands back its public URL. */
-export default function ImageUploadButton({ folder, onUploaded }: ImageUploadButtonProps) {
+export default function ImageUploadButton({ folder, onUploaded, onBusyChange, label = "Upload" }: ImageUploadButtonProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  const [uploading, runUpload] = useSingleFlight();
+  const toast = useToast();
 
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
 
-    setUploading(true);
-    try {
-      const body = new FormData();
-      body.append("file", file);
-      body.append("folder", folder);
-      const res = await fetch("/api/admin/upload", { method: "POST", body });
-      const data = await res.json();
-      if (res.ok && data.url) onUploaded(data.url);
-      else alert(data.error || "Upload failed");
-    } catch {
-      alert("Upload failed");
-    } finally {
-      setUploading(false);
-    }
+    runUpload(async () => {
+      onBusyChange?.(true);
+      try {
+        const body = new FormData();
+        body.append("file", file);
+        body.append("folder", folder);
+        const res = await fetch("/api/admin/upload", { method: "POST", body });
+        if (!res.ok) {
+          toast(await errorMessage(res, "Couldn't upload the image. Try again."), "error");
+          return;
+        }
+        const data = await res.json();
+        onUploaded(data.url);
+      } catch {
+        toast("Couldn't reach the server. Check your connection and try again.", "error");
+      } finally {
+        onBusyChange?.(false);
+      }
+    });
   };
 
   return (
@@ -40,16 +51,13 @@ export default function ImageUploadButton({ folder, onUploaded }: ImageUploadBut
         type="file"
         accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
         className="hidden"
+        tabIndex={-1}
         onChange={handleChange}
       />
-      <button
-        type="button"
-        disabled={uploading}
-        onClick={() => inputRef.current?.click()}
-        className="shrink-0 px-3 py-2 border rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-gray-50 disabled:opacity-60"
-      >
-        <Upload size={16} /> {uploading ? "Uploading..." : "Upload"}
-      </button>
+      <Button variant="secondary" loading={uploading} onClick={() => inputRef.current?.click()}>
+        {!uploading && <Upload size={16} aria-hidden="true" />}
+        {uploading ? "Uploading…" : label}
+      </Button>
     </>
   );
 }

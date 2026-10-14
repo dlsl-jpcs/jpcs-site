@@ -6,8 +6,11 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   : null;
 
 const nextConfig: NextConfig = {
+  // Self-contained server for the Docker image (Dockerfile); hosts like Vercel ignore it.
+  output: "standalone",
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    // Keep console.error so server failures (e.g. Supabase unreachable) still show up in logs.
+    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
   },
   experimental: {
     optimizePackageImports: [
@@ -27,8 +30,12 @@ const nextConfig: NextConfig = {
           },
         ]
       : [],
-    // The local Supabase stack runs on 127.0.0.1, which next/image blocks by default.
-    dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
+    // The local Supabase stack runs on 127.0.0.1, which next/image blocks by default. Allowed only
+    // when Supabase itself is local (dev server, or the Docker build in compose.yaml); a hosted
+    // Supabase URL keeps the block on.
+    dangerouslyAllowLocalIP:
+      process.env.NODE_ENV !== "production" ||
+      ["127.0.0.1", "localhost"].includes(supabaseUrl?.hostname ?? ""),
   },
 };
 

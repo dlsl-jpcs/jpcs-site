@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.vscode
+# Secrets come in at runtime through env_file in compose.yaml, never baked into the image.
+.env*
+!.env.example
+supabase
+docs
+Dockerfile
+compose.yaml
+.dockerignore

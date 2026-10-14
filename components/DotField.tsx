@@ -113,6 +113,8 @@ const DotField = memo(
         };
 
         buildDots(w, h);
+        // Resizing clears the canvas; redraw if the loop is parked (reduced motion).
+        if (rafRef.current === 0 && onScreen) rafRef.current = requestAnimationFrame(tick);
       }
 
       function buildDots(w: number, h: number) {
@@ -164,9 +166,16 @@ const DotField = memo(
       const speedInterval = setInterval(updateMouseSpeed, 20);
 
       let frameCount = 0;
+      // Only animate while the field is on screen, and hold it still for reduced motion.
+      let onScreen = true;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
       function tick() {
-        frameCount++;
+        if (!onScreen) {
+          rafRef.current = 0;
+          return;
+        }
+        if (!reducedMotion.matches || frameCount === 0) frameCount++;
         const dots = dotsRef.current;
         const m = mouseRef.current;
         const { w, h } = sizeRef.current;
@@ -262,8 +271,17 @@ const DotField = memo(
 
         ctx!.fill();
 
-        rafRef.current = requestAnimationFrame(tick);
+        rafRef.current = reducedMotion.matches ? 0 : requestAnimationFrame(tick);
       }
+
+      const visibility = new IntersectionObserver(([entry]) => {
+        const wasOnScreen = onScreen;
+        onScreen = entry.isIntersecting;
+        if (onScreen && !wasOnScreen && !rafRef.current) {
+          rafRef.current = requestAnimationFrame(tick);
+        }
+      });
+      visibility.observe(canvas!);
 
       doResize();
       window.addEventListener("resize", resize);
@@ -276,6 +294,7 @@ const DotField = memo(
       };
 
       return () => {
+        visibility.disconnect();
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
         clearInterval(speedInterval);
         clearTimeout(resizeTimer);

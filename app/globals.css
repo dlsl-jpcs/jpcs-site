@@ -59,11 +59,32 @@ body::-webkit-scrollbar {
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
   --radius-pill: var(--radius-pill);
+  /* Admin dashboard: inputs/buttons and panels. The radii above are sized for the public site. */
+  --radius-control: 0.625rem;
+  --radius-panel: 1rem;
 }
 
 @layer base {
   body {
     @apply bg-charcoal text-white;
+  }
+
+  /* Keyboard focus fallback; components can still set their own focus-visible outline. */
+  :where(a, button, [role="button"], [tabindex], summary):focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+/* Marquees and other CSS animation stop for visitors who ask for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

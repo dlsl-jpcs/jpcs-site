@@ -40,10 +40,12 @@ const ProgramsUnder = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="group relative bg-charcoal rounded-[2.5rem] p-10 overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/5 hover:border-neon/40 hover:shadow-[0_20px_50px_-10px_rgba(196,255,71,0.15)] flex flex-col"
+              className="group relative bg-charcoal rounded-[2.5rem] p-8 sm:p-10 shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/5 hover:border-neon/40 hover:shadow-[0_20px_50px_-10px_rgba(196,255,71,0.15)] flex flex-col cursor-pointer"
             >
-              <div className="absolute -bottom-4 -right-4 text-[8rem] font-black text-white/[0.02] select-none pointer-events-none tracking-tighter group-hover:text-white/[0.05] transition-colors duration-500">
-                {prog.short}
+              <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-[2.5rem] pointer-events-none">
+                <div className="absolute -bottom-4 -right-4 text-[8rem] font-black text-white/[0.02] select-none tracking-tighter group-hover:text-white/[0.05] transition-colors duration-500">
+                  {prog.short}
+                </div>
               </div>
 
               <div className="mb-10 relative z-10">
@@ -63,7 +65,8 @@ const ProgramsUnder = () => {
               <Link
                 href={`/programs/${prog.slug}`}
                 aria-label={`Explore ${prog.title} track`}
-                className="mt-auto flex items-center gap-4 text-white font-bold text-sm relative z-10 group-hover:text-neon transition-colors duration-300"
+                // The ::after covers the whole card so any part of it opens the track.
+                className="mt-auto flex items-center gap-4 text-white font-bold text-sm z-10 group-hover:text-neon transition-colors duration-300 outline-none after:absolute after:inset-0 after:z-20 after:rounded-[2.5rem] after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-neon focus-visible:after:ring-offset-4 focus-visible:after:ring-offset-[#F4F4F5]"
               >
                 <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-neon group-hover:border-neon group-hover:text-navy transition-all duration-300 shadow-inner">
                   <svg

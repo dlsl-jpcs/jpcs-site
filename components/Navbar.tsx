@@ -7,16 +7,34 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
+import { ADMIN_LOGIN_PATH } from "@/lib/adminPath";
 
 const StaggeredMenu = dynamic(
   () => import("./StaggeredMenu").then((mod) => mod.StaggeredMenu),
   { ssr: false },
 );
 
+const NAV_ITEMS = [
+  { name: "Home", link: "#home" },
+  { name: "About", link: "#about" },
+  { name: "Projects", link: "#projects" },
+  //{ name: "Gallery", link: "#gallery" },
+  { name: "Officers", link: "#officers" },
+];
+
+const SOCIAL_ITEMS = [
+  { label: "Facebook", link: "https://www.facebook.com/JPCS.DLSL" },
+  { label: "Instagram", link: "https://www.instagram.com/jpcsdlsl" },
+];
+
+// Sections tracked for the active nav pill; #contact has no pill, so none is highlighted there.
+const SPY_TARGETS = [...NAV_ITEMS.map((item) => item.link), "#contact"];
+
 const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [navTheme, setNavTheme] = useState<"dark" | "light">("dark");
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [activeLink, setActiveLink] = useState("#home");
   const lastScrollYRef = useRef(0);
   const tickingRef = useRef(false);
   const showNavbarRef = useRef(true);
@@ -26,19 +44,10 @@ const Navbar = () => {
   const router = useRouter();
   const isProgramPage = pathname.startsWith("/programs/");
 
-  const navItems = [
-    { name: "Home", link: "#home" },
-    { name: "About", link: "#about" },
-    { name: "Projects", link: "#projects" },
-    //{ name: "Gallery", link: "#gallery" },
-    { name: "Officers", link: "#officers" },
-  ];
-
-  const socialItems = [
-    { label: "Facebook", link: "https://www.facebook.com/JPCS.DLSL" },
-    { label: "Instagram", link: "https://www.instagram.com/jpcsdlsl" },
-    { label: "Twitter", link: "https://twitter.com/jpcs" },
-  ];
+  const navItems = NAV_ITEMS;
+  const socialItems = SOCIAL_ITEMS;
+  const activeIndex = navItems.findIndex((item) => item.link === activeLink);
+  const pillIndex = hoveredIndex ?? (activeIndex >= 0 ? activeIndex : null);
 
   const scrollToSection = (sectionId: string) => {
     if (!sectionId.startsWith("#")) return;
@@ -77,6 +86,16 @@ const Navbar = () => {
         return nextShowNavbar;
       });
       lastScrollYRef.current = currentScrollY;
+
+      // Active section: the last one whose top has passed 35% of the viewport.
+      const probe = window.innerHeight * 0.35;
+      let current = SPY_TARGETS[0];
+      for (const id of SPY_TARGETS) {
+        const el = document.querySelector(id);
+        if (el && el.getBoundingClientRect().top <= probe) current = id;
+      }
+      setActiveLink((prev) => (prev === current ? prev : current));
+
       tickingRef.current = false;
     };
 
@@ -162,25 +181,27 @@ const Navbar = () => {
         }}
       >
         <div className="flex items-center justify-between w-full max-w-7xl">
-          <div
-            className="flex gap-3 items-center pointer-events-auto cursor-pointer group"
+          <button
+            type="button"
+            aria-label="JPCS, back to top"
+            className="flex gap-3 items-center pointer-events-auto cursor-pointer group rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neon"
             onClick={() => {
-              // Handle triple click
+              // A single click scrolls home; three quick clicks open the admin sign-in.
               clickCountRef.current += 1;
+              if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
               if (clickCountRef.current === 3) {
                 clickCountRef.current = 0;
-                if (clickTimeoutRef.current)
-                  clearTimeout(clickTimeoutRef.current);
-                router.push("/admin/login");
+                router.push(ADMIN_LOGIN_PATH);
                 return;
               }
-
-              if (clickTimeoutRef.current)
-                clearTimeout(clickTimeoutRef.current);
+              // On the home page scroll right away; elsewhere navigating would unmount
+              // this navbar mid-sequence, so wait to see whether more clicks follow.
+              const onHome = pathname === "/";
+              if (onHome && clickCountRef.current === 1) scrollToSection("#home");
               clickTimeoutRef.current = setTimeout(() => {
                 clickCountRef.current = 0;
-                scrollToSection("#home");
-              }, 400); // Wait 400ms to differentiate between single and triple clicks, or just route to home anyway on first click, but that disrupts the triple click.
+                if (!onHome) scrollToSection("#home");
+              }, 450);
             }}
           >
             <div className="relative bg-white rounded-full w-14 h-14 shadow-[0_0_20px_rgba(255,255,255,0.1)] flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
@@ -201,7 +222,7 @@ const Navbar = () => {
             >
               JPCS<span className="text-neon">.</span>
             </p>
-          </div>
+          </button>
 
           {!isProgramPage && (
             <div
@@ -217,21 +238,18 @@ const Navbar = () => {
                   key={item.name}
                   href={item.link}
                   onMouseEnter={() => setHoveredIndex(idx)}
+                  aria-current={activeIndex === idx ? "location" : undefined}
                   onClick={(e) => {
                     e.preventDefault();
                     scrollToSection(item.link);
                   }}
-                  className={`relative px-7 py-1 rounded-full transition-colors duration-300 text-[15px] ${
+                  className={`relative px-7 py-1 rounded-full transition-colors duration-300 text-[15px] focus-visible:outline-2 focus-visible:outline-offset-2 ${
                     navTheme === "light"
-                      ? hoveredIndex === idx
-                        ? "text-navy"
-                        : "text-navy/60"
-                      : hoveredIndex === idx
-                        ? "text-neon"
-                        : "text-white/70"
+                      ? `focus-visible:outline-navy ${pillIndex === idx ? "text-navy" : "text-navy/60"}`
+                      : `focus-visible:outline-neon ${pillIndex === idx ? "text-neon" : "text-white/70"}`
                   }`}
                 >
-                  {hoveredIndex === idx && (
+                  {pillIndex === idx && (
                     <motion.div
                       layoutId="nav-pill-background"
                       className={`absolute inset-0 rounded-full ${
@@ -255,7 +273,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => scrollToSection("#contact")}
-                className={`px-9 py-3 rounded-full font-extrabold text-[15px] tracking-wide transition-all duration-500 hover:-translate-y-1 ${
+                className={`px-9 py-3 rounded-full font-extrabold text-[15px] tracking-wide transition-all duration-500 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neon ${
                   navTheme === "light"
                     ? "bg-navy text-white hover:bg-navy-light shadow-[0_15px_30px_-10px_rgba(11,19,43,0.4)]"
                     : "bg-neon text-navy hover:bg-neon-hover shadow-[0_15px_30px_-10px_rgba(196,255,71,0.3)]"

@@ -144,15 +144,22 @@ export default function Officers() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
+            role="tablist"
+            aria-label="Officer groups"
             className="hidden md:flex items-center p-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
           >
-            {SECTIONS.map(({ key, short }) => {
+            {SECTIONS.map(({ key, short, label }) => {
               const isActive = active === key;
               return (
                 <button
                   key={key}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls="officers-track"
+                  title={label}
                   onClick={() => setActive(key)}
-                  className="relative px-6 py-3 rounded-full text-sm font-extrabold transition-colors duration-300"
+                  className="relative px-6 py-3 rounded-full text-sm font-extrabold transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon"
                 >
                   {isActive && (
                     <motion.span
@@ -182,6 +189,9 @@ export default function Officers() {
 
           <div
             ref={containerRef}
+            id="officers-track"
+            role="tabpanel"
+            aria-label={SECTIONS.find((sec) => sec.key === active)?.label}
             className={`overflow-hidden px-4 min-[401px]:px-6 md:px-16 ${!canScroll ? " flex justify-center" : ""}`}
           >
             <AnimatePresence mode="wait">
@@ -227,8 +237,10 @@ export default function Officers() {
           {canScroll && (
             <div className="px-4 min-[401px]:px-6 md:px-16 mt-3 min-[401px]:mt-4 flex items-center justify-end gap-3 min-[401px]:gap-4">
               <button
+                type="button"
                 onClick={() => slide(-1)}
-                className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-neon hover:border-neon hover:text-navy transition-all duration-300"
+                aria-label="Show previous officers"
+                className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-neon hover:border-neon hover:text-navy transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon"
               >
                 <svg
                   className="w-5 h-5"
@@ -245,8 +257,10 @@ export default function Officers() {
                 </svg>
               </button>
               <button
+                type="button"
                 onClick={() => slide(1)}
-                className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-neon hover:border-neon hover:text-navy transition-all duration-300"
+                aria-label="Show more officers"
+                className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-neon hover:border-neon hover:text-navy transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon"
               >
                 <svg
                   className="w-5 h-5"
@@ -285,8 +299,11 @@ export default function Officers() {
                 className={`rounded-3xl border transition-all duration-300 overflow-hidden ${isOpen ? "border-neon/30 bg-white/5" : "border-white/10 bg-transparent"}`}
               >
                 <button
+                  type="button"
                   onClick={() => toggleAccordion(key)}
-                  className="w-full flex items-center justify-between p-5 min-[401px]:p-6 pb-2 text-left"
+                  aria-expanded={isOpen}
+                  aria-controls={`officers-${key.replace(/\s+/g, "-").toLowerCase()}`}
+                  className="w-full flex items-center justify-between p-5 min-[401px]:p-6 pb-2 text-left rounded-3xl focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-neon"
                 >
                   <span
                     className={`text-base min-[401px]:text-lg font-extrabold ${isOpen ? "text-neon" : "text-white"}`}
@@ -317,6 +334,7 @@ export default function Officers() {
                   {isOpen && (
                     <motion.div
                       key="content"
+                      id={`officers-${key.replace(/\s+/g, "-").toLowerCase()}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

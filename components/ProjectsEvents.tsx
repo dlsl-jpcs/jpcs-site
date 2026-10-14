@@ -4,13 +4,11 @@ import { useState, useEffect } from "react";
 import "swiper/css";
 import ProjectsCarousel from "./events/ProjectsCarousel";
 import { Project } from "@/types/projects";
-import { EventImage } from "@/types/eventsImages";
 import { motion } from "framer-motion";
 
 export default function ProjectsEvents() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [image, setImage] = useState<EventImage[]>([]);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -27,41 +25,18 @@ export default function ProjectsEvents() {
     };
 
     fetchProjects();
-
-    const fetchImages = async () => {
-      try {
-        const response = await fetch("/api/eventImagesMain");
-        if (!response.ok) throw new Error("Failed to load images");
-        const data = await response.json();
-        setImage(data.data ?? []);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchImages();
   }, []);
 
+  // /api/projects already includes each project's cover image.
   const displayProjects = projects.map((project) => ({
-    id: project.id,
-    name: project.name,
-    description: project.description,
-    org: project.org,
-    date: project.date,
-    facebook: project.facebook,
-    instagram: project.instagram,
+    ...project,
     gallery: project.gallery ?? [],
-    image:
-      image.find((img) => img.projects_and_events_id === project.id)
-        ?.image_url || "",
   }));
 
   return (
     <section
       id="projects"
-      className="relative min-h-[800px] bg-navy grid grid-rows-[1fr_2fr] overflow-hidden"
+      className="relative min-h-[800px] bg-navy grid grid-rows-[1fr_2fr] overflow-hidden pb-24"
     >
       <div
         className="relative bg-white mt-[-200px] w-[100%] min-h-[160%] rounded-b-[50%] justify-self-center overflow-visible bg-[linear-gradient(to_bottom,transparent,rgba(0,0,0,0.09)),linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)]
@@ -91,15 +66,25 @@ bg-[size:auto,4rem_4rem,4rem_4rem]"
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative h-full w-full min-w-0 mt-[-40px] "
+        className="relative h-full w-full min-w-0 mt-[-40px]"
       >
         {loading ? (
-          <div className="h-full w-full flex items-center justify-center text-white/60">
-            Loading projects...
+          <div role="status" className="flex h-full w-full items-start justify-center gap-6 overflow-hidden pt-6">
+            <span className="sr-only">Loading projects</span>
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                aria-hidden="true"
+                className={`h-[300px] w-[78%] shrink-0 animate-pulse rounded-[18px] border border-white/10 bg-white/[0.05] sm:h-[400px] sm:w-[70%] sm:rounded-[24px] md:h-[460px] md:w-[52%] lg:h-[485px] lg:w-[38%] lg:rounded-[28px] xl:w-[34%] ${i === 1 ? "" : "hidden lg:block opacity-40"}`}
+              />
+            ))}
           </div>
         ) : displayProjects.length === 0 ? (
-          <div className="h-full w-full flex items-center justify-center text-white/60">
-            No projects to show right now.
+          <div className="h-full w-full flex flex-col items-center justify-center px-6 text-center">
+            <p className="font-bold text-white">Projects are on the way</p>
+            <p className="mt-1 max-w-sm text-sm text-white/60">
+              Photos and recaps from our activities will be posted here soon.
+            </p>
           </div>
         ) : (
           <ProjectsCarousel projects={displayProjects} />
