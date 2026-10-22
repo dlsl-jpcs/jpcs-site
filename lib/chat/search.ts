@@ -7,6 +7,25 @@ export type ChatAnswer = { reply: string; links: string[]; handoff: boolean };
 
 const has = (q: string, words: string[]) => words.some((w) => new RegExp(`\\b${w}`, "i").test(q));
 
+const FAQ_CLOSE_MATCH = 0.5;
+
+const wordSet = (s: string) =>
+  new Set(
+    s
+      .toLowerCase()
+      .split(/\W+/)
+      .filter(Boolean)
+      .map((w) => (w.length > 3 ? w.replace(/s$/, "") : w)),
+  );
+
+// Jaccard overlap (shared words / all words), stopwords included so "how to be an officer" is far from "who are the officers".
+function similarity(a: string, b: string) {
+  const wa = wordSet(a);
+  const wb = wordSet(b);
+  const shared = [...wa].filter((w) => wb.has(w)).length;
+  return shared / (wa.size + wb.size - shared || 1);
+}
+
 /**
  * No-LLM answers: a few templated intents over live data, then the officers' FAQ via full-text
  * search. Used when no API key is set, the free quota is spent, or the provider is down.
@@ -26,6 +45,14 @@ export async function searchAnswer(
       handoff: false,
     };
   }
+
+  // An FAQ the officers wrote for nearly this exact question beats the generic templates below,
+  // which would otherwise grab it on a keyword like "officer".
+  const { data, error } = await supabase.rpc("search_chat_faq", { q: question });
+  if (error) console.error("search_chat_faq failed:", error.message);
+  const faqs = (data as { question: string; answer: string }[] | null) ?? [];
+  const close = faqs.find((f) => similarity(q, f.question) >= FAQ_CLOSE_MATCH);
+  if (close) return { reply: close.answer, links: [], handoff: false };
 
   const program = programs.find((p) => has(q, [p.slug, p.short.toLowerCase()]));
   if (program) {
@@ -80,10 +107,7 @@ export async function searchAnswer(
     };
   }
 
-  const { data, error } = await supabase.rpc("search_chat_faq", { q: question });
-  if (error) console.error("search_chat_faq failed:", error.message);
-  const top = (data as { answer: string }[] | null)?.[0];
-  if (top) return { reply: top.answer, links: [], handoff: false };
+  if (faqs[0]) return { reply: faqs[0].answer, links: [], handoff: false };
 
   if (has(q, ["contact", "email", "reach", "facebook", "instagram", "message"])) {
     return {
