@@ -5,6 +5,10 @@ import "swiper/css";
 import ProjectsCarousel from "./events/ProjectsCarousel";
 import { Project } from "@/types/projects";
 import { motion } from "framer-motion";
+import CircuitTraces from "./tech/CircuitTraces";
+import GridSpotlight from "./tech/GridSpotlight";
+import ScrambleText from "./tech/ScrambleText";
+import SectionTag from "./tech/SectionTag";
 
 export default function ProjectsEvents() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -38,6 +42,8 @@ export default function ProjectsEvents() {
       id="projects"
       className="relative min-h-[800px] bg-navy grid grid-rows-[1fr_2fr] overflow-hidden pb-24"
     >
+      <CircuitTraces tone="dark" />
+      <GridSpotlight />
       <div
         className="relative bg-white mt-[-200px] w-[100%] min-h-[160%] rounded-b-[50%] justify-self-center overflow-visible bg-[linear-gradient(to_bottom,transparent,rgba(0,0,0,0.09)),linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)]
 bg-[size:auto,4rem_4rem,4rem_4rem]"
@@ -49,10 +55,11 @@ bg-[size:auto,4rem_4rem,4rem_4rem]"
           transition={{ duration: 0.8, delay: 0.2 }}
           className="absolute top-[200px] sm:top-[150px] md:top-[180px] lg:top-[200px] left-1/2 -translate-x-1/2 text-center"
         >
+          <SectionTag label="// 04 — projects" />
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight mb-6">
             Our{" "}
             <span className="bg-neon px-5 py-2 rounded-full inline-block transform rotate-2">
-              Projects
+              <ScrambleText text="Projects" />
             </span>
           </h2>
           <p className="text-navy/60 text-lg md:text-xl font-medium max-w-2xl">

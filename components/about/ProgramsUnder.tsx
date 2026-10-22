@@ -3,8 +3,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { programs } from "@/data/programs";
+import ScrambleText from "@/components/tech/ScrambleText";
+import SectionTag from "@/components/tech/SectionTag";
+import { useBorderBeam } from "@/components/tech/hooks";
 
 const ProgramsUnder = () => {
+  const beamRef = useBorderBeam<HTMLDivElement>();
   return (
     <section
       id="programs"
@@ -20,10 +24,11 @@ const ProgramsUnder = () => {
           transition={{ duration: 0.6 }}
           className="flex flex-col items-center text-center mb-10 lg:mb-15"
         >
+          <SectionTag label="// 03 — programs" />
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy tracking-tight mb-6">
             Degree{" "}
             <span className="bg-neon px-5 py-2 rounded-full inline-block transform rotate-2">
-              Programs
+              <ScrambleText text="Programs" />
             </span>
           </h2>
           <p className="text-navy/60 text-lg md:text-xl font-medium max-w-2xl">
@@ -32,7 +37,7 @@ const ProgramsUnder = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div ref={beamRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {programs.map((prog, index) => (
             <motion.div
               key={prog.short}
@@ -40,7 +45,7 @@ const ProgramsUnder = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="group relative bg-charcoal rounded-[2.5rem] p-8 sm:p-10 shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/5 hover:border-neon/40 hover:shadow-[0_20px_50px_-10px_rgba(196,255,71,0.15)] flex flex-col cursor-pointer"
+              className="border-beam group relative bg-charcoal rounded-[2.5rem] p-8 sm:p-10 shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white/5 hover:border-neon/40 hover:shadow-[0_20px_50px_-10px_rgba(196,255,71,0.15)] flex flex-col cursor-pointer"
             >
               <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-[2.5rem] pointer-events-none">
                 <div className="absolute -bottom-4 -right-4 text-[8rem] font-black text-white/[0.02] select-none tracking-tighter group-hover:text-white/[0.05] transition-colors duration-500">
@@ -48,9 +53,12 @@ const ProgramsUnder = () => {
                 </div>
               </div>
 
-              <div className="mb-10 relative z-10">
+              <div className="mb-10 relative z-10 flex items-center gap-3">
                 <span className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-neon/10 border border-neon/20 text-neon font-extrabold text-sm tracking-widest uppercase">
                   {prog.short}
+                </span>
+                <span aria-hidden="true" className="font-mono text-xs text-white/40 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  $ cd ./{prog.slug}
                 </span>
               </div>
 

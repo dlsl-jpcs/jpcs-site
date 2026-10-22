@@ -1,5 +1,8 @@
 "use client";
+import { useRef } from "react";
 import Image from "next/image";
+
+const MAX_TILT = 6;
 
 interface OfficerCardProps {
   name: string;
@@ -20,8 +23,36 @@ export default function OfficerCard({
   const words = name.trim().split(/\s+/);
   const initials = ((words[0]?.[0] ?? "") + (words.length > 1 ? (words[words.length - 1][0] ?? "") : "")).toUpperCase();
 
+  // Mouse-only 3D tilt toward the pointer, written straight to the style so it never re-renders.
+  const cardRef = useRef<HTMLDivElement>(null);
+  const raf = useRef(0);
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || raf.current) return;
+    const { clientX, clientY } = e;
+    raf.current = requestAnimationFrame(() => {
+      raf.current = 0;
+      const el = cardRef.current;
+      if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const r = el.getBoundingClientRect();
+      const px = (clientX - r.left) / r.width - 0.5;
+      const py = (clientY - r.top) / r.height - 0.5;
+      el.style.transform = `perspective(900px) rotateX(${-py * MAX_TILT * 2}deg) rotateY(${px * MAX_TILT * 2}deg)`;
+    });
+  };
+  const onPointerLeave = () => {
+    cancelAnimationFrame(raf.current);
+    raf.current = 0;
+    if (cardRef.current) cardRef.current.style.transform = "";
+  };
+
+  const bracket = "pointer-events-none absolute z-10 h-4 w-4 border-neon opacity-0 transition-all duration-300 group-hover:opacity-100";
+
   return (
-    <div className="group relative w-[220px] min-[401px]:w-[248px] md:w-[300px] aspect-[4/5] rounded-[1.7rem] min-[401px]:rounded-[2rem] overflow-hidden bg-charcoal-light border border-white/5 hover:border-neon/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(196,255,71,0.15)] select-none">
+    <div
+      ref={cardRef}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+      className="group relative w-[220px] min-[401px]:w-[248px] md:w-[300px] aspect-[4/5] rounded-[1.7rem] min-[401px]:rounded-[2rem] overflow-hidden bg-charcoal-light border border-white/5 hover:border-neon/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(196,255,71,0.15)] select-none">
       {image ? (
         <Image
           src={image}
@@ -40,6 +71,10 @@ export default function OfficerCard({
       )}
 
       <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/40 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Viewfinder corners that snap in on hover. */}
+      <span aria-hidden="true" className={`${bracket} left-5 top-5 border-l-2 border-t-2 -translate-x-1 -translate-y-1 group-hover:translate-x-0 group-hover:translate-y-0`} />
+      <span aria-hidden="true" className={`${bracket} right-5 bottom-5 border-r-2 border-b-2 translate-x-1 translate-y-1 group-hover:translate-x-0 group-hover:translate-y-0`} />
 
       <div className="absolute top-4 min-[401px]:top-5 right-4 min-[401px]:right-5 z-10">
         <span className="inline-block px-3 min-[401px]:px-4 py-1 min-[401px]:py-1.5 text-[10px] min-[401px]:text-[11px] font-extrabold tracking-widest text-navy bg-neon rounded-full shadow-lg transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 transition-all duration-300">

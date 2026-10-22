@@ -8,6 +8,9 @@ import {
 } from "framer-motion";
 import { OFFICER_CATEGORIES, type Officer, type OfficerCategory } from "@/lib/officers";
 import OfficerCard from "./OfficerCard";
+import GridSpotlight from "@/components/tech/GridSpotlight";
+import ScrambleText from "@/components/tech/ScrambleText";
+import SectionTag from "@/components/tech/SectionTag";
 
 type Category = OfficerCategory;
 
@@ -108,6 +111,7 @@ export default function Officers() {
       className="relative py-20 min-[401px]:py-24 md:py-32 bg-charcoal overflow-hidden rounded-t-[3rem] -mt-10 z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.15)]"
     >
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+      <GridSpotlight />
 
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="px-4 min-[401px]:px-6 md:px-16 mb-12 min-[401px]:mb-16 flex flex-col lg:flex-row lg:items-end justify-between gap-8 min-[401px]:gap-10">
@@ -117,8 +121,9 @@ export default function Officers() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
+            <SectionTag label="<officers />" tone="dark" />
             <h2 className="text-5xl min-[401px]:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold text-white tracking-tight leading-tight">
-              The <span className="text-neon inline-block">Officers</span>
+              The <span className="text-neon inline-block"><ScrambleText text="Officers" /></span>
             </h2>
             <p className="mt-3 min-[401px]:mt-4 text-white/50 text-base min-[401px]:text-lg max-w-md font-medium">
               The dedicated individuals driving JPCS DLSL forward through

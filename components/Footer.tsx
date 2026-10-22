@@ -1,6 +1,10 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useSpring } from "framer-motion";
+import GridSpotlight from "./tech/GridSpotlight";
+import ScrambleText from "./tech/ScrambleText";
+import SectionTag from "./tech/SectionTag";
+import { useFinePointer } from "./tech/hooks";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,6 +21,22 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const Footer = () => {
+  // The neon glow drifts loosely after the cursor (springs, so no re-renders). 320px = half the blob.
+  const footerRef = useRef<HTMLElement>(null);
+  const fine = useFinePointer();
+  const glowX = useSpring(0, { stiffness: 40, damping: 18 });
+  const glowY = useSpring(0, { stiffness: 40, damping: 18 });
+  const onPointerMove = (e: React.PointerEvent) => {
+    const r = footerRef.current?.getBoundingClientRect();
+    if (!fine || !r) return;
+    glowX.set((e.clientX - (r.right - 320)) * 0.5);
+    glowY.set((e.clientY - (r.top + 320)) * 0.5);
+  };
+  const onPointerLeave = () => {
+    glowX.set(0);
+    glowY.set(0);
+  };
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -29,9 +49,18 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-navy pt-20 min-[401px]:pt-28 pb-10 min-[401px]:pb-12 px-4 min-[401px]:px-6 overflow-hidden rounded-t-[3rem] -mt-10 z-40 shadow-[0_-30px_60px_rgba(0,0,0,0.3)]">
+    <footer
+      ref={footerRef}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+      className="relative bg-navy pt-20 min-[401px]:pt-28 pb-10 min-[401px]:pb-12 px-4 min-[401px]:px-6 overflow-hidden rounded-t-[3rem] -mt-10 z-40 shadow-[0_-30px_60px_rgba(0,0,0,0.3)]"
+    >
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-neon/5 rounded-full blur-[150px] pointer-events-none" />
+      <GridSpotlight />
+      <motion.div
+        style={{ x: glowX, y: glowY }}
+        className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-neon/5 rounded-full blur-[150px] pointer-events-none"
+      />
 
       <div className="absolute bottom-[-5vw] left-0 w-full overflow-hidden flex justify-center pointer-events-none select-none z-0 opacity-[0.02]">
         <h1 className="text-[24vw] min-[401px]:text-[19vw] font-black text-white whitespace-nowrap leading-none tracking-tighter">
@@ -48,9 +77,10 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             className="max-w-2xl"
           >
+            <SectionTag label="$ ./join --jpcs" tone="dark" />
             <h2 className="text-4xl min-[401px]:text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold text-white tracking-tight leading-[1.05] mb-4 min-[401px]:mb-6">
               Ready to <br />
-              <span className="text-neon">innovate?</span>
+              <span className="text-neon"><ScrambleText text="innovate?" /></span>
             </h2>
             <p className="text-white/50 text-base min-[401px]:text-lg md:text-xl font-medium leading-relaxed">
               Join the network of future IT professionals. Connect with us to

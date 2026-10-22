@@ -2,6 +2,9 @@
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 import { CONTACT_INFO } from "@/data/about";
+import CircuitTraces from "./tech/CircuitTraces";
+import ScrambleText from "./tech/ScrambleText";
+import SectionTag from "./tech/SectionTag";
 
 const ADDRESS = CONTACT_INFO.address;
 const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -99,6 +102,7 @@ const Contact = () => {
       className="relative py-20 min-[401px]:py-28 md:py-32 px-4 min-[401px]:px-6 md:px-16 overflow-hidden bg-white z-30 rounded-t-[3rem] -mt-10 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
     >
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
+      <CircuitTraces tone="light" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-10 min-[401px]:gap-14 lg:gap-20 items-center">
           <motion.div
@@ -107,11 +111,12 @@ const Contact = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
+            <SectionTag label="// 06 — contact" />
             <h2 className="text-5xl min-[401px]:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold text-navy tracking-tight leading-[1.05] mb-4 min-[401px]:mb-6">
               Let&apos;s build <br />
               something <br />
               <span className="inline-block bg-charcoal text-neon px-4 min-[401px]:px-5 py-1.5 min-[401px]:py-2 mt-2 min-[401px]:mt-3 rounded-full transform -rotate-2 shadow-2xl text-2xl min-[401px]:text-4xl md:text-7xl">
-                extraordinary.
+                <ScrambleText text="extraordinary." />
               </span>
             </h2>
 
