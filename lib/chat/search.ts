@@ -19,6 +19,14 @@ export async function searchAnswer(
 ): Promise<ChatAnswer | null> {
   const q = question.toLowerCase();
 
+  if (/^\s*(hi|hello|hey|yo|good (morning|afternoon|evening)|sup)\b[\s!.?]*$/.test(q)) {
+    return {
+      reply: "Hi, I'm Judy! 🦥 I can help with JPCS events, officers, programs and how to reach us. What would you like to know?",
+      links: [],
+      handoff: false,
+    };
+  }
+
   const program = programs.find((p) => has(q, [p.slug, p.short.toLowerCase()]));
   if (program) {
     return {
@@ -39,7 +47,7 @@ export async function searchAnswer(
           handoff: false,
         }
       : {
-          reply: "No upcoming events are posted right now. Follow JPCS on Facebook for announcements.",
+          reply: "No upcoming events are posted right now, but follow JPCS on Facebook so you don't miss the next one!",
           links: ["/#contact"],
           handoff: false,
         };

@@ -35,8 +35,9 @@ let cached: { at: number; value: Knowledge } | null = null;
  */
 export async function getKnowledge(): Promise<Knowledge> {
   if (cached && Date.now() - cached.at < TTL_MS) return cached.value;
-  const value = await buildKnowledge();
-  cached = { at: Date.now(), value };
+  const { value, complete } = await buildKnowledge();
+  // A pack built while Supabase was erroring is partial; don't pin it for the full TTL.
+  if (complete) cached = { at: Date.now(), value };
   return value;
 }
 
@@ -45,7 +46,7 @@ export function invalidateKnowledge() {
   cached = null;
 }
 
-async function buildKnowledge(): Promise<Knowledge> {
+async function buildKnowledge(): Promise<{ value: Knowledge; complete: boolean }> {
   // Cookieless anon client: public data only, same RLS view as a logged-out visitor.
   const supabase = createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -81,8 +82,12 @@ async function buildKnowledge(): Promise<Knowledge> {
       .returns<ChatFaqRow[]>(),
   ]);
 
+  let complete = true;
   for (const [name, res] of Object.entries({ eventsRes, projectsRes, officersRes, faqRes })) {
-    if (res.error) console.error(`chat knowledge: ${name} failed:`, res.error.message);
+    if (res.error) {
+      complete = false;
+      console.error(`chat knowledge: ${name} failed:`, res.error.message);
+    }
   }
 
   const events: ChatEvent[] = (eventsRes.data ?? []).map((row) => ({
@@ -145,5 +150,5 @@ async function buildKnowledge(): Promise<Knowledge> {
 
   lines.push("", "## Links you may use", ...CHAT_LINKS.map((l) => `- ${l.href}: ${l.label}`));
 
-  return { text: lines.join("\n"), events, officers };
+  return { value: { text: lines.join("\n"), events, officers }, complete };
 }

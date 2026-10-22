@@ -93,7 +93,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
       if (!res.ok) {
         setMessages((m) => [
           ...m,
-          { role: "assistant", content: data.message ?? "Something went wrong. Please try again.", error: true },
+          { role: "assistant", content: data.message ?? "Oops, I tripped over a branch! Please try again.", error: true },
         ]);
         return;
       }
@@ -101,7 +101,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
     } catch {
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: "I can't reach the server right now. Check your connection and try again.", error: true },
+        { role: "assistant", content: "I can't reach the server right now. Check your connection and I'll be right here when you try again!", error: true },
       ]);
     } finally {
       setPending(false);
@@ -121,7 +121,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
       id="jpcs-chat-panel"
       role="dialog"
       aria-modal={isSheet}
-      aria-label="JPCS assistant"
+      aria-label="Chat with Judy"
       tabIndex={-1}
       initial={{ opacity: 0, y: 16, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -132,8 +132,8 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
       <header className="flex items-center gap-3 border-b border-white/10 bg-navy px-4 py-3">
         <BotAvatar size={36} />
         <div className="min-w-0 flex-1">
-          <p className="font-bold leading-tight">JPCS Assistant</p>
-          <p className="text-xs text-white/50">Answers from the JPCS website</p>
+          <p className="font-bold leading-tight">Judy</p>
+          <p className="text-xs text-white/50">JPCS's happy sloth · ask me anything</p>
         </div>
         <button
           type="button"
@@ -149,7 +149,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
         {messages.length === 0 && (
           <div className="space-y-4">
             <Bubble role="assistant">
-              Hi! I can tell you about JPCS events, programs, officers, and how to get involved. What would you like to know?
+              Hi, I'm Judy, the JPCS sloth! 🦥 I may move slow, but I know a lot about our events, programs, officers, and how to get involved. What are you curious about?
             </Bubble>
             <div className="flex flex-wrap gap-2 pl-10">
               {QUICK_REPLIES.map((q) => (
@@ -201,7 +201,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
         ))}
 
         {pending && (
-          <div className="flex items-end gap-2" aria-label="Assistant is typing">
+          <div className="flex items-end gap-2" aria-label="Judy is typing">
             <BotAvatar size={32} />
             <div className="flex gap-1 rounded-2xl rounded-bl-md bg-white/5 px-4 py-3">
               {[0, 1, 2].map((d) => (
@@ -238,7 +238,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
                 ask(input);
               }
             }}
-            placeholder="Ask about events, programs…"
+            placeholder="Ask Judy about events, programs…"
             className="max-h-28 min-h-[40px] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm text-white placeholder:text-white/40 outline-none"
           />
           <button
@@ -303,7 +303,7 @@ function HandoffForm({ question, onDone }: { question: string; onDone: () => voi
 
   if (status.kind === "sent") {
     return (
-      <Bubble role="assistant">Sent! An officer will reply to {form.email} as soon as they can.</Bubble>
+      <Bubble role="assistant">Yay, sent! 🎉 An officer will reply to {form.email} as soon as they can.</Bubble>
     );
   }
 

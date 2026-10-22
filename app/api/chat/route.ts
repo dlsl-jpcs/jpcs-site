@@ -11,7 +11,7 @@ const MAX_TURNS = 6;
 const ALLOWED_LINKS = new Set(CHAT_LINKS.map((l) => l.href));
 
 const NOT_SURE =
-  "I'm not sure about that one. Want to send your question to the JPCS officers? They'll reply by email.";
+  "Hmm, that one's beyond my branch! 🦥 Want to send your question to the JPCS officers? They'll reply by email.";
 
 export async function POST(req: Request) {
   let body: Record<string, unknown>;

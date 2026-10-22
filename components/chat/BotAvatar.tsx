@@ -1,18 +1,21 @@
-/**
- * Placeholder chatbot mark: a ">_" terminal prompt. Swap this one file for the real logo later
- * (e.g. an <Image src="/chat/bot.png" />); the launcher and message bubbles both use it.
- */
+import Image from "next/image";
+
+/** Judy, the JPCS sloth mascot (public/JPCS_MASCOT.png). Used by the launcher and message bubbles. */
 export default function BotAvatar({ size = 32, plain = false }: { size?: number; plain?: boolean }) {
   return (
     <span
       aria-hidden="true"
-      className={`inline-flex shrink-0 items-center justify-center rounded-xl ${plain ? "" : "bg-neon text-navy"}`}
+      className={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-xl ${plain ? "" : "bg-neon"}`}
       style={{ width: size, height: size }}
     >
-      <svg viewBox="0 0 24 24" width={size * 0.6} height={size * 0.6} fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 7l5 5-5 5" />
-        <path d="M13 17h6" />
-      </svg>
+      <Image
+        src="/JPCS_MASCOT.png"
+        alt=""
+        width={size * 2}
+        height={size * 2}
+        sizes={`${size * 2}px`}
+        className="h-full w-full scale-110 object-contain"
+      />
     </span>
   );
 }
