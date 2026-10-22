@@ -4,6 +4,12 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import type { Program } from "@/data/programs";
+import CircuitTraces from "@/components/tech/CircuitTraces";
+import GridSpotlight from "@/components/tech/GridSpotlight";
+import ScrambleText from "@/components/tech/ScrambleText";
+import SectionTag from "@/components/tech/SectionTag";
+import Typewriter from "@/components/tech/Typewriter";
+import { useBorderBeam, useVelocityMarquee } from "@/components/tech/hooks";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -66,8 +72,36 @@ function RevealItem({
   );
 }
 
+/** Subject ticker under the hero; drifts like the home banner and surges while the page scrolls. */
+function Ticker({ subjects }: { subjects: string[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref);
+  const { x, skew } = useVelocityMarquee(-5, inView);
+  return (
+    <div ref={ref} className="bg-[#070b12] border-y border-white/[0.07] py-2.5 overflow-hidden" aria-hidden="true">
+      <motion.div className="flex w-max items-center whitespace-nowrap" style={{ x, skewX: skew }}>
+        {[0, 1].map((dupe) => (
+          <span key={dupe} className="flex items-center">
+            {subjects.map((subject) => (
+              <span key={subject} className="inline-flex items-center gap-3 px-7">
+                <span className="text-neon text-[8px] leading-none">●</span>
+                <span className="font-mono text-[13px] text-white/35 tracking-[0.14em] uppercase">{subject}</span>
+                <span className="text-white/15 text-xs font-light ml-1">|</span>
+              </span>
+            ))}
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
 export default function ProgramDetail({ program }: { program: Program }) {
   const [openCareer, setOpenCareer] = useState<number | null>(null);
+  const beamRef = useBorderBeam<HTMLDivElement>();
+  const titleWords = program.title.split(" ");
+  const lastWord = titleWords.at(-1) ?? "";
+  const leadingWords = titleWords.slice(0, -1).join(" ");
 
   return (
     <div className="min-h-screen bg-charcoal">
@@ -79,6 +113,8 @@ export default function ProgramDetail({ program }: { program: Program }) {
         className="relative min-h-screen flex flex-col justify-center bg-gradient-to-br from-navy to-charcoal pt-28 pb-16 md:py-24 overflow-hidden"
       >
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+        <GridSpotlight />
+        <CircuitTraces tone="dark" corners={["tr", "bl"]} className="hidden lg:block" />
         <div className="absolute -bottom-4 -right-8 text-[12rem] font-black text-white/[0.02] select-none pointer-events-none leading-none tracking-tighter" aria-hidden="true">
           {program.short}
         </div>
@@ -96,17 +132,16 @@ export default function ProgramDetail({ program }: { program: Program }) {
           <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-neon/10 border border-neon/20 text-neon font-extrabold text-sm tracking-widest uppercase mb-6">
             {program.short}
           </span>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-none uppercase mb-4">
-            <span className="text-white">
-              {program.title.split(" ").slice(0, -1).join(" ")}
-            </span>
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] tracking-tight mb-5">
+            <span className="text-white">{leadingWords}</span>
             <br />
-            <span className="text-neon">
-              {program.title.split(" ").slice(-1)[0]}
+            <span className="inline-block bg-neon text-navy px-4 md:px-6 py-1.5 md:py-2 mt-3 md:mt-4 rounded-full shadow-[0_0_40px_rgba(196,255,71,0.25)] -rotate-2 text-[0.8em]">
+              <ScrambleText text={lastWord} />
             </span>
           </h1>
-          <p className="text-white/60 text-base md:text-xl mb-10 max-w-2xl leading-relaxed">
-            {program.tagline}
+          <p className="inline-flex gap-2 text-left font-mono text-xs min-[401px]:text-sm md:text-base text-white/60 mb-10 max-w-2xl leading-relaxed">
+            <span aria-hidden="true" className="text-neon">&gt;</span>
+            <Typewriter text={program.tagline} delay={600} speed={22} />
           </p>
           <div className="flex flex-wrap gap-3">
             {[
@@ -127,38 +162,16 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </motion.section>
 
       {/* ── Program Overview ── */}
-      <section className="bg-navy border-t-2 border-neon">
-        {/* Ticker */}
-        <div className="bg-[#070b12] border-y border-white/[0.07] py-2.5 overflow-hidden">
-          <div
-            className="flex items-center whitespace-nowrap animate-marquee-left"
-            style={{ animationDuration: "10s" }}
-          >
-            {[0, 1].map((dupe) => (
-              <span key={dupe} className="flex items-center">
-                {program.curriculum.map((subject) => (
-                  <span key={subject} className="inline-flex items-center gap-3 px-7">
-                    <span className="text-neon text-[8px] leading-none">●</span>
-                    <span className="font-mono text-[13px] text-white/35 tracking-[0.14em] uppercase">
-                      {subject}
-                    </span>
-                    <span className="text-white/15 text-xs font-light ml-1">|</span>
-                  </span>
-                ))}
-              </span>
-            ))}
-          </div>
-        </div>
+      <section className="relative overflow-hidden bg-navy border-t-2 border-neon">
+        <GridSpotlight />
+        <CircuitTraces tone="dark" corners={["br"]} className="hidden lg:block" />
+        <Ticker subjects={program.curriculum} />
 
-        <div className="px-6 md:px-16 py-14 md:py-24 max-w-7xl mx-auto">
+        <div className="relative z-10 px-6 md:px-16 py-14 md:py-24 max-w-7xl mx-auto">
           <Reveal>
             <RevealItem duration={0.45}>
-              <div className="flex items-center gap-4 mb-10 md:mb-12">
-                <span className="text-white/20 font-mono text-sm">01</span>
-                <div className="h-px w-10 bg-neon/40" />
-                <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
-                  Program Overview
-                </span>
+              <div className="mb-4 md:mb-6">
+                <SectionTag label="// 01 — program overview" tone="dark" />
               </div>
             </RevealItem>
 
@@ -166,10 +179,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
               {/* Left */}
               <div>
                 <RevealItem duration={0.6}>
-                  <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight mb-8">
                     <span className="text-white">About the</span>
                     <br />
-                    <span className="text-neon">Program</span>
+                    <span className="text-neon"><ScrambleText text="Program" /></span>
                   </h2>
                 </RevealItem>
                 {program.overviewParagraphs.map((para, i) => (
@@ -199,10 +212,10 @@ export default function ProgramDetail({ program }: { program: Program }) {
                 ].map((stat, i, arr) => (
                   <RevealItem key={stat.label} duration={0.4}>
                     <div className={`flex items-center justify-between px-5 md:px-8 py-4 md:py-6 ${i < arr.length - 1 ? "border-b border-white/10" : ""}`}>
-                      <span className="text-white/35 text-[10px] font-bold tracking-[0.2em] uppercase">
+                      <span className="text-white/35 font-mono text-[10px] tracking-[0.2em] uppercase">
                         {stat.label}
                       </span>
-                      <span className="text-neon font-black text-2xl md:text-4xl">
+                      <span className="text-neon font-extrabold text-2xl md:text-4xl">
                         {stat.value}
                       </span>
                     </div>
@@ -215,25 +228,22 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* ── Core Curriculum ── */}
-      <section className="bg-off-white min-h-screen flex flex-col justify-center py-16 md:py-0 md:h-screen md:overflow-hidden">
-        <Reveal className="px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
+      <section className="relative z-10 -mt-10 rounded-t-[3rem] bg-off-white min-h-screen flex flex-col justify-center py-16 md:py-0 md:h-screen overflow-hidden">
+        <CircuitTraces tone="light" corners={["br"]} className="hidden lg:block" />
+        <Reveal className="relative z-10 px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
           <RevealItem duration={0.45}>
-            <div className="flex items-center gap-4 mb-8">
-              <span className="text-navy/20 font-mono text-sm">02</span>
-              <div className="h-px w-10 bg-navy/20" />
-              <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
-                Core Curriculum
-              </span>
+            <div className="mb-4">
+              <SectionTag label="// 02 — core curriculum" />
             </div>
           </RevealItem>
 
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-16 items-start">
             <div>
               <RevealItem duration={0.6}>
-                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-6 md:mb-8">
-                  <span className="text-navy">What You</span>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight text-navy mb-6 md:mb-8">
+                  <span>What You</span>
                   <br />
-                  <span className="bg-neon text-navy px-4 md:px-5 py-2 rounded-full inline-block transform -rotate-2">Study</span>
+                  <span className="bg-neon text-navy px-4 md:px-5 py-2 rounded-full inline-block transform -rotate-2 mt-2"><ScrambleText text="Study" /></span>
                 </h2>
               </RevealItem>
               <RevealItem duration={0.5}>
@@ -271,23 +281,21 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* ── Career Paths ── */}
-      <section className="bg-navy min-h-screen flex flex-col justify-center py-16 md:py-0">
-        <Reveal className="px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
+      <section className="relative z-20 -mt-10 rounded-t-[3rem] overflow-hidden bg-navy min-h-screen flex flex-col justify-center py-16 md:py-0">
+        <GridSpotlight />
+        <CircuitTraces tone="dark" corners={["tr"]} className="hidden lg:block" />
+        <Reveal className="relative z-10 px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
           <RevealItem duration={0.45}>
-            <div className="flex items-center gap-4 mb-8">
-              <span className="text-white/20 font-mono text-sm">03</span>
-              <div className="h-px w-10 bg-neon/40" />
-              <span className="text-neon text-[10px] font-extrabold tracking-[0.3em] uppercase">
-                Career Paths
-              </span>
+            <div className="mb-4">
+              <SectionTag label="// 03 — career paths" tone="dark" />
             </div>
           </RevealItem>
 
           <RevealItem duration={0.6}>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase mb-8">
-              <span className="text-white">Where You'll</span>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight mb-8">
+              <span className="text-white">Where You&apos;ll</span>
               <br />
-              <span className="text-neon">Go</span>
+              <span className="text-neon"><ScrambleText text="Go" /></span>
             </h2>
           </RevealItem>
 
@@ -305,7 +313,7 @@ export default function ProgramDetail({ program }: { program: Program }) {
                         <span className={`font-mono text-xs w-6 flex-shrink-0 transition-colors duration-200 ${isOpen ? "text-neon" : "text-white/20"}`}>
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className={`font-extrabold text-xs md:text-sm uppercase tracking-wide transition-colors duration-200 truncate ${isOpen ? "text-neon" : "text-white"}`}>
+                        <span className={`font-bold text-sm md:text-base tracking-tight transition-colors duration-200 truncate ${isOpen ? "text-neon" : "text-white"}`}>
                           {career.name}
                         </span>
                       </div>
@@ -372,48 +380,46 @@ export default function ProgramDetail({ program }: { program: Program }) {
       </section>
 
       {/* ── Why Choose ── */}
-      <div className="relative z-40 bg-off-white min-h-screen md:h-[calc(100vh+2.5rem)] flex flex-col justify-center md:overflow-hidden py-16 md:py-0 pb-20 md:pb-14">
+      <section className="relative z-30 -mt-10 rounded-t-[3rem] bg-off-white min-h-screen md:h-[calc(100vh+2.5rem)] flex flex-col justify-center overflow-hidden py-16 md:py-0 pb-20 md:pb-14">
         <Reveal className="px-6 md:px-16 py-0 md:py-14 max-w-7xl mx-auto w-full">
           <RevealItem duration={0.45}>
-            <div className="flex items-center gap-4 mb-8">
-              <span className="text-navy/20 font-mono text-sm">04</span>
-              <div className="h-px w-10 bg-navy/20" />
-              <span className="text-navy text-[10px] font-extrabold tracking-[0.3em] uppercase">
-                Why {program.short}
-              </span>
+            <div className="mb-4">
+              <SectionTag label={`// 04 — why ${program.short.toLowerCase()}`} />
             </div>
           </RevealItem>
 
           <RevealItem duration={0.6}>
             <div className="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-12 mb-10 md:mb-12">
-              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none uppercase shrink-0">
-                <span className="text-navy">The Case For</span>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight text-navy shrink-0">
+                <span>The Case For</span>
                 <br />
                 <span className="bg-neon text-navy px-4 md:px-5 py-2 rounded-full inline-block transform -rotate-2 mt-3">
-                  Choosing {program.short}
+                  Choosing <ScrambleText text={program.short} />
                 </span>
               </h2>
               <p className="text-navy/50 text-sm md:text-base leading-relaxed max-w-xs">
-                Four reasons this program stands apart — from how it's built to where it takes you.
+                Four reasons this program stands apart — from how it&apos;s built to where it takes you.
               </p>
             </div>
           </RevealItem>
 
-          <Reveal variants={staggerFast} className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-            {program.highlights.map((h, i) => (
-              <RevealItem key={h.title} duration={0.4}>
-                <div className="bg-white border-0 border-t-2 border-t-transparent rounded-2xl p-6 md:p-8 shadow-none transition-all duration-300 ease-in-out hover:border-t-neon hover:bg-gray-100 hover:shadow-xl">
-                  <p className="text-gray-400 font-mono text-xs mb-4">
-                    — {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <p className="text-navy font-black text-lg md:text-xl uppercase tracking-wide mb-3">{h.title}</p>
-                  <p className="text-gray-500 text-sm leading-relaxed">{h.desc}</p>
-                </div>
-              </RevealItem>
-            ))}
-          </Reveal>
+          <div ref={beamRef}>
+            <Reveal variants={staggerFast} className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+              {program.highlights.map((h, i) => (
+                <RevealItem key={h.title} duration={0.4}>
+                  <div className="border-beam bg-white border-0 border-t-2 border-t-transparent rounded-2xl p-6 md:p-8 shadow-none transition-all duration-300 ease-in-out hover:border-t-neon hover:bg-gray-100 hover:shadow-xl">
+                    <p className="text-gray-400 font-mono text-xs mb-4">
+                      — {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <p className="text-navy font-extrabold text-lg md:text-xl tracking-tight mb-3">{h.title}</p>
+                    <p className="text-gray-500 text-sm leading-relaxed">{h.desc}</p>
+                  </div>
+                </RevealItem>
+              ))}
+            </Reveal>
+          </div>
         </Reveal>
-      </div>
+      </section>
     </div>
   );
 }
