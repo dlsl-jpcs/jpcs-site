@@ -1,4 +1,4 @@
-import { useEffect, useRef, memo } from "react";
+import { useEffect, useId, useRef, memo } from "react";
 
 import "./DotField.css";
 
@@ -76,9 +76,8 @@ const DotField = memo(
       gradientTo,
     };
     const rebuildRef = useRef<(() => void) | null>(null);
-    const glowIdRef = useRef(
-      `dot-field-glow-${Math.random().toString(36).slice(2, 9)}`,
-    );
+    // useId matches between server and client, so the gradient id doesn't cause a hydration mismatch.
+    const glowIdRef = useRef(`dot-field-glow-${useId().replace(/:/g, "")}`);
 
     useEffect(() => {
       const canvas = canvasRef.current;

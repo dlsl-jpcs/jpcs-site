@@ -1,8 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Events from "./events/Events";
 import DotField from "./DotField";
+import Typewriter from "./tech/Typewriter";
 
 interface UpcomingEvent {
   org: string;
@@ -21,6 +22,15 @@ export default function Hero() {
   const [isMobile, setIsMobile] = useState(false);
   // null until the first response, so the empty message doesn't flash while loading.
   const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[] | null>(null);
+
+  // Background drifts slower than the content, and the content lifts away as the hero scrolls off.
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  // Flat ranges for reduced motion; the styles stay bound so server and client markup match.
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "30%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -80]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, reduce ? 1 : 0]);
 
   useEffect(() => {
     const fetchUpcomingEvents = async () => {
@@ -62,11 +72,12 @@ export default function Hero() {
 
   return (
     <section
+      ref={sectionRef}
       id="home"
       className="relative min-h-screen w-full bg-navy flex items-center justify-center overflow-hidden z-0"
     >
       {/* DotField background layer */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <motion.div className="absolute inset-0 z-0 pointer-events-none" style={{ y: bgY }}>
         <DotField
           dotRadius={1.5}
           dotSpacing={12}
@@ -81,14 +92,20 @@ export default function Hero() {
           gradientTo="#4ae609"
           glowColor="transparent"
         />
-      </div>
+      </motion.div>
 
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none">
+        {/* Slow scanline sweeping down the grid, like a CRT refresh. */}
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-transparent via-neon/[0.06] to-transparent animate-scanline motion-reduce:hidden" />
+      </div>
 
       <div className="absolute top-1/4 -left-32 w-[36rem] h-[36rem] bg-[radial-gradient(circle,rgba(196,255,71,0.1),transparent_65%)] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[48rem] h-[48rem] bg-[radial-gradient(circle,rgba(59,130,246,0.1),transparent_65%)] pointer-events-none" />
 
-      <div className="max-w-[95%] sm:max-w-[95%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto px-3 min-[401px]:px-5 sm:px-6 relative z-10 w-full pt-20 min-[401px]:pt-24 lg:pt-14 pb-12 min-[401px]:pb-16">
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="max-w-[95%] sm:max-w-[95%] md:max-w-6xl lg:max-w-7xl xl:max-w-8xl mx-auto px-3 min-[401px]:px-5 sm:px-6 relative z-10 w-full pt-20 min-[401px]:pt-24 lg:pt-14 pb-12 min-[401px]:pb-16"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-[401px]:gap-8 lg:gap-8 items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -106,8 +123,9 @@ export default function Hero() {
               </span>
             </h1>
 
-            <p className="text-sm min-[401px]:text-[16px] md:text-lg text-white/60 max-w-md mt-3 min-[401px]:mt-2 leading-relaxed font-medium md:ml-6 lg:ml-2">
-              Exploring limitless opportunities through innovation
+            <p className="inline-flex gap-2 text-left font-mono text-xs min-[401px]:text-sm md:text-base text-white/60 max-w-md mt-3 min-[401px]:mt-2 leading-relaxed md:ml-6 lg:ml-2">
+              <span aria-hidden="true" className="text-neon">&gt;</span>
+              <Typewriter text="Exploring limitless opportunities through innovation" delay={900} speed={32} />
             </p>
           </motion.div>
 
@@ -120,7 +138,7 @@ export default function Hero() {
             <Events events={events} isMobile={isMobile} loading={upcomingEvents === null} />
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
