@@ -84,6 +84,16 @@ export function formatEventRange(startsAt: string, endsAt?: string | null) {
   return { date, time };
 }
 
+/** timestamptz -> the site-local calendar day it falls on, "YYYY-MM-DD". */
+export function ymdInSiteZone(iso: string | Date) {
+  return ymdFormat.format(typeof iso === "string" ? new Date(iso) : iso);
+}
+
+/** "YYYY-MM-DD" (site-local day) -> the timestamptz of that day's midnight in site time. */
+export function siteMidnightISO(ymd: string) {
+  return `${ymd}T00:00:00${SITE_UTC_OFFSET}`;
+}
+
 /** Midnight (site time) of the current day, so today's events still count as upcoming. */
 export function startOfTodayISO(now = new Date()) {
   return `${ymdFormat.format(now)}T00:00:00${SITE_UTC_OFFSET}`;

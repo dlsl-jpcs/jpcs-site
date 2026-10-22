@@ -14,6 +14,7 @@ export const CHAT_LINKS: { href: string; label: string }[] = [
   { href: "/#gallery", label: "Gallery highlights" },
   { href: "/#contact", label: "Contact us" },
   { href: "/gallery", label: "Full gallery" },
+  { href: "/calendar", label: "Calendar of activities" },
   ...programs.map((p) => ({ href: `/programs/${p.slug}`, label: `${p.short} program` })),
 ];
 
@@ -121,6 +122,8 @@ async function buildKnowledge(): Promise<{ value: Knowledge; complete: boolean }
   for (const row of eventsRes.data ?? []) {
     lines.push(`  ${row.event_name} details: ${row.event_description}`);
   }
+
+  lines.push("A month-by-month calendar of events is at /calendar.");
 
   lines.push("", "## Past projects and events (shown in /#projects)");
   for (const p of projects) {

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Event } from "@/types/events";
 import EventCarousel from "./EventCarousel";
 
@@ -56,6 +57,24 @@ export default function Events({ events, isMobile, loading = false }: EventsProp
       ) : (
         <EventCarousel events={events} isMobile={isMobile} />
       )}
+
+      <Link
+        href="/calendar"
+        className="group mx-2 mt-4 flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white/80 transition-colors hover:border-neon/50 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon min-[401px]:mx-3"
+      >
+        <svg aria-hidden="true" className="h-4 w-4 text-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+        View calendar of activities
+        <span aria-hidden="true" className="font-mono text-neon transition-transform group-hover:translate-x-0.5">
+          →
+        </span>
+      </Link>
     </div>
   );
 }
