@@ -40,6 +40,11 @@ export async function getKnowledge(): Promise<Knowledge> {
   return value;
 }
 
+/** Drop the cached pack so the next question sees an admin's FAQ edit right away. */
+export function invalidateKnowledge() {
+  cached = null;
+}
+
 async function buildKnowledge(): Promise<Knowledge> {
   // Cookieless anon client: public data only, same RLS view as a logged-out visitor.
   const supabase = createSupabaseClient(

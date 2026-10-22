@@ -11,6 +11,7 @@ import {
   // Image as ImageIcon, // toggle once gallery ready
   Mail,
   Users,
+  Bot,
   LogOut,
   Menu,
   X,
@@ -24,6 +25,7 @@ const NAV = [
   { href: `${ADMIN_PATH}/events`, icon: CalendarDays, label: "Events" },
   { href: `${ADMIN_PATH}/projects`, icon: FolderKanban, label: "Projects" },
   { href: `${ADMIN_PATH}/officers`, icon: Users, label: "Officers" },
+  { href: `${ADMIN_PATH}/chatbot`, icon: Bot, label: "Chatbot" },
   // { href: `${ADMIN_PATH}/gallery`, icon: ImageIcon, label: "Gallery" }, // toggle once gallery ready
   { href: `${ADMIN_PATH}/messages`, icon: Mail, label: "Messages" },
 ];
