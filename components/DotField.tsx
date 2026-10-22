@@ -59,7 +59,7 @@ const DotField = memo(
       speed: 0,
     });
     const rafRef = useRef<number | null>(null);
-    const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
+    const sizeRef = useRef({ w: 0, h: 0 });
     const glowOpacity = useRef(0);
     const engagement = useRef(0);
     const propsRef = useRef<Record<string, unknown>>({});
@@ -104,12 +104,7 @@ const DotField = memo(
         canvas!.style.height = `${h}px`;
         ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        sizeRef.current = {
-          w,
-          h,
-          offsetX: rect.left + window.scrollX,
-          offsetY: rect.top + window.scrollY,
-        };
+        sizeRef.current = { w, h };
 
         buildDots(w, h);
         // Resizing clears the canvas; redraw if the loop is parked (reduced motion).
@@ -145,10 +140,22 @@ const DotField = memo(
         dotsRef.current = dots;
       }
 
+      // Map the pointer against the canvas's live position, not the one cached at resize: a
+      // parent transform (the hero's scroll parallax) moves the canvas without resizing it.
+      // Scrolling re-maps the last pointer position too, since no mousemove fires then.
+      let clientX: number | null = null;
+      let clientY = 0;
+      function mapPointer() {
+        if (clientX === null) return;
+        const r = canvas!.getBoundingClientRect();
+        mouseRef.current.x = clientX - r.left;
+        mouseRef.current.y = clientY - r.top;
+      }
+
       function onMouseMove(e: MouseEvent) {
-        const s = sizeRef.current;
-        mouseRef.current.x = e.pageX - s.offsetX;
-        mouseRef.current.y = e.pageY - s.offsetY;
+        clientX = e.clientX;
+        clientY = e.clientY;
+        mapPointer();
       }
 
       function updateMouseSpeed() {
@@ -304,6 +311,7 @@ const DotField = memo(
       doResize();
       window.addEventListener("resize", resize);
       window.addEventListener("mousemove", onMouseMove, { passive: true });
+      window.addEventListener("scroll", mapPointer, { passive: true });
       rafRef.current = requestAnimationFrame(tick);
 
       rebuildRef.current = () => {
@@ -318,6 +326,7 @@ const DotField = memo(
         clearTimeout(resizeTimer);
         window.removeEventListener("resize", resize);
         window.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("scroll", mapPointer);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

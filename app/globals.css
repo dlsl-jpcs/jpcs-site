@@ -132,17 +132,6 @@ body::-webkit-scrollbar {
   }
   --animate-caret: caret-blink 1s step-end infinite;
 
-  /* A short bright dash travelling along a circuit trace (pathLength="100"). */
-  @keyframes trace-pulse {
-    0% {
-      stroke-dashoffset: 108;
-    }
-    60%,
-    100% {
-      stroke-dashoffset: -8;
-    }
-  }
-
   @keyframes scanline {
     0% {
       transform: translateY(-10vh);
@@ -163,15 +152,6 @@ body::-webkit-scrollbar {
 input,
 textarea {
   caret-color: var(--neon);
-}
-
-.trace-pulse {
-  stroke-dasharray: 8 100;
-  animation: trace-pulse 7s linear infinite;
-}
-
-.circuit[data-paused="true"] .trace-pulse {
-  animation-play-state: paused;
 }
 
 /* Pointer-following conic border; --angle is set by useBorderBeam. Only on mouse/trackpad. */

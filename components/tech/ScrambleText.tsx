@@ -42,7 +42,7 @@ export default function ScrambleText({ text, duration = 750, className = "" }: {
       <span aria-hidden="true" className="invisible col-start-1 row-start-1">
         {text}
       </span>
-      <span ref={out} aria-hidden="true" className="col-start-1 row-start-1 overflow-hidden whitespace-nowrap">
+      <span ref={out} aria-hidden="true" className="col-start-1 row-start-1 whitespace-nowrap">
         {text}
       </span>
     </span>

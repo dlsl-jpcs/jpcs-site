@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, useReducedMotion } from "framer-motion";
 
 import { Project } from "@/types/projects";
 import EventInfo from "../EventInfo";
+import { useBorderBeam } from "../tech/hooks";
 
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -16,624 +16,171 @@ interface ProjectsCarouselProps {
   projects: Project[];
 }
 
-function useIsMobile(breakpoint = 640) {
-  const [isMobile, setIsMobile] = useState(false);
+const pad = (n: number) => String(n).padStart(2, "0");
 
-  useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
-
-    const update = () => {
-      setIsMobile(mql.matches);
-    };
-
-    update();
-
-    mql.addEventListener("change", update);
-
-    return () => {
-      mql.removeEventListener("change", update);
-    };
-  }, [breakpoint]);
-
-  return isMobile;
-}
-
+/**
+ * Projects as a native scroll-snap rail. The browser does the scrolling (trackpad and touch
+ * swipe for free), only on-screen cards paint, and nothing is rotated or blurred, so it stays
+ * smooth on weak laptops. The rail bleeds to the screen edges but its first card lines up with
+ * the page's 80rem content column.
+ */
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
-  const isMobile = useIsMobile();
+  const railRef = useRef<HTMLUListElement>(null);
+  const beamRef = useBorderBeam<HTMLDivElement>();
+  const reduce = useReducedMotion();
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    align: "center",
-    containScroll: false,
-    skipSnaps: false,
-  });
-
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
-
-  const [showPopup, setShowPopup] = useState(false);
+  const [first, setFirst] = useState(0);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  /*
-   * ==========================
-   * CAROUSEL CONTROLS
-   * ==========================
-   */
-
-  const scrollPrev = useCallback(() => {
-    emblaApi?.scrollPrev();
-  }, [emblaApi]);
-
-  const scrollNext = useCallback(() => {
-    emblaApi?.scrollNext();
-  }, [emblaApi]);
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (showPopup) return;
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      scrollPrev();
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      scrollNext();
-    }
-  };
-
-  const onSelect = useCallback((api: NonNullable<typeof emblaApi>) => {
-    setSelectedIndex(api.selectedScrollSnap());
-    setCanScrollPrev(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
+  // Distance between card starts (card width + gap).
+  const step = useCallback(() => {
+    const rail = railRef.current;
+    const card = rail?.firstElementChild as HTMLElement | null;
+    if (!rail || !card) return 0;
+    return card.offsetWidth + parseFloat(getComputedStyle(rail).columnGap || "0");
   }, []);
 
+  // Scroll position → counter and button states. State only changes when a value
+  // actually changes, so a scroll gesture costs a couple of renders, not one per frame.
   useEffect(() => {
-    if (!emblaApi) return;
-
-    onSelect(emblaApi);
-
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
-
-    return () => {
-      emblaApi.off("select", onSelect);
-      emblaApi.off("reInit", onSelect);
+    const rail = railRef.current;
+    if (!rail) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const max = rail.scrollWidth - rail.clientWidth;
+      const s = step();
+      const atEnd = rail.scrollLeft >= max - 4;
+      // The counter tracks the leftmost card, but at the end several are visible at once, so
+      // show the last one there (11 / 11, not 09 / 11).
+      setFirst(atEnd ? projects.length - 1 : s ? Math.min(projects.length - 1, Math.round(rail.scrollLeft / s)) : 0);
+      setCanPrev(rail.scrollLeft > 4);
+      setCanNext(!atEnd);
     };
-  }, [emblaApi, onSelect]);
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      rail.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [projects.length, step]);
 
-  /*
-   * ==========================
-   * MODAL
-   * ==========================
-   */
-
-  const openProjectInfo = (project: Project) => {
-    setSelectedProject(project);
-    setShowPopup(true);
+  const scrollByCards = (dir: 1 | -1, page = false) => {
+    const rail = railRef.current;
+    const s = step();
+    if (!rail || !s) return;
+    // A page is however many whole cards fit; the snap points tidy up the landing.
+    const cards = page ? Math.max(1, Math.floor((rail.clientWidth + 1) / s)) : 1;
+    rail.scrollBy({ left: dir * cards * s, behavior: reduce ? "auto" : "smooth" });
   };
 
-  const closeProjectInfo = () => {
-    setShowPopup(false);
-    setSelectedProject(null);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (selectedProject) return;
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+      scrollByCards(e.key === "ArrowLeft" ? -1 : 1);
+    }
   };
 
   if (!projects || projects.length === 0) {
     return null;
   }
 
-  /*
-   * ==========================
-   * FAN EFFECT
-   * ==========================
-   *
-   * Desktop:
-   * Stronger fan effect.
-   *
-   * Mobile:
-   * Almost no fan effect so cards
-   * don't get clipped.
-   */
-
-  const MAX_FAN = isMobile ? 0 : 4;
-
-  const ROTATE_STEP = isMobile ? 0 : -6;
-
-  const TRANSLATE_Y_STEP = isMobile ? 0 : 26;
-
-  const SCALE_STEP = isMobile ? 0.02 : 0.07;
-
-  const OPACITY_STEP = isMobile ? 0.15 : 0.18;
+  const navButton =
+    "flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors duration-200 hover:border-neon/60 hover:text-neon focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-white/10 disabled:hover:text-white";
 
   return (
     <>
-      {/* =====================================================
-          CAROUSEL
-      ====================================================== */}
-
       <div
-        className="w-full overflow-hidden"
+        ref={beamRef}
+        className="w-full [--gutter:1rem] sm:[--gutter:1.5rem] xl:[--gutter:calc((100vw-80rem)/2+1.5rem)]"
         role="region"
         aria-roledescription="carousel"
         aria-label="Projects"
         onKeyDown={handleKeyDown}
       >
-        {/* Embla viewport */}
-
-        <div
-          ref={emblaRef}
-          className="
-            w-full
-            overflow-hidden
-            sm:overflow-visible
-          "
-        >
-          {/* Embla container */}
-
-          <div
-            className="
-              flex
-              items-center
-            "
-          >
-            {projects.map((project, index) => {
-              const isActive = index === selectedIndex;
-
-              const diff = index - selectedIndex;
-
-              const clampedDiff = Math.max(-MAX_FAN, Math.min(MAX_FAN, diff));
-
-              const rotation = clampedDiff * ROTATE_STEP;
-
-              const translateY = Math.abs(clampedDiff) * TRANSLATE_Y_STEP;
-
-              const scale = 1 - Math.abs(clampedDiff) * SCALE_STEP;
-
-              const opacity = 1 - Math.abs(clampedDiff) * OPACITY_STEP;
-
-              return (
-                <div
-                  key={project.id}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`${index + 1} of ${projects.length}`}
-                  onClick={() => {
-                    if (isActive) openProjectInfo(project);
-                    else emblaApi?.scrollTo(index);
-                  }}
-                  className={`
-                    relative
-                    shrink-0
-                    grow-0
-                    min-w-0
-
-                    basis-[78%]
-                    px-2
-
-                    sm:basis-[70%]
-                    sm:px-0
-                    md:basis-[52%]
-                    lg:basis-[38%]
-                    xl:basis-[34%]
-                    cursor-pointer
-                  `}
-                >
-                  {/* ==========================
-                      CARD
-                  =========================== */}
-
-                  <div
-                    className="
-                      card
-                      relative
-
-                      mx-0
-
-                      h-[300px]
-                      
-                      sm:mx-[-10px]
-                      sm:h-[400px]
-
-                      md:h-[460px]
-
-                      lg:h-[485px]
-
-                      rounded-[18px]
-
-                      sm:rounded-[24px]
-
-                      lg:rounded-[28px]
-
-                      overflow-hidden
-
-                      bg-[#0D1522]
-
-                      text-white
-
-                      transition-[transform,opacity,border-color,box-shadow]
-                      duration-500
-                      ease-out
-                    "
-                    style={{
-                      transform: `
-                        rotate(${rotation}deg)
-                        translateY(${translateY}px)
-                        scale(${scale})
-                      `,
-
-                      opacity: Math.max(opacity, isMobile ? 0.4 : 0.25),
-
-                      zIndex: 20 - Math.abs(clampedDiff),
-
-                      border: isActive
-                        ? "1.5px solid #D0FF47"
-                        : "1px solid rgba(156,163,175,0.25)",
-
-                      boxShadow: isActive
-                        ? "0 0 30px rgba(208,255,71,0.20)"
-                        : "none",
-                    }}
-                  >
-                    {/* ==========================
-                        IMAGE
-                    =========================== */}
-
-                    <Image
-                      src={project.image || "/jpcslogo.png"}
-                      alt={project.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 78vw, (max-width: 768px) 70vw, (max-width: 1024px) 52vw, (max-width: 1280px) 38vw, 34vw"
-                      priority={index === 0}
-                    />
-
-                    {project.date && (
-                      <p
-                        className="
-                          absolute
-                          right-3
-                          top-3
-                          z-10
-
-                          max-w-[70%]
-                          truncate
-
-                          rounded-full
-
-                          bg-[#0D1522]/80
-                          px-3
-                          py-1
-
-                          text-[11px]
-                          font-medium
-                          text-gray-200
-
-                          backdrop-blur-sm
-
-                          sm:right-4
-                          sm:top-4
-                          sm:text-xs
-                        "
-                      >
-                        {project.date}
-                      </p>
-                    )}
-
-                    {/* ==========================
-                        IMAGE GRADIENT
-                    =========================== */}
-
-                    <div
-                      className="
-                        absolute
-                        inset-x-0
-                        top-0
-
-                        h-[65%]
-
-                        bg-gradient-to-b
-                        from-transparent
-                        via-transparent
-                        to-[#0D1522]
-                      "
-                    />
-
-                    {/* ==========================
-                        DARK CONTENT BACKGROUND
-                    =========================== */}
-
-                    <div
-                      className="
-                        absolute
-                        inset-x-0
-                        bottom-0
-
-                        h-[35%]
-
-                        bg-[#0D1522]
-                      "
-                    />
-
-                    {/* ==========================
-                        CONTENT
-                    =========================== */}
-
-                    <div
-                      className="
-                        relative
-                        z-10
-
-                        flex
-                        h-full
-                        flex-col
-                        justify-end
-                      "
-                    >
-                      {/* Project information */}
-
-                      <div
-                        className="
-                          px-4
-                          pb-1
-
-                          sm:px-6
-                          sm:pb-3
-
-                          lg:px-7
-                        "
-                      >
-                        <h3
-                          className="
-                            mb-1
-                            line-clamp-2
-
-                            text-lg
-                            font-semibold
-
-                            sm:mb-2
-                            sm:text-2xl
-
-                            lg:text-2xl
-                          "
-                        >
-                          {project.name}
-                        </h3>
-
-                        <p
-                          className="
-                            line-clamp-3
-
-                            text-[13px]
-                            font-medium
-                            leading-relaxed
-
-                            text-[#9CA3AF]
-
-                            sm:line-clamp-4
-                            sm:text-base
-                          "
-                        >
-                          {project.description}
-                        </p>
-                      </div>
-
-                      {/* ==========================
-                          MORE INFO
-                      =========================== */}
-
-                      <div
-                        className="
-                          flex
-                          h-[60px]
-                          items-center
-
-                          px-4
-
-                          sm:h-[72px]
-                          sm:px-6
-
-                          lg:px-7
-                        "
-                      >
-                        {isActive && (
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openProjectInfo(project);
-                            }}
-                            className="
-                              group
-                              flex
-                              items-center
-
-                              text-[#9CA3AF]
-
-                              rounded-full
-                              py-1
-                              pr-3
-
-                              transition-colors
-                              duration-200
-
-                              hover:text-white
-                              focus-visible:outline-2
-                              focus-visible:outline-offset-2
-                              focus-visible:outline-neon
-                            "
-                            aria-haspopup="dialog"
-                            aria-label={`More info about ${project.name}`}
-                          >
-                            {/* Arrow */}
-
-                            <div
-                              className="
-                                mr-3
-
-                                flex
-                                h-[32px]
-                                w-[32px]
-
-                                items-center
-                                justify-center
-
-                                rounded-full
-
-                                border
-                                border-[#9CA3AF]
-
-                                transition-all
-                                duration-200
-
-                                group-hover:border-white
-                                group-hover:bg-white/5
-
-                                sm:mr-5
-                                sm:h-[38px]
-                                sm:w-[38px]
-                              "
-                            >
-                              <ArrowForwardIcon
-                                fontSize="small"
-                              />
-                            </div>
-
-                            <span
-                              className="
-                                text-[11px]
-                                font-medium
-                                tracking-wide
-
-                                sm:text-sm
-                              "
-                            >
-                              MORE INFO
-                            </span>
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+        {/* Header: terminal prompt on the left, counter and arrows on the right. */}
+        <div className="mb-4 flex items-center justify-between gap-4 px-[var(--gutter)] sm:mb-6">
+          <p className="font-mono text-xs text-white/50 sm:text-sm">
+            <span className="text-neon">$</span> ls -t ./projects{" "}
+            <span className="hidden text-white/30 sm:inline">· {projects.length} items</span>
+          </p>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <p aria-live="polite" className="min-w-[64px] text-center font-mono text-xs tabular-nums text-white sm:text-sm">
+              {pad(first + 1)}
+              <span className="text-white/40"> / {pad(projects.length)}</span>
+            </p>
+            <button type="button" onClick={() => scrollByCards(-1, true)} disabled={!canPrev} aria-label="Previous projects" className={navButton}>
+              <NavigateBeforeIcon fontSize="small" />
+            </button>
+            <button type="button" onClick={() => scrollByCards(1, true)} disabled={!canNext} aria-label="Next projects" className={navButton}>
+              <NavigateNextIcon fontSize="small" />
+            </button>
           </div>
         </div>
 
-        {/* =====================================================
-            NAVIGATION
-        ====================================================== */}
-
-        <div
-          className="
-            mt-4
-
-            flex
-            items-center
-            justify-center
-            gap-1
-
-            sm:mt-6
-            sm:gap-2
-          "
+        <ul
+          ref={railRef}
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-[var(--gutter)] pt-2 pb-6 [scroll-padding-inline:var(--gutter)] [scrollbar-width:none] sm:gap-5 [&::-webkit-scrollbar]:hidden"
         >
-          {/* Previous */}
+          {projects.map((project, index) => (
+            <li
+              key={project.id}
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${projects.length}`}
+              className="w-[82%] shrink-0 snap-start sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]"
+            >
+              <article className="border-beam group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0D1522] text-white transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-neon/40">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-navy-light">
+                  <Image
+                    src={project.image || "/jpcslogo.png"}
+                    alt=""
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 82vw, (max-width: 1024px) 48vw, 32vw"
+                  />
+                  <span className="absolute left-3 top-3 rounded-md bg-navy/90 px-2 py-0.5 font-mono text-[11px] font-medium text-neon">
+                    #{pad(index + 1)}
+                  </span>
+                </div>
 
-          <button
-            type="button"
-            onClick={scrollPrev}
-            disabled={!canScrollPrev}
-            aria-label="Previous project"
-            className="
-              flex
-              h-9
-              w-9
-              items-center
-              justify-center
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  {project.date && <p className="mb-2 font-mono text-[11px] text-white/45 sm:text-xs">{project.date}</p>}
+                  <h3 className="mb-2 line-clamp-2 text-lg font-bold leading-snug sm:text-xl">{project.name}</h3>
+                  <p className="mb-5 line-clamp-3 text-[13px] font-medium leading-relaxed text-[#9CA3AF] sm:text-sm">
+                    {project.description}
+                  </p>
 
-              rounded-full
-              bg-[#27334C]
-
-              transition-opacity
-              duration-200
-
-              hover:bg-[#33415f]
-              focus-visible:outline-2
-              focus-visible:outline-offset-2
-              focus-visible:outline-neon
-
-              disabled:cursor-not-allowed
-              disabled:opacity-30
-            "
-          >
-            <NavigateBeforeIcon fontSize="small" />
-          </button>
-
-          {/* Current slide */}
-
-          <p
-            aria-live="polite"
-            className="
-              mx-2
-              min-w-[56px]
-
-              text-center
-              text-xs
-              font-medium
-              tabular-nums
-              text-white
-
-              sm:mx-3
-              sm:text-base
-            "
-          >
-            {String(selectedIndex + 1).padStart(2, "0")}
-            <span className="text-white/50">
-              {" / "}
-              {String(projects.length).padStart(2, "0")}
-            </span>
-          </p>
-
-          {/* Next */}
-
-          <button
-            type="button"
-            onClick={scrollNext}
-            disabled={!canScrollNext}
-            aria-label="Next project"
-            className="
-              flex
-              h-9
-              w-9
-              items-center
-              justify-center
-
-              rounded-full
-              bg-[#27334C]
-
-              transition-opacity
-              duration-200
-
-              hover:bg-[#33415f]
-              focus-visible:outline-2
-              focus-visible:outline-offset-2
-              focus-visible:outline-neon
-
-              disabled:cursor-not-allowed
-              disabled:opacity-30
-            "
-          >
-            <NavigateNextIcon fontSize="small" />
-          </button>
-        </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProject(project)}
+                    aria-haspopup="dialog"
+                    aria-label={`More info about ${project.name}`}
+                    // The ::after covers the whole card so any part of it opens the details.
+                    className="mt-auto flex items-center gap-3 self-start rounded-full text-[#9CA3AF] outline-none transition-colors duration-200 group-hover:text-white after:absolute after:inset-0 after:z-10 after:rounded-[1.5rem] after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-neon"
+                  >
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-current transition-colors duration-200 group-hover:border-neon group-hover:bg-neon group-hover:text-navy">
+                      <ArrowForwardIcon sx={{ fontSize: 16 }} />
+                    </span>
+                    <span className="font-mono text-xs tracking-wide">more_info()</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* =====================================================
-          MODAL
-      ====================================================== */}
-
       <AnimatePresence>
-        {showPopup && selectedProject && (
-          <EventInfo project={selectedProject} onClose={closeProjectInfo} />
-        )}
+        {selectedProject && <EventInfo project={selectedProject} onClose={() => setSelectedProject(null)} />}
       </AnimatePresence>
     </>
   );
