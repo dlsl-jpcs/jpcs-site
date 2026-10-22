@@ -133,7 +133,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
         <BotAvatar size={36} />
         <div className="min-w-0 flex-1">
           <p className="font-bold leading-tight">Judy</p>
-          <p className="text-xs text-white/50">JPCS's happy sloth · ask me anything</p>
+          <p className="text-xs text-white/50">JPCS&apos;s happy sloth · ask me anything</p>
         </div>
         <button
           type="button"
@@ -149,7 +149,7 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
         {messages.length === 0 && (
           <div className="space-y-4">
             <Bubble role="assistant">
-              Hi, I'm Judy, the JPCS sloth! 🦥 I may move slow, but I know a lot about our events, programs, officers, and how to get involved. What are you curious about?
+              Hi, I&apos;m Judy, the JPCS sloth! 🦥 I may move slow, but I know a lot about our events, programs, officers, and how to get involved. What are you curious about?
             </Bubble>
             <div className="flex flex-wrap gap-2 pl-10">
               {QUICK_REPLIES.map((q) => (

@@ -77,12 +77,12 @@ export default function CalendarView({ month, today }: { month: string; today: s
     "flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition-colors hover:border-neon/60 hover:text-neon focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon";
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-navy pb-36 text-white selection:bg-neon selection:text-navy">
+    <section className="relative min-h-screen overflow-hidden bg-navy pb-36 text-white">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:4rem_4rem]" />
       <GridSpotlight />
-      <CircuitTraces tone="dark" corners={["tr", "bl"]} />
+      <CircuitTraces tone="dark" corners={["tr", "bl"]} className="hidden lg:block" />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-24 min-[401px]:px-6 md:px-16 md:pt-28">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-28 min-[401px]:px-6 md:px-16 md:pt-40">
         <Link
           href="/#home"
           className="mb-8 flex w-fit items-center gap-2 text-sm font-medium text-white/50 transition-colors duration-200 hover:text-neon"
@@ -242,7 +242,7 @@ export default function CalendarView({ month, today }: { month: string; today: s
           />
         )}
       </AnimatePresence>
-    </main>
+    </section>
   );
 }
 
