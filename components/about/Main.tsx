@@ -1,6 +1,7 @@
 
 "use client";
 import { motion } from "framer-motion";
+import { ABOUT_INTRO } from "@/data/about";
 
 const Main = () => {
   return (
@@ -35,14 +36,10 @@ const Main = () => {
             className="lg:pt-6 space-y-4 min-[401px]:space-y-6"
           >
             <p className="text-charcoal text-base min-[401px]:text-lg md:text-xl leading-relaxed font-semibold">
-              JPCS is a professional organization of ICT students which aims to
-              provide knowledge and skills significant to the students once they
-              enter the academe and industry.
+              {ABOUT_INTRO[0]}
             </p>
             <p className="text-navy/60 text-sm min-[401px]:text-base md:text-lg leading-relaxed font-medium">
-              We provide wide opportunities and experiences which encourage
-              collaboration, innovation, and healthy competition among our
-              members, preparing them to be the digital leaders of tomorrow.
+              {ABOUT_INTRO[1]}
             </p>
           </motion.div>
         </div>

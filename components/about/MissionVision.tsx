@@ -1,6 +1,7 @@
 
 "use client";
 import { motion } from "framer-motion";
+import { MISSION, MISSION_PILLARS, VISION_ITEMS } from "@/data/about";
 
 const MissionVision = () => {
   const fadeInUp = {
@@ -8,26 +9,6 @@ const MissionVision = () => {
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, amount: 0.2 },
   };
-
-  const visionItems = [
-    {
-      number: "01",
-      title: "Professional Excellence",
-      description:
-        "Preparing students for future endeavors as IT professionals.",
-    },
-    {
-      number: "02",
-      title: "Social Responsibility",
-      description:
-        "Awakening the sense of responsibility among future IT leaders.",
-    },
-    {
-      number: "03",
-      title: "Technology Leadership",
-      description: "Promoting the understanding and usage of cutting-edge ICT.",
-    },
-  ];
 
   return (
     <section className="py-16 min-[401px]:py-20 px-4 min-[401px]:px-6 md:px-16 relative overflow-hidden bg-white">
@@ -47,20 +28,11 @@ const MissionVision = () => {
             </h3>
 
             <p className="text-white/80 text-base min-[401px]:text-lg md:text-xl leading-relaxed font-medium mb-8 min-[401px]:mb-12">
-              To build a community that will help future IT professionals
-              develop their technical and non-technical skills in order to help
-              others in bringing equality, equity, and justice into all and
-              every aspect of society.
+              {MISSION}
             </p>
 
             <div className="flex flex-wrap gap-3">
-              {[
-                "Community",
-                "Development",
-                "Equality",
-                "Justice",
-                "Impact",
-              ].map((pillar) => (
+              MISSION_PILLARS.map((pillar) => (
                 <span
                   key={pillar}
                   className="px-4 min-[401px]:px-5 py-1.5 min-[401px]:py-2 bg-white/10 text-white rounded-full text-xs min-[401px]:text-sm font-bold tracking-wide backdrop-blur-md"
@@ -81,7 +53,7 @@ const MissionVision = () => {
             </h3>
 
             <div className="space-y-6 min-[401px]:space-y-8">
-              {visionItems.map((item, index) => (
+              {VISION_ITEMS.map((item, index) => (
                 <div key={index} className="flex items-start gap-4 min-[401px]:gap-6 group">
                   <span className="text-2xl min-[401px]:text-3xl font-black text-neon/40 group-hover:text-neon transition-colors duration-300 mt-1">
                     {item.number}

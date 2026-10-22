@@ -1,8 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
+import { CONTACT_INFO } from "@/data/about";
 
-const ADDRESS = "1962 J.P. Laurel National Highway, Mataas na Lupa, 4217, Batangas";
+const ADDRESS = CONTACT_INFO.address;
 const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
   `De La Salle Lipa, ${ADDRESS}`,
 )}`;
