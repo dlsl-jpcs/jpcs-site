@@ -32,7 +32,7 @@ const MissionVision = () => {
             </p>
 
             <div className="flex flex-wrap gap-3">
-              MISSION_PILLARS.map((pillar) => (
+              {MISSION_PILLARS.map((pillar) => (
                 <span
                   key={pillar}
                   className="px-4 min-[401px]:px-5 py-1.5 min-[401px]:py-2 bg-white/10 text-white rounded-full text-xs min-[401px]:text-sm font-bold tracking-wide backdrop-blur-md"
