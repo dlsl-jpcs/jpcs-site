@@ -53,6 +53,7 @@ body::-webkit-scrollbar {
   --color-dark-green: var(--navy);
 
   --font-sans: var(--font-plus-jakarta), sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
   --radius-sm: calc(var(--radius) - 8px);
   --radius-md: calc(var(--radius) - 4px);
@@ -118,6 +119,90 @@ body::-webkit-scrollbar {
   }
   --animate-marquee-left: marquee-left 20s linear infinite;
   --animate-marquee-right: marquee-right 20s linear infinite;
+
+  @keyframes caret-blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  --animate-caret: caret-blink 1s step-end infinite;
+
+  /* A short bright dash travelling along a circuit trace (pathLength="100"). */
+  @keyframes trace-pulse {
+    0% {
+      stroke-dashoffset: 108;
+    }
+    60%,
+    100% {
+      stroke-dashoffset: -8;
+    }
+  }
+
+  @keyframes scanline {
+    0% {
+      transform: translateY(-10vh);
+      opacity: 0;
+    }
+    8% {
+      opacity: 1;
+    }
+    35%,
+    100% {
+      transform: translateY(110vh);
+      opacity: 0;
+    }
+  }
+  --animate-scanline: scanline 9s linear infinite;
+}
+
+input,
+textarea {
+  caret-color: var(--neon);
+}
+
+.trace-pulse {
+  stroke-dasharray: 8 100;
+  animation: trace-pulse 7s linear infinite;
+}
+
+.circuit[data-paused="true"] .trace-pulse {
+  animation-play-state: paused;
+}
+
+/* Pointer-following conic border; --angle is set by useBorderBeam. Only on mouse/trackpad. */
+@media (hover: hover) and (pointer: fine) {
+  .border-beam {
+    position: relative;
+  }
+  .border-beam::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--angle, 0deg),
+      transparent 0deg,
+      var(--neon) 40deg,
+      transparent 110deg,
+      transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .border-beam:hover::before {
+    opacity: 1;
+  }
 }
 
 .glass-panel {
