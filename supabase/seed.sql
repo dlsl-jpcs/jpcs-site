@@ -36,3 +36,11 @@ VALUES ('/jpcslogo.png', 'Sample homepage gallery image', 1);
 INSERT INTO public.gallery (image_url, alt_text, display_order)
 VALUES ('/jpcslogo.png', 'Sample gallery image 1', 1),
        ('/jpcslogo.png', 'Sample gallery image 2', 2);
+
+INSERT INTO public.chat_faq (question, answer, keywords, display_order)
+VALUES ('[SAMPLE] How do I join JPCS?',
+        'Sample answer: membership opens at the start of each semester. Watch our Facebook page or message the officers through the Contact section.',
+        'join member membership sign up register apply', 1),
+       ('[SAMPLE] How do I contact the officers?',
+        'Use the Contact form at the bottom of the home page and an officer will get back to you.',
+        'contact email message reach officers', 2);

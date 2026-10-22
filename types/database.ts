@@ -70,3 +70,24 @@ export interface OfficerRow {
   created_at: string;
   updated_at: string;
 }
+
+export interface ChatFaqRow {
+  id: number;
+  question: string;
+  answer: string;
+  keywords: string | null;
+  is_active: boolean;
+  /** Position in the admin list and the fallback tie-break; lower first. */
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ChatQuestionRow {
+  id: number;
+  question: string;
+  source: "llm" | "search" | "none";
+  /** The bot said it couldn't answer — these are the FAQ gaps. */
+  unanswered: boolean;
+  created_at: string;
+}

@@ -1,16 +1,9 @@
 import { NextResponse } from "next/server";
-import { createHash } from "node:crypto";
 import { createClient } from "@/utils/supabase/server";
 import { EMAIL_PATTERN, str } from "@/lib/validation";
+import { hashIp } from "@/lib/ipHash";
 
 const LIMITS = { name: 255, email: 255, subject: 255, message: 5000 };
-
-function hashIp(req: Request): string | null {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip");
-  if (!ip) return null;
-  const salt = process.env.CONTACT_IP_SALT ?? "";
-  return createHash("sha256").update(`${salt}:${ip}`).digest("hex");
-}
 
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
