@@ -66,7 +66,10 @@ export default function ChatPanel({ onClose }: { onClose: () => void }) {
   }, [messages, pending, handoffFor]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    // Only when focus is in the chat, so Escape in another modal (e.g. event details) leaves it open.
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && panelRef.current?.contains(document.activeElement)) onClose();
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);

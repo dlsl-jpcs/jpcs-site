@@ -22,7 +22,7 @@ export async function searchAnswer(
   const program = programs.find((p) => has(q, [p.slug, p.short.toLowerCase()]));
   if (program) {
     return {
-      reply: `${program.short} (${program.title}): ${program.tagline} It's a ${program.duration.toLowerCase()} ${program.degree}.`,
+      reply: `${program.short} (${program.title}): ${program.tagline} ${program.degree}, ${program.duration.toLowerCase()}.`,
       links: [`/programs/${program.slug}`],
       handoff: false,
     };
@@ -46,12 +46,14 @@ export async function searchAnswer(
   }
 
   if (has(q, ["officer", "president", "vice", "secretary", "treasurer", "auditor", "head", "rep"])) {
-    const byPosition = knowledge.officers.filter((o) =>
-      o.position
-        .toLowerCase()
-        .split(/\W+/)
-        .some((word) => word.length > 3 && q.includes(word)),
-    );
+    // "president" alone shouldn't also pull in every Vice/Assistant President.
+    const byPosition = knowledge.officers.filter((o) => {
+      const words = o.position.toLowerCase().split(/\W+/);
+      const modifiers = ["vice", "assistant", "deputy"];
+      if (modifiers.some((m) => words.includes(m) !== has(q, [m]))) return false;
+      // Generic words ("officers", "head") would match every title; they fall through to the board.
+      return words.some((w) => w.length > 3 && !["officer", "head", "representative"].includes(w) && has(q, [w]));
+    });
     const list = (byPosition.length ? byPosition : knowledge.officers.filter((o) => o.category === "executive")).slice(0, 5);
     if (list.length) {
       return {
